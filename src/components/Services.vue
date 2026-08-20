@@ -1,62 +1,139 @@
 <script setup>
-import { WrenchScrewdriverIcon, ServerIcon, ComputerDesktopIcon, CodeBracketIcon, CircleStackIcon, CalendarDaysIcon } from '@heroicons/vue/24/outline'
+import { 
+  ComputerDesktopIcon, 
+  ServerIcon, 
+  CodeBracketIcon, 
+  ShieldCheckIcon,
+  CheckIcon,
+  ArrowRightIcon
+} from '@heroicons/vue/24/outline';
+
+const services = [
+  {
+    icon: ComputerDesktopIcon,
+    badge: 'Hardware & Cajas',
+    badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
+    title: 'Mantenimiento de Puntos de Venta (POS)',
+    description: 'Aseguramos que tus equipos de cobro, computadoras comerciales e impresoras funcionen siempre con fluidez y sin bloqueos.',
+    points: [
+      'Soporte técnico especializado L1, L2 y L3',
+      'Mantenimiento preventivo y limpieza física interna',
+      'Sustitución de piezas y optimización de rendimiento'
+    ],
+    ctaText: 'Consultar Mantenimiento POS',
+    whatsappMsg: 'Hola Jeralth, deseo consultar sobre mantenimiento para mis Puntos de Venta (POS).'
+  },
+  {
+    icon: ServerIcon,
+    badge: 'Conectividad Comercial',
+    badgeColor: 'text-blue-400 bg-blue-950/80 border-blue-500/30',
+    title: 'Puntos de Red & Cableado Comercial',
+    description: 'Instalación y reemplazo de cables de red para conectar de forma estable tus cajas, balanzas, impresoras y computadoras al router o switch.',
+    points: [
+      'Tendido de cables de red entre puntos (ej. switch a balanza o caja)',
+      'Cambio de cables deteriorados y sustitución de conectores RJ45',
+      'Optimización de la conexión directa para evitar caídas en cajas'
+    ],
+    ctaText: 'Cotizar Puntos de Red',
+    whatsappMsg: 'Hola Jeralth, deseo cotizar instalación o reemplazo de cables de red para mis equipos.'
+  },
+  {
+    icon: CodeBracketIcon,
+    badge: 'Software & Backend',
+    badgeColor: 'text-purple-400 bg-purple-950/80 border-purple-500/30',
+    title: 'Desarrollo Web (Laravel + Vue.js) & SQL',
+    description: 'Convertimos procesos manuales y hojas de Excel en aplicaciones web robustas con Laravel, Vue.js y bases de datos relacionales seguras.',
+    points: [
+      'Sistemas de Citas y Mesa de Ayuda (Helpdesk) en Laravel + Vue.js',
+      'Digitalización y estructuración de inventarios en PostgreSQL / MySQL',
+      'Paneles administrativos y automatización con Python'
+    ],
+    ctaText: 'Cotizar Software a Medida',
+    whatsappMsg: 'Hola Jeralth, quiero cotizar un desarrollo con Laravel / Vue o base de datos.'
+  },
+  {
+    icon: ShieldCheckIcon,
+    badge: 'Seguridad & Datos',
+    badgeColor: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
+    title: 'Buenas Prácticas de Ciberseguridad & Backups',
+    description: 'Aplicamos principios de ciberseguridad defensiva y copias de seguridad automáticas para proteger tu información comercial.',
+    points: [
+      'Configuración de copias de seguridad automáticas periódicas',
+      'En formación continua y especialización en Ciberseguridad Defensiva',
+      'Protección de datos comerciales y recuperación ante imprevistos'
+    ],
+    ctaText: 'Proteger mi Información',
+    whatsappMsg: 'Hola Jeralth, deseo implementar copias de seguridad y medidas de seguridad en mi negocio.'
+  }
+];
 </script>
 
 <template>
-  <section id="servicios" class="bg-gray-50 py-24 sm:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Nuestros Servicios</h2>
+  <section id="servicios" class="py-24 bg-slate-900/40 relative border-t border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-semibold text-cyan-400 uppercase tracking-widest block mb-2 font-mono">
+          Soluciones Prácticas
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Servicios Integrales para tu Negocio
+        </h2>
+        <p class="mt-4 text-base sm:text-lg text-slate-400 leading-relaxed">
+          Atendemos el hardware y cables de tus equipos comerciales y programamos el software que hace crecer tu empresa.
+        </p>
       </div>
-      <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-        <div class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
 
-          <!-- Card 1: Área TECH -->
-          <div class="flex flex-col bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 p-8 sm:p-10 transform transition duration-500 hover:-translate-y-2">
-            <h3 class="text-2xl font-bold tracking-tight text-cyan-600 mb-6 flex items-center gap-3">
-              <WrenchScrewdriverIcon class="h-8 w-8 text-cyan-600" />
-              Área TECH (Infraestructura)
-            </h3>
-            <ul role="list" class="mt-4 space-y-6 text-base leading-7 text-gray-600 flex-1">
-              <li class="flex gap-x-3">
-                <ServerIcon class="h-6 w-5 flex-none text-cyan-500" aria-hidden="true" />
-                <span>Soporte técnico L1-L3.</span>
-              </li>
-              <li class="flex gap-x-3">
-                <ComputerDesktopIcon class="h-6 w-5 flex-none text-cyan-500" aria-hidden="true" />
-                <span>Mantenimiento de Puntos de Venta (POS).</span>
-              </li>
-              <li class="flex gap-x-3">
-                <WrenchScrewdriverIcon class="h-6 w-5 flex-none text-cyan-500" aria-hidden="true" />
-                <span>Redes estructuradas y recuperación de sistemas.</span>
+      <!-- Services Grid (2x2 Clean Layout) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <div 
+          v-for="(service, idx) in services" 
+          :key="idx"
+          class="service-card rounded-3xl p-8 sm:p-10 border border-slate-800 flex flex-col justify-between group"
+        >
+          <div>
+            <!-- Top Badge & Icon -->
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300">
+                <component :is="service.icon" class="w-6 h-6" />
+              </div>
+              <span :class="['text-2xs font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full border', service.badgeColor]">
+                {{ service.badge }}
+              </span>
+            </div>
+
+            <!-- Content -->
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">{{ service.title }}</h3>
+            <p class="text-sm sm:text-base text-slate-300 mb-6 leading-relaxed">
+              {{ service.description }}
+            </p>
+
+            <!-- Bullets -->
+            <ul class="space-y-3 mb-8 text-sm text-slate-300">
+              <li v-for="(pt, pIdx) in service.points" :key="pIdx" class="flex items-start gap-2.5">
+                <CheckIcon class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+                <span>{{ pt }}</span>
               </li>
             </ul>
           </div>
 
-          <!-- Card 2: Área CODE -->
-          <div class="flex flex-col bg-gray-900 rounded-2xl shadow-xl ring-1 ring-gray-900 p-8 sm:p-10 transform transition duration-500 hover:-translate-y-2">
-            <h3 class="text-2xl font-bold tracking-tight text-cyan-400 mb-6 flex items-center gap-3">
-              <CodeBracketIcon class="h-8 w-8 text-cyan-400" />
-              Área CODE (Desarrollo)
-            </h3>
-            <ul role="list" class="mt-4 space-y-6 text-base leading-7 text-gray-300 flex-1">
-              <li class="flex gap-x-3">
-                <CodeBracketIcon class="h-6 w-5 flex-none text-cyan-400" aria-hidden="true" />
-                <span>Desarrollo de aplicaciones web internas.</span>
-              </li>
-              <li class="flex gap-x-3">
-                <CircleStackIcon class="h-6 w-5 flex-none text-cyan-400" aria-hidden="true" />
-                <span>Bases de datos relacionales y digitalización de inventarios.</span>
-              </li>
-              <li class="flex gap-x-3">
-                <CalendarDaysIcon class="h-6 w-5 flex-none text-cyan-400" aria-hidden="true" />
-                <span>Sistemas de citas y control de asistencia.</span>
-              </li>
-            </ul>
+          <!-- Bottom Action Link -->
+          <div class="pt-6 border-t border-slate-800/80">
+            <a 
+              :href="'https://wa.me/584247130583?text=' + encodeURIComponent(service.whatsappMsg)"
+              target="_blank"
+              class="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-1 transition-all"
+            >
+              <span>{{ service.ctaText }}</span>
+              <ArrowRightIcon class="w-4 h-4" />
+            </a>
           </div>
-
         </div>
+
       </div>
+
     </div>
   </section>
 </template>

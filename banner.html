@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Banner - Jeralth Contreras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Proporción exacta para banner de LinkedIn (1584 x 396) */
+        .linkedin-banner {
+            width: 1584px;
+            height: 396px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Patrón de fondo estilo "Cyber" */
+        .cyber-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        /* Acento visual geométrico */
+        .accent-shape {
+            position: absolute;
+            right: -100px;
+            top: -150px;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+            transform: rotate(45deg);
+            border-radius: 60px;
+            z-index: 2;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 80px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Contenedor del Banner -->
+    <div class="linkedin-banner rounded-lg shadow-2xl">
+        <div class="cyber-grid"></div>
+        <div class="accent-shape"></div>
+
+        <div class="content-wrapper">
+            <!-- Bloque Izquierdo: Textos Principales -->
+            <div class="flex flex-col space-y-4">
+                <h1 class="text-6xl font-black text-white tracking-wider uppercase drop-shadow-lg">
+                    Jeralth <span class="text-sky-400">Contreras</span>
+                </h1>
+                <div class="h-1 w-24 bg-sky-400 rounded"></div>
+                <h2 class="text-2xl font-semibold text-gray-300 tracking-wide mt-2">
+                    IT Systems Analyst & Developer
+                </h2>
+            </div>
+
+            <!-- Bloque Derecho: Contacto -->
+            <div
+                class="flex flex-col space-y-5 bg-slate-800/50 p-6 rounded-xl border border-slate-700 backdrop-blur-sm">
+                <div class="flex items-center space-x-4 text-gray-200 text-lg">
+                    <i class="fa-brands fa-github text-2xl text-sky-400 w-8 text-center"></i>
+                    <span class="font-medium tracking-wide">github.com/Jeralthc</span>
+                </div>
+                <div class="flex items-center space-x-4 text-gray-200 text-lg">
+                    <i class="fa-solid fa-envelope text-2xl text-sky-400 w-8 text-center"></i>
+                    <span class="font-medium tracking-wide">jeralthc@gmail.com</span>
+                </div>
+                <div class="flex items-center space-x-4 text-gray-200 text-lg">
+                    <i class="fa-solid fa-phone text-2xl text-sky-400 w-8 text-center"></i>
+                    <span class="font-medium tracking-wide">+58 424-7130583</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
