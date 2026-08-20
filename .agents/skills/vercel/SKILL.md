@@ -1,50 +1,34 @@
 ---
 name: vercel
-description: Procedimientos y comandos para desplegar, configurar dominios, gestionar variables de entorno y administrar proyectos en Vercel mediante Vercel CLI.
+description: >-
+  Guía completa y flujos de trabajo para desplegar, gestionar dominios, configurar variables de entorno
+  y monitorear aplicaciones web en Vercel utilizando Vercel CLI y Git integrations.
 ---
 
 # Vercel Deployment & Management Skill
 
-Esta skill permite al agente interactuar con Vercel para desplegar aplicaciones web (Vite, Vue, Next.js), configurar dominios personalizados y gestionar proyectos.
+Esta skill proporciona flujos de trabajo estandarizados y comandos para desplegar y administrar aplicaciones en Vercel.
 
----
+## 1. Métodos de Despliegue
 
-## 1. Comandos Principales de Vercel CLI
+### A. Despliegue Automático vía Git (Recomendado)
+1. Conectar el repositorio de GitHub en [vercel.com](https://vercel.com/new).
+2. Cada `git push` a la rama `main` despliega automáticamente a Producción.
+3. Los Pull Requests generan URLs de Preview automáticas.
 
-### A. Despliegue en Vista Previa (Preview)
-Despliega el estado actual del proyecto en un entorno de prueba temporal:
+### B. Despliegue mediante Vercel CLI
+Para desplegar desde la terminal:
+
 ```bash
+# Despliegue de Preview / Desarrollo
 npx vercel
-```
 
-### B. Despliegue en Producción (Production)
-Despliega directamente a la URL de producción principal:
-```bash
+# Despliegue directo a Producción
 npx vercel --prod
 ```
 
-### C. Enlazar Proyecto Existente
-Conecta el directorio local con un proyecto ya creado en el dashboard de Vercel:
-```bash
-npx vercel link
-```
-
-### D. Gestión de Variables de Entorno
-```bash
-# Agregar una variable de entorno
-npx vercel env add NOMBRE_VARIABLE
-
-# Listar variables de entorno
-npx vercel env ls
-
-# Descargar variables locales (.env.local)
-npx vercel env pull
-```
-
----
-
-## 2. Configuración Recomendada para Proyectos Vite (`vercel.json`)
-Para aplicaciones Single Page Applications (SPA) con Vue 3 / Vite, se debe incluir un archivo `vercel.json` en la raíz del proyecto para redireccionar todas las rutas al `index.html`:
+## 2. Configuración para Proyectos Vite / Vue
+Para aplicaciones SPA (Single Page Applications) como Vue/Vite, crear un archivo `vercel.json` en la raíz si se requiere reescritura de rutas:
 
 ```json
 {
@@ -54,9 +38,17 @@ Para aplicaciones Single Page Applications (SPA) con Vue 3 / Vite, se debe inclu
 }
 ```
 
----
+## 3. Comandos Útiles de Vercel CLI
 
-## 3. Integración con Git (GitHub CI/CD)
-Cuando el repositorio de GitHub está conectado a Vercel:
-1. Cada `git push origin main` dispara automáticamente un despliegue a **Producción**.
-2. Cada `pull request` o rama secundaria genera un **Preview Deployment** único.
+- **Iniciar sesión:** `npx vercel login`
+- **Vincular proyecto existente:** `npx vercel link`
+- **Gestionar variables de entorno:**
+  - Listar: `npx vercel env ls`
+  - Agregar: `npx vercel env add NOMBRE_VARIABLE`
+  - Descargar a local: `npx vercel env pull .env.local`
+- **Ver registros en vivo (Logs):** `npx vercel logs <deployment-url>`
+- **Dominios:** `npx vercel domains ls`
+
+## 4. Diagnóstico de Errores Comunes
+- **Build Failed:** Verificar que `npm run build` funcione localmente antes de desplegar.
+- **Rutas 404 en subpáginas:** Asegurar el archivo `vercel.json` con la regla de reescritura SPA hacia `/index.html`.
