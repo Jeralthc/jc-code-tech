@@ -11,14 +11,14 @@ import {
 const services = [
   {
     icon: ComputerDesktopIcon,
-    badge: 'Especialidad Stellar POS',
+    badge: 'Hardware & Cajas',
     badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
-    title: 'Mantenimiento de Puntos de Venta (Stellar POS)',
-    description: 'Atención especializada para comercios que operan con Stellar POS y sistemas de cobro, garantizando máxima fluidez en cajas.',
+    title: 'Mantenimiento de Puntos de Venta & Stellar POS',
+    description: 'Soporte técnico y mantenimiento para comercios con Stellar POS y sistemas de cobro, asegurando el correcto funcionamiento de tus cajas.',
     points: [
-      'Soporte técnico L1, L2 y L3 enfocado en Stellar POS y cajas comerciales',
-      'Mantenimiento preventivo a computadoras de cobro e impresoras',
-      'Sustitución de piezas, optimización de velocidad y conexión de base de datos'
+      'Soporte técnico L1, L2 y L3 para equipos de cobro y terminales Stellar POS',
+      'Mantenimiento preventivo a computadoras de caja e impresoras comerciales',
+      'Sustitución de piezas, optimización de velocidad y conexión con base de datos'
     ]
   },
   {
@@ -35,12 +35,12 @@ const services = [
   },
   {
     icon: CodeBracketIcon,
-    badge: 'Software & Backend',
+    badge: 'PHP / Laravel & Vue',
     badgeColor: 'text-purple-400 bg-purple-950/80 border-purple-500/30',
-    title: 'Desarrollo Web (Laravel + Vue.js) & SQL',
-    description: 'Convertimos procesos manuales y hojas de Excel en aplicaciones web robustas con Laravel, Vue.js y bases de datos relacionales seguras.',
+    title: 'Desarrollo Web (PHP / Laravel + Vue.js) & SQL',
+    description: 'Convertimos procesos manuales y hojas de Excel en aplicaciones web robustas con PHP moderno, Laravel, Vue.js y bases de datos relacionales.',
     points: [
-      'Sistemas de Citas y Mesa de Ayuda (Helpdesk) en Laravel + Vue.js',
+      'Sistemas de Citas y Mesa de Ayuda (Helpdesk) en PHP / Laravel + Vue.js',
       'Digitalización y estructuración de inventarios en PostgreSQL / MySQL',
       'Paneles administrativos y automatización con Python'
     ]

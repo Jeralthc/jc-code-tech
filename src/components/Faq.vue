@@ -10,16 +10,16 @@ const toggleFaq = (index) => {
 
 const faqs = [
   {
-    q: '¿Tienen experiencia y soporte especializado para Stellar POS?',
-    a: 'Sí, es nuestra especialidad principal en puntos de venta. Atendemos comercios que operan con Stellar POS para resolver problemas de lentitud, configuración de impresoras fiscales/térmicas, enlace con base de datos local y mantenimiento preventivo de las computadoras de caja.'
+    q: '¿Brindan soporte a comercios que utilizan Stellar POS?',
+    a: 'Sí. Contamos con experiencia práctica atendiendo comercios que operan con Stellar POS para resolver fallas en terminales de cobro, configuración de impresoras, conexión con bases de datos y mantenimiento preventivo de las computadoras de caja.'
   },
   {
     q: '¿El diagnóstico inicial tiene algún costo o compromiso?',
-    a: 'No, es 100% gratuito y sin ningún compromiso. Evaluamos el estado de tus puntos de venta (Stellar POS), tus cables de red o los requerimientos de software en Laravel / Vue que necesitas, y te entregamos un diagnóstico claro con una propuesta técnica y económica transparente.'
+    a: 'No, es 100% gratuito y sin ningún compromiso. Evaluamos el estado de tus puntos de venta (incluyendo Stellar POS), tus cables de red o los requerimientos de software en PHP, Laravel o Vue que necesitas, y te entregamos un diagnóstico claro con una propuesta técnica y económica transparente.'
   },
   {
     q: '¿Prestan servicio presencial en Mérida y soporte remoto a otras ciudades?',
-    a: 'Sí. Atendemos presencialmente en Mérida para instalación de cables de red punto a punto, mantenimiento de computadoras comerciales y cajas con Stellar POS. Para desarrollo de software web con Laravel y Vue, bases de datos y consultoría, brindamos soporte remoto a nivel nacional e internacional.'
+    a: 'Sí. Atendemos presencialmente en Mérida para instalación de cables de red punto a punto, mantenimiento de computadoras comerciales y cajas con Stellar POS. Para desarrollo de software web en PHP / Laravel y Vue, bases de datos y consultoría, brindamos soporte remoto a nivel nacional e internacional.'
   },
   {
     q: '¿Ofrecen planes de mantenimiento preventivo y soporte mensual?',
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: '¿Pueden digitalizar mi inventario si actualmente lo llevo en Excel?',
-    a: 'Por supuesto. Extraemos y limpiamos la información de tus productos, la estructuramos en una base de datos relacional segura (MySQL o PostgreSQL) y te desarrollamos un panel web moderno con Laravel y Vue.js para que el stock se actualice en tiempo real.'
+    a: 'Por supuesto. Extraemos y limpiamos la información de tus productos, la estructuramos en una base de datos relacional segura (MySQL o PostgreSQL) y te desarrollamos un panel web moderno con PHP, Laravel y Vue.js para que el stock se actualice en tiempo real.'
   }
 ];
 </script>

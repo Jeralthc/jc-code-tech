@@ -21,7 +21,7 @@ import {
         <MapPinIcon class="w-4 h-4 text-cyan-400" />
         <span>Mérida, Venezuela</span>
         <span class="text-slate-600">•</span>
-        <span class="text-cyan-300 font-semibold">Especialistas en Stellar POS</span>
+        <span class="text-cyan-300 font-semibold">Soporte POS &amp; Desarrollo PHP / Laravel</span>
       </div>
 
       <!-- Main Headline (Optimized for SEO H1 & SEM Conversion) -->
@@ -32,7 +32,7 @@ import {
 
       <!-- Clear, engaging Subtitle -->
       <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
-        Cuidamos el soporte técnico de tus puntos de venta (especialistas en <strong class="text-white font-semibold">Stellar POS</strong>) y conexiones de red, y desarrollamos aplicaciones web con Laravel y Vue.js para que tu negocio opere seguro y sin pausas.
+        Soporte técnico para tus puntos de venta (con experiencia práctica en <strong class="text-white font-semibold">Stellar POS</strong>) y cables de red, junto con desarrollo web a medida en PHP, Laravel y Vue.js.
       </p>
 
       <!-- Clean Action Buttons -->
@@ -58,8 +58,8 @@ import {
         <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/80 flex items-center gap-3">
           <CheckCircleIcon class="w-6 h-6 text-cyan-400 shrink-0" />
           <div class="text-xs">
-            <strong class="text-white block font-semibold">Soporte Stellar POS</strong>
-            <span class="text-slate-400">Cajas y facturación sin trabas</span>
+            <strong class="text-white block font-semibold">Soporte Stellar POS &amp; Cajas</strong>
+            <span class="text-slate-400">Atención a equipos de cobro</span>
           </div>
         </div>
 

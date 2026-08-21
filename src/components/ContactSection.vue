@@ -13,7 +13,7 @@ const form = ref({
   name: '',
   business: '',
   phone: '',
-  service: 'stellar_pos',
+  service: 'pos',
   message: ''
 });
 
@@ -21,9 +21,9 @@ const isSubmitted = ref(false);
 
 const sendWhatsApp = () => {
   const serviceLabels = {
-    stellar_pos: 'Soporte Puntos de Venta (Stellar POS)',
+    pos: 'Mantenimiento de Puntos de Venta (Stellar POS / Otros)',
     redes: 'Instalación / Reemplazo de Cables de Red (Punto a Punto)',
-    software: 'Desarrollo de Software Web (Laravel / Vue.js)',
+    software: 'Desarrollo Web (PHP / Laravel / Vue.js)',
     databases: 'Digitalización de Inventarios (MySQL / PostgreSQL)',
     soporte: 'Plan de Soporte Mensual B2B',
     otro: 'Diagnóstico Técnico General'
@@ -55,7 +55,7 @@ const sendWhatsApp = () => {
           </h2>
 
           <p class="text-base text-slate-300 leading-relaxed font-sans font-normal">
-            Conversemos sobre tu negocio, tus cajas con <strong class="text-white font-semibold">Stellar POS</strong>, tus cables de red o tu idea de software en Laravel / Vue. Te responderé rápidamente con una propuesta adaptada a tus necesidades.
+            Conversemos sobre tu negocio, tus computadoras de caja, tus cables de red o tu idea de software en PHP, Laravel o Vue. Te responderé rápidamente con una propuesta adaptada a tus necesidades.
           </p>
 
           <!-- Contact Cards List -->
@@ -154,9 +154,9 @@ const sendWhatsApp = () => {
                     v-model="form.service" 
                     class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-sans"
                   >
-                    <option value="stellar_pos">Soporte Puntos de Venta (Stellar POS)</option>
+                    <option value="pos">Mantenimiento de Puntos de Venta (Stellar POS / Otros)</option>
                     <option value="redes">Instalación / Reemplazo de Cables de Red</option>
-                    <option value="software">Desarrollo Web (Laravel / Vue.js)</option>
+                    <option value="software">Desarrollo Web (PHP / Laravel / Vue.js)</option>
                     <option value="databases">Digitalización de Inventarios (SQL)</option>
                     <option value="soporte">Plan de Soporte Mensual</option>
                     <option value="otro">Diagnóstico Técnico General</option>
@@ -170,7 +170,7 @@ const sendWhatsApp = () => {
                   v-model="form.message" 
                   rows="4" 
                   required 
-                  placeholder="Detalla brevemente la falla que presentan tus cajas con Stellar POS, equipos de red o la solución web que deseas desarrollar..."
+                  placeholder="Detalla brevemente la falla que presentan tus equipos o la solución que deseas desarrollar..."
                   class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none font-sans"
                 ></textarea>
               </div>
