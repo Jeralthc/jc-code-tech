@@ -1,18 +1,17 @@
 <script setup>
 const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
 const githubUrl = 'https://github.com/Jeralthc';
-const whatsappUrl = 'https://wa.me/584247130583';
 </script>
 
 <template>
-  <footer class="bg-slate-950 border-t border-slate-800/80 pt-16 pb-12 relative overflow-hidden font-sans">
+  <footer class="bg-slate-950 border-t border-slate-800/80 pt-14 pb-12 relative overflow-hidden font-sans">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-800/80">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-slate-800/80">
         
-        <!-- Brand & Bio -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="flex items-center gap-2.5">
+        <!-- Brand & Slogan -->
+        <div class="space-y-2 text-center md:text-left">
+          <div class="flex items-center justify-center md:justify-start gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-mono font-bold text-sm">
               JC
             </div>
@@ -21,79 +20,51 @@ const whatsappUrl = 'https://wa.me/584247130583';
             </span>
           </div>
 
-          <p class="text-sm text-slate-400 leading-relaxed max-w-sm">
-            Soporte técnico de alta disponibilidad, mantenimiento de puntos de venta (POS) y desarrollo de software web a medida con Laravel y Vue.js. Liderado por <strong class="text-slate-200">Jeralth Contreras</strong> en Mérida, Venezuela.
+          <p class="text-xs sm:text-sm text-slate-400 max-w-md">
+            Soporte técnico para puntos de venta (POS), redes comerciales y desarrollo web a medida con Laravel y Vue.js. Sede en Mérida, Venezuela.
           </p>
-
-          <div class="flex items-center gap-3 pt-2">
-            <a 
-              :href="linkedInUrl" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/10 flex items-center justify-center text-slate-400 hover:text-blue-400 transition-all"
-              aria-label="Perfil de LinkedIn"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-            </a>
-
-            <a 
-              :href="githubUrl" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/50 hover:bg-purple-500/10 flex items-center justify-center text-slate-400 hover:text-purple-400 transition-all"
-              aria-label="GitHub"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
-              </svg>
-            </a>
-
-            <a 
-              :href="whatsappUrl" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-emerald-500/50 hover:bg-emerald-500/10 flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-all"
-              aria-label="WhatsApp"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-              </svg>
-            </a>
-          </div>
         </div>
 
-        <!-- Links Column 1 -->
-        <div class="lg:col-span-3 space-y-3">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-200 block mb-3 font-mono">Navegación</span>
-          <a href="#servicios" class="block text-sm text-slate-400 hover:text-cyan-400 transition-colors">Servicios &amp; Soluciones</a>
-          <a href="#nosotros" class="block text-sm text-slate-400 hover:text-cyan-400 transition-colors">Sobre Jeralth Contreras</a>
-          <a href="#metodologia" class="block text-sm text-slate-400 hover:text-cyan-400 transition-colors">Cómo Trabajamos</a>
-          <a href="#faq" class="block text-sm text-slate-400 hover:text-cyan-400 transition-colors">Preguntas Frecuentes</a>
-          <a href="#contacto" class="block text-sm text-slate-400 hover:text-cyan-400 transition-colors">Solicitar Diagnóstico</a>
+        <!-- Navigation Links -->
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <a href="#servicios" class="hover:text-cyan-400 transition-colors">Servicios</a>
+          <a href="#nosotros" class="hover:text-cyan-400 transition-colors">Sobre Mí</a>
+          <a href="#metodologia" class="hover:text-cyan-400 transition-colors">Cómo Trabajamos</a>
+          <a href="#faq" class="hover:text-cyan-400 transition-colors">Preguntas</a>
+          <a href="#contacto" class="text-cyan-400 hover:underline">Contacto</a>
         </div>
 
-        <!-- Links Column 2 -->
-        <div class="lg:col-span-4 space-y-3 text-sm">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-200 block mb-3 font-mono">Cobertura &amp; Contacto</span>
-          <p class="text-slate-400">
-            Soporte presencial en comercios de Mérida, Venezuela. Desarrollo de software web en Laravel / Vue y consultoría remota.
-          </p>
-          <div class="pt-1">
-            <a href="tel:+584247130583" class="text-sm font-mono text-cyan-400 font-bold hover:underline block">
-              +58 424-7130583 / 0422-7130583
-            </a>
-            <a href="mailto:jeralthc@gmail.com" class="text-xs text-slate-400 hover:text-slate-200 block mt-1">
-              jeralthc@gmail.com
-            </a>
-          </div>
+        <!-- Social Icons -->
+        <div class="flex items-center gap-3">
+          <a 
+            :href="linkedInUrl" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/10 flex items-center justify-center text-slate-400 hover:text-blue-400 transition-all"
+            aria-label="Perfil de LinkedIn"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+
+          <a 
+            :href="githubUrl" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/50 hover:bg-purple-500/10 flex items-center justify-center text-slate-400 hover:text-purple-400 transition-all"
+            aria-label="GitHub"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+            </svg>
+          </a>
         </div>
 
       </div>
 
       <!-- Bottom Credits -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono text-center sm:text-left">
         <p>&copy; {{ new Date().getFullYear() }} JC Code &amp; Tech. Todos los derechos reservados.</p>
         <p class="text-slate-400">Conectamos tu infraestructura. Programamos tus soluciones.</p>
       </div>

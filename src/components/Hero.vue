@@ -6,8 +6,6 @@ import {
   WrenchScrewdriverIcon,
   CheckCircleIcon
 } from '@heroicons/vue/24/outline';
-
-const whatsappUrl = 'https://wa.me/584247130583?text=Hola%20Jeralth,%20deseo%20solicitar%20un%20diagn%C3%B3stico%20gratuito%20para%20mi%20empresa.';
 </script>
 
 <template>
@@ -26,22 +24,21 @@ const whatsappUrl = 'https://wa.me/584247130583?text=Hola%20Jeralth,%20deseo%20s
         <span class="text-cyan-300 font-semibold">Atención Presencial &amp; Remota</span>
       </div>
 
-      <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12] mb-6">
+      <!-- Main Headline (Optimized for SEO H1 & SEM Conversion) -->
+      <h1 class="text-4xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.14] mb-6">
         Infraestructura que <span class="gradient-text-cyan">no se cae</span>. <br class="hidden sm:inline" />
         Software a la medida de tu comercio.
       </h1>
 
-      <!-- Clear Value Subtitle -->
-      <p class="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10">
-        Brindamos soporte técnico especializado para puntos de venta (POS) y redes, y desarrollamos software a medida con bases de datos seguras para que tu empresa crezca sin interrupciones.
+      <!-- Clear, engaging Subtitle (Pleasant to read, not heavy) -->
+      <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
+        Cuidamos el soporte técnico de tus puntos de venta (POS) y conexiones de red, y desarrollamos aplicaciones web con Laravel y Vue.js para que tu negocio opere seguro y sin pausas.
       </p>
 
-      <!-- CTAs -->
+      <!-- Clean Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
         <a 
-          :href="whatsappUrl" 
-          target="_blank"
+          href="#contacto"
           class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-base font-bold text-white shadow-[0_0_25px_rgba(6,182,212,0.35)] hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
         >
           <span>Solicitar Diagnóstico Gratuito</span>

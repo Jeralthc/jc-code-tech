@@ -19,9 +19,7 @@ const services = [
       'Soporte técnico especializado L1, L2 y L3',
       'Mantenimiento preventivo y limpieza física interna',
       'Sustitución de piezas y optimización de rendimiento'
-    ],
-    ctaText: 'Consultar Mantenimiento POS',
-    whatsappMsg: 'Hola Jeralth, deseo consultar sobre mantenimiento para mis Puntos de Venta (POS).'
+    ]
   },
   {
     icon: ServerIcon,
@@ -33,9 +31,7 @@ const services = [
       'Tendido de cables de red entre puntos (ej. switch a balanza o caja)',
       'Cambio de cables deteriorados y sustitución de conectores RJ45',
       'Optimización de la conexión directa para evitar caídas en cajas'
-    ],
-    ctaText: 'Cotizar Puntos de Red',
-    whatsappMsg: 'Hola Jeralth, deseo cotizar instalación o reemplazo de cables de red para mis equipos.'
+    ]
   },
   {
     icon: CodeBracketIcon,
@@ -47,9 +43,7 @@ const services = [
       'Sistemas de Citas y Mesa de Ayuda (Helpdesk) en Laravel + Vue.js',
       'Digitalización y estructuración de inventarios en PostgreSQL / MySQL',
       'Paneles administrativos y automatización con Python'
-    ],
-    ctaText: 'Cotizar Software a Medida',
-    whatsappMsg: 'Hola Jeralth, quiero cotizar un desarrollo con Laravel / Vue o base de datos.'
+    ]
   },
   {
     icon: ShieldCheckIcon,
@@ -61,9 +55,7 @@ const services = [
       'Configuración de copias de seguridad automáticas periódicas',
       'En formación continua y especialización en Ciberseguridad Defensiva',
       'Protección de datos comerciales y recuperación ante imprevistos'
-    ],
-    ctaText: 'Proteger mi Información',
-    whatsappMsg: 'Hola Jeralth, deseo implementar copias de seguridad y medidas de seguridad en mi negocio.'
+    ]
   }
 ];
 </script>
@@ -80,13 +72,13 @@ const services = [
         <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
           Servicios Integrales para tu Negocio
         </h2>
-        <p class="mt-4 text-base sm:text-lg text-slate-400 leading-relaxed">
+        <p class="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
           Atendemos el hardware y cables de tus equipos comerciales y programamos el software que hace crecer tu empresa.
         </p>
       </div>
 
       <!-- Services Grid (2x2 Clean Layout) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         
         <div 
           v-for="(service, idx) in services" 
@@ -106,32 +98,39 @@ const services = [
 
             <!-- Content -->
             <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">{{ service.title }}</h3>
-            <p class="text-sm sm:text-base text-slate-300 mb-6 leading-relaxed">
+            <p class="text-sm sm:text-base text-slate-300 mb-6 leading-relaxed font-normal">
               {{ service.description }}
             </p>
 
             <!-- Bullets -->
-            <ul class="space-y-3 mb-8 text-sm text-slate-300">
+            <ul class="space-y-3 text-sm text-slate-300">
               <li v-for="(pt, pIdx) in service.points" :key="pIdx" class="flex items-start gap-2.5">
                 <CheckIcon class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
                 <span>{{ pt }}</span>
               </li>
             </ul>
           </div>
-
-          <!-- Bottom Action Link -->
-          <div class="pt-6 border-t border-slate-800/80">
-            <a 
-              :href="'https://wa.me/584247130583?text=' + encodeURIComponent(service.whatsappMsg)"
-              target="_blank"
-              class="inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-1 transition-all"
-            >
-              <span>{{ service.ctaText }}</span>
-              <ArrowRightIcon class="w-4 h-4" />
-            </a>
-          </div>
         </div>
 
+      </div>
+
+      <!-- Unified Service CTA Bar (Clean, no clutter) -->
+      <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left shadow-xl">
+        <div>
+          <h4 class="text-lg sm:text-xl font-bold text-white mb-1">
+            ¿Tienes dudas sobre qué servicio requiere tu negocio?
+          </h4>
+          <p class="text-sm text-slate-300">
+            Realizamos una evaluación técnica inicial sin ningún costo ni compromiso.
+          </p>
+        </div>
+        <a 
+          href="#contacto"
+          class="shrink-0 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:scale-105 transition-all"
+        >
+          <span>Solicitar Evaluación</span>
+          <ArrowRightIcon class="w-4 h-4" />
+        </a>
       </div>
 
     </div>

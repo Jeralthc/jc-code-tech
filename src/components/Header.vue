@@ -21,7 +21,6 @@ onUnmounted(() => {
 });
 
 const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
-const whatsappUrl = 'https://wa.me/584247130583?text=Hola%20Jeralth,%20deseo%20solicitar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20para%20mi%20negocio.';
 </script>
 
 <template>
@@ -62,11 +61,10 @@ const whatsappUrl = 'https://wa.me/584247130583?text=Hola%20Jeralth,%20deseo%20s
           </a>
         </nav>
 
-        <!-- Right CTA Button -->
+        <!-- Right CTA Button (Scrolls to unified contact section) -->
         <div class="hidden sm:flex items-center gap-3">
           <a 
-            :href="whatsappUrl" 
-            target="_blank"
+            href="#contacto" 
             class="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-2"
           >
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -112,11 +110,11 @@ const whatsappUrl = 'https://wa.me/584247130583?text=Hola%20Jeralth,%20deseo%20s
         </a>
         <div class="pt-2 border-t border-slate-800">
           <a 
-            :href="whatsappUrl" 
-            target="_blank"
+            @click="closeMenu"
+            href="#contacto" 
             class="block w-full text-center rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 text-xs font-bold text-white shadow-lg"
           >
-            Contactar por WhatsApp (+58 424-7130583)
+            Solicitar Diagnóstico Gratuito
           </a>
         </div>
       </div>
