@@ -11,14 +11,14 @@ import {
 const services = [
   {
     icon: ComputerDesktopIcon,
-    badge: 'Hardware & Cajas',
+    badge: 'Especialidad Stellar POS',
     badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
-    title: 'Mantenimiento de Puntos de Venta (POS)',
-    description: 'Aseguramos que tus equipos de cobro, computadoras comerciales e impresoras funcionen siempre con fluidez y sin bloqueos.',
+    title: 'Mantenimiento de Puntos de Venta (Stellar POS)',
+    description: 'Atención especializada para comercios que operan con Stellar POS y sistemas de cobro, garantizando máxima fluidez en cajas.',
     points: [
-      'Soporte técnico especializado L1, L2 y L3',
-      'Mantenimiento preventivo y limpieza física interna',
-      'Sustitución de piezas y optimización de rendimiento'
+      'Soporte técnico L1, L2 y L3 enfocado en Stellar POS y cajas comerciales',
+      'Mantenimiento preventivo a computadoras de cobro e impresoras',
+      'Sustitución de piezas, optimización de velocidad y conexión de base de datos'
     ]
   },
   {
@@ -114,7 +114,7 @@ const services = [
 
       </div>
 
-      <!-- Unified Service CTA Bar (Clean, no clutter) -->
+      <!-- Unified Service CTA Bar -->
       <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left shadow-xl">
         <div>
           <h4 class="text-lg sm:text-xl font-bold text-white mb-1">

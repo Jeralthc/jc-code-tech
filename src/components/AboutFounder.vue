@@ -47,7 +47,7 @@ import {
                 Soy <strong class="text-white font-semibold">Jeralth Contreras</strong>, Analista de Soporte TI, Desarrollador Web y especialista en Ciberseguridad Defensiva.
               </p>
               <p>
-                Con sede en <strong class="text-white font-semibold">Mérida</strong>, me dedico a resolver los cuellos de botella tecnológicos de tu empresa. Conecto el mundo físico (soporte técnico L1-L3, cables de red y mantenimiento de equipos) con el mundo digital (desarrollo de sistemas internos como citas y mesa de ayuda en Laravel + Vue, digitalización de inventarios y bases de datos).
+                Con sede en <strong class="text-white font-semibold">Mérida</strong>, me dedico a resolver los cuellos de botella tecnológicos de tu empresa. Conecto el mundo físico (soporte técnico L1-L3 a puntos de venta, principalmente negocios con <strong class="text-cyan-300 font-semibold">Stellar POS</strong>, cables de red y mantenimiento) con el mundo digital (desarrollo de sistemas internos como citas y mesa de ayuda en Laravel + Vue, digitalización de inventarios y bases de datos).
               </p>
               <p class="text-cyan-100 font-medium">
                 Entiendo la urgencia de tu negocio y construyo soluciones seguras para que nunca dejes de operar.
@@ -56,11 +56,12 @@ import {
 
             <!-- Stack Badges -->
             <div class="flex flex-wrap gap-2 pt-1 font-mono text-2xs">
+              <span class="px-2.5 py-1 rounded-md bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-semibold">Stellar POS Expert</span>
               <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">Laravel / PHP</span>
               <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">Vue.js 3</span>
               <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">MySQL &amp; PostgreSQL</span>
               <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">Python</span>
-              <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">Soporte TI &amp; POS</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">Soporte TI L1-L3</span>
             </div>
 
             <!-- Action Button scrolling to central contact -->
@@ -85,7 +86,7 @@ import {
 
           </div>
 
-          <!-- Right: Value Proposition & Core Values Card (Non-repetitive) -->
+          <!-- Right: Value Proposition & Core Values Card -->
           <div class="lg:col-span-5 space-y-4">
             <div class="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-5">
               <div class="text-xs text-slate-300 uppercase tracking-wider font-bold pb-2 border-b border-slate-800">
@@ -95,8 +96,8 @@ import {
               <div class="flex items-start gap-3">
                 <CheckBadgeIcon class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
                 <div class="text-xs">
-                  <strong class="text-white block font-semibold text-sm">Respuesta Rápida y Personalizada</strong>
-                  <span class="text-slate-400">Atención directa sin intermediarios ni demoras burocráticas.</span>
+                  <strong class="text-white block font-semibold text-sm">Especialista en Stellar POS &amp; Cajas</strong>
+                  <span class="text-slate-400">Atención técnica experta en terminales de cobro e impresoras.</span>
                 </div>
               </div>
 

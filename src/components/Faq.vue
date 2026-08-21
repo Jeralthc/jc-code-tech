@@ -10,16 +10,20 @@ const toggleFaq = (index) => {
 
 const faqs = [
   {
+    q: '¿Tienen experiencia y soporte especializado para Stellar POS?',
+    a: 'Sí, es nuestra especialidad principal en puntos de venta. Atendemos comercios que operan con Stellar POS para resolver problemas de lentitud, configuración de impresoras fiscales/térmicas, enlace con base de datos local y mantenimiento preventivo de las computadoras de caja.'
+  },
+  {
     q: '¿El diagnóstico inicial tiene algún costo o compromiso?',
-    a: 'No, es 100% gratuito y sin ningún compromiso. Evaluamos el estado de tus puntos de venta (POS), tus cables de red o los requerimientos de software en Laravel / Vue que necesitas, y te entregamos un diagnóstico claro con una propuesta técnica y económica transparente.'
+    a: 'No, es 100% gratuito y sin ningún compromiso. Evaluamos el estado de tus puntos de venta (Stellar POS), tus cables de red o los requerimientos de software en Laravel / Vue que necesitas, y te entregamos un diagnóstico claro con una propuesta técnica y económica transparente.'
   },
   {
     q: '¿Prestan servicio presencial en Mérida y soporte remoto a otras ciudades?',
-    a: 'Sí. Atendemos presencialmente en Mérida para instalación de cables de red punto a punto, mantenimiento de computadoras comerciales y puntos de venta. Para desarrollo de software web con Laravel y Vue, bases de datos y consultoría, brindamos soporte remoto a nivel nacional e internacional.'
+    a: 'Sí. Atendemos presencialmente en Mérida para instalación de cables de red punto a punto, mantenimiento de computadoras comerciales y cajas con Stellar POS. Para desarrollo de software web con Laravel y Vue, bases de datos y consultoría, brindamos soporte remoto a nivel nacional e internacional.'
   },
   {
     q: '¿Ofrecen planes de mantenimiento preventivo y soporte mensual?',
-    a: 'Sí. Diseñamos planes mensuales a la medida de tu comercio para realizar mantenimiento preventivo periódico, verificación de copias de seguridad automáticas y atención técnica prioritaria cuando ocurra una eventualidad.'
+    a: 'Sí. Diseñamos planes mensuales a la medida de tu comercio para realizar mantenimiento preventivo periódico, verificación de copias de seguridad automáticas y atención técnica prioritaria cuando ocurra una eventualidad en tus cajas.'
   },
   {
     q: '¿Pueden digitalizar mi inventario si actualmente lo llevo en Excel?',

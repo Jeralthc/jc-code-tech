@@ -13,7 +13,7 @@ const form = ref({
   name: '',
   business: '',
   phone: '',
-  service: 'pos',
+  service: 'stellar_pos',
   message: ''
 });
 
@@ -21,7 +21,7 @@ const isSubmitted = ref(false);
 
 const sendWhatsApp = () => {
   const serviceLabels = {
-    pos: 'Mantenimiento de Puntos de Venta (POS)',
+    stellar_pos: 'Soporte Puntos de Venta (Stellar POS)',
     redes: 'Instalación / Reemplazo de Cables de Red (Punto a Punto)',
     software: 'Desarrollo de Software Web (Laravel / Vue.js)',
     databases: 'Digitalización de Inventarios (MySQL / PostgreSQL)',
@@ -54,8 +54,8 @@ const sendWhatsApp = () => {
             <span class="gradient-text-cyan">Sin Ningún Costo</span>
           </h2>
 
-          <p class="text-base text-slate-300 leading-relaxed font-sans">
-            Conversemos sobre tu negocio, tus computadoras de caja, tus cables de red o tu idea de software en Laravel / Vue. Te responderé rápidamente con una propuesta adaptada a tu presupuesto.
+          <p class="text-base text-slate-300 leading-relaxed font-sans font-normal">
+            Conversemos sobre tu negocio, tus cajas con <strong class="text-white font-semibold">Stellar POS</strong>, tus cables de red o tu idea de software en Laravel / Vue. Te responderé rápidamente con una propuesta adaptada a tus necesidades.
           </p>
 
           <!-- Contact Cards List -->
@@ -111,7 +111,7 @@ const sendWhatsApp = () => {
         <div class="lg:col-span-7">
           <div class="service-card rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-2xl">
             <h3 class="text-2xl font-bold text-white mb-2">Envía tu Solicitud</h3>
-            <p class="text-sm text-slate-400 mb-8">Completa los datos y te responderé en menos de 2 horas hábiles.</p>
+            <p class="text-sm text-slate-400 mb-8 font-normal">Completa los datos y te responderé en menos de 2 horas hábiles.</p>
 
             <form @submit.prevent="sendWhatsApp" class="space-y-5">
               
@@ -154,7 +154,7 @@ const sendWhatsApp = () => {
                     v-model="form.service" 
                     class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-sans"
                   >
-                    <option value="pos">Mantenimiento de Puntos de Venta (POS)</option>
+                    <option value="stellar_pos">Soporte Puntos de Venta (Stellar POS)</option>
                     <option value="redes">Instalación / Reemplazo de Cables de Red</option>
                     <option value="software">Desarrollo Web (Laravel / Vue.js)</option>
                     <option value="databases">Digitalización de Inventarios (SQL)</option>
@@ -170,7 +170,7 @@ const sendWhatsApp = () => {
                   v-model="form.message" 
                   rows="4" 
                   required 
-                  placeholder="Detalla brevemente la falla que presentan tus equipos o la solución que deseas desarrollar..."
+                  placeholder="Detalla brevemente la falla que presentan tus cajas con Stellar POS, equipos de red o la solución web que deseas desarrollar..."
                   class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none font-sans"
                 ></textarea>
               </div>
