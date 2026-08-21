@@ -111,7 +111,7 @@ const sendWhatsApp = () => {
         <div class="lg:col-span-7">
           <div class="service-card rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-2xl">
             <h3 class="text-2xl font-bold text-white mb-2">Envía tu Solicitud</h3>
-            <p class="text-sm text-slate-400 mb-8 font-normal">Completa los datos y te responderé en menos de 2 horas hábiles.</p>
+            <p class="text-sm text-slate-400 mb-8 font-normal">Completa los datos y te responderé lo antes posible para coordinar tu atención.</p>
 
             <form @submit.prevent="sendWhatsApp" class="space-y-5">
               
