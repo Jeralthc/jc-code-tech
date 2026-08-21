@@ -180,7 +180,7 @@ const sendWhatsApp = () => {
                 class="w-full rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 py-4 text-base font-bold text-white shadow-[0_0_25px_rgba(16,185,129,0.35)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] transition-all duration-300 flex items-center justify-center gap-2.5 hover:scale-[1.01]"
               >
                 <PaperAirplaneIcon class="w-5 h-5" />
-                <span>Enviar Solicitud a WhatsApp (+58 424-7130583)</span>
+                <span>Enviar Solicitud a WhatsApp</span>
               </button>
 
               <div v-if="isSubmitted" class="p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2 font-sans">
