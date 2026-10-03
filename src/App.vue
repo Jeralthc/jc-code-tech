@@ -2,6 +2,7 @@
 import Header from './components/Header.vue';
 import Hero from './components/Hero.vue';
 import ProjectsShowcase from './components/ProjectsShowcase.vue';
+import AnalyticsMetrics from './components/AnalyticsMetrics.vue';
 import Services from './components/Services.vue';
 import ReviewsSection from './components/ReviewsSection.vue';
 import AboutFounder from './components/AboutFounder.vue';
@@ -16,6 +17,7 @@ import WhatsAppButton from './components/WhatsAppButton.vue';
     <main class="flex-grow">
       <Hero />
       <ProjectsShowcase />
+      <AnalyticsMetrics />
       <Services />
       <ReviewsSection />
       <AboutFounder />
