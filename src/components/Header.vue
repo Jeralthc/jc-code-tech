@@ -49,9 +49,10 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-7">
-          <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Soluciones</a>
+          <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
+          <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
+          <a href="#comentarios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Opiniones</a>
           <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
-          <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Preguntas</a>
           <a :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-blue-400 flex items-center gap-1 transition-colors">
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
@@ -100,9 +101,10 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         v-if="mobileMenuOpen" 
         class="lg:hidden mx-4 mt-3 rounded-2xl glass-nav p-5 border border-white/10 shadow-2xl space-y-4 text-sm"
       >
-        <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Soluciones</a>
+        <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
+        <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
+        <a @click="closeMenu" href="#comentarios" class="block text-slate-200 hover:text-cyan-400 py-1">Opiniones</a>
         <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
-        <a @click="closeMenu" href="#faq" class="block text-slate-200 hover:text-cyan-400 py-1">Preguntas Frecuentes</a>
         <a @click="closeMenu" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
           <span>Perfil de LinkedIn</span>
         </a>

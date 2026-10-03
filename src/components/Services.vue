@@ -1,66 +1,50 @@
 <script setup>
 import { 
-  CalculatorIcon,
+  CodeBracketSquareIcon,
   CalendarDaysIcon, 
-  ChartBarIcon, 
-  ComputerDesktopIcon,
+  ComputerDesktopIcon, 
+  ServerIcon,
   CheckCircleIcon,
   ArrowRightIcon,
   SparklesIcon
 } from '@heroicons/vue/24/outline';
 
-const solutions = [
+const services = [
   {
-    id: 'costos',
-    title: 'Calculadoras de Costos & Rentabilidad',
-    category: 'Alimentos & Gastronomía',
-    badgeClass: 'text-amber-400 bg-amber-950/80 border-amber-500/30',
-    caseBadge: 'Caso Real: Industria Gastronómica',
-    desc: 'Costeo de recetas con merma, prorrateo inteligente de gastos fijos (alquiler, luz, nómina) y cálculo automático del margen de ganancia neto real por producto.',
-    stack: ['Laravel 11', 'Vue.js 3', 'MySQL / In-Memory Calc'],
-    target: 'Restaurantes, franquicias de comida, panaderías y mayoristas',
-    icon: CalculatorIcon,
-    accentBorder: 'hover:border-amber-500/40',
-    iconColor: 'text-amber-400'
+    id: 'fullstack',
+    title: 'Desarrollo Web Full-Stack a Medida',
+    badge: 'Software Personalizado',
+    badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
+    desc: 'Construimos el sistema web exacto que tu negocio necesita: calculadoras de costos, portales para clientes, paneles de control y automatización para dejar atrás las hojas de Excel.',
+    benefit: 'Ahorra horas de trabajo manual y centraliza tus datos en la nube de forma segura.',
+    icon: CodeBracketSquareIcon
   },
   {
-    id: 'logistica-citas',
-    title: 'Sistemas de Citas, Logística & Turnos',
-    category: 'Logística & Operaciones',
-    badgeClass: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
-    caseBadge: 'Caso Real: LogiSync & ERP',
-    desc: 'Plataforma para coordinar citas de proveedores y muelle de carga con sincronización ERP, ventanas horarias, control de transportistas y avisos por correo.',
-    stack: ['Laravel 11', 'Vue.js 3', 'Inertia.js', 'API ERP'],
-    target: 'Cadenas de retail, distribuidoras, muelles y consultorios',
-    icon: CalendarDaysIcon,
-    accentBorder: 'hover:border-cyan-500/40',
-    iconColor: 'text-cyan-400'
+    id: 'citas',
+    title: 'Sistemas de Citas, Turnos & Reservas',
+    badge: 'Automatización 24/7',
+    badgeColor: 'text-amber-400 bg-amber-950/80 border-amber-500/30',
+    desc: 'Plataformas interactivas para que tus clientes, pacientes o proveedores agenden citas automáticamente según tus horarios disponibles y capacidad de atención.',
+    benefit: 'Elimina el 80% de llamadas y mensajes repetitivos de WhatsApp.',
+    icon: CalendarDaysIcon
   },
   {
-    id: 'reportes-bi',
-    title: 'Sistemas de Reportes & Catálogo Web',
-    category: 'Empresas & Tecnología',
-    badgeClass: 'text-purple-400 bg-purple-950/80 border-purple-500/30',
-    caseBadge: 'Caso Real: Sector Tecnológico',
-    desc: 'Dashboards ejecutivos con métricas de ventas y stock, catálogo digital con pedidos automáticos a WhatsApp, exportación de PDFs y trazabilidad de seriales.',
-    stack: ['Laravel', 'Vue.js', 'Tailwind', 'Generación PDF'],
-    target: 'Empresas de tecnología, distribuidores de repuestos y comercios B2B',
-    icon: ChartBarIcon,
-    accentBorder: 'hover:border-purple-500/40',
-    iconColor: 'text-purple-400'
+    id: 'pos',
+    title: 'Soporte y Continuidad para Cajas (Stellar POS)',
+    badge: 'Presencial en Mérida',
+    badgeColor: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
+    desc: 'Atención técnica preventiva y de emergencia para comercios con Stellar POS. Solucionamos cuelgues de caja, errores de software y fallas de impresoras térmicas.',
+    benefit: 'Garantiza que tus puntos de cobro nunca se detengan en horas pico.',
+    icon: ComputerDesktopIcon
   },
   {
-    id: 'pos-soporte',
-    title: 'Soporte Stellar POS & Redes Físicas',
-    category: 'Comercios en Mérida',
-    badgeClass: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
-    caseBadge: 'Presencial en Mérida & Remoto',
-    desc: 'Atención técnica preventiva y correctiva para negocios que usan Stellar POS. Instalación de cables de red punto a punto (router a balanzas/cajas) y respaldos.',
-    stack: ['Stellar POS', 'Redes LAN RJ45', 'Respaldos Automáticos'],
-    target: 'Bodegones, supermercados, farmacias y tiendas locales',
-    icon: ComputerDesktopIcon,
-    accentBorder: 'hover:border-emerald-500/40',
-    iconColor: 'text-emerald-400'
+    id: 'redes',
+    title: 'Puntos de Red & Cableado Comercial',
+    badge: 'Conectividad Estable',
+    badgeColor: 'text-blue-400 bg-blue-950/80 border-blue-500/30',
+    desc: 'Instalación y sustitución de cables de red punto a punto para conectar de forma fija y rápida tus balanzas, cajas registradoras, impresoras y computadoras.',
+    benefit: 'Olvídate de la lentitud y las caídas de señal del WiFi en tus equipos de venta.',
+    icon: ServerIcon
   }
 ];
 </script>
@@ -71,42 +55,34 @@ const solutions = [
       
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-3">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-3">
           <SparklesIcon class="w-3.5 h-3.5" />
-          <span>Experiencia Real en Producción</span>
+          <span>Servicios Profesionales</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Soluciones de Software &amp; Soporte
+          ¿Cómo Puedo Ayudar a tu Negocio?
         </h2>
-        <p class="mt-3 text-sm sm:text-base text-slate-400">
-          Sistemas probados en empresas reales para resolver finanzas, logística y continuidad operativa.
+        <p class="mt-2 text-sm sm:text-base text-slate-400">
+          Soluciones claras, explicadas en tu idioma y enfocadas en rentabilidad y tranquilidad operativa.
         </p>
       </div>
 
-      <!-- Solutions Grid (4 Compact, High-Impact Cards) -->
+      <!-- 4 Services Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div 
-          v-for="item in solutions" 
+          v-for="item in services" 
           :key="item.id"
-          :class="[
-            'service-card rounded-2xl p-6 sm:p-7 border border-slate-800/90 bg-slate-900/60 flex flex-col justify-between transition-all duration-300 group',
-            item.accentBorder
-          ]"
+          class="service-card rounded-2xl p-6 sm:p-7 border border-slate-800/90 bg-slate-900/60 flex flex-col justify-between hover:border-cyan-500/40 transition-all duration-300 group"
         >
           <div>
-            <!-- Top Row: Icon + Badges -->
+            <!-- Top: Icon & Badge -->
             <div class="flex items-center justify-between gap-3 mb-4">
-              <div class="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center group-hover:scale-105 transition-all">
-                <component :is="item.icon" :class="['w-5 h-5', item.iconColor]" />
+              <div class="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all">
+                <component :is="item.icon" class="w-5 h-5" />
               </div>
-              <div class="flex flex-wrap items-center gap-1.5 justify-end">
-                <span class="text-3xs font-mono font-medium text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                  {{ item.caseBadge }}
-                </span>
-                <span :class="['text-3xs font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border', item.badgeClass]">
-                  {{ item.category }}
-                </span>
-              </div>
+              <span :class="['text-3xs font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border', item.badgeColor]">
+                {{ item.badge }}
+              </span>
             </div>
 
             <!-- Title & Description -->
@@ -117,52 +93,29 @@ const solutions = [
               {{ item.desc }}
             </p>
 
-            <!-- Target Audience -->
-            <div class="text-2xs text-slate-400 mb-4 flex items-start gap-1.5">
-              <span class="text-cyan-400 font-semibold shrink-0">Dirigido a:</span>
-              <span>{{ item.target }}</span>
+            <!-- Direct Benefit Line -->
+            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 mb-4 flex items-start gap-2">
+              <CheckCircleIcon class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <p class="text-2xs sm:text-xs text-emerald-300/90 font-medium">
+                {{ item.benefit }}
+              </p>
             </div>
           </div>
 
-          <!-- Bottom: Tech Stack & WhatsApp Action -->
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
-            <div class="flex flex-wrap gap-1.5">
-              <span 
-                v-for="tech in item.stack" 
-                :key="tech"
-                class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-3xs font-mono text-slate-400"
-              >
-                {{ tech }}
-              </span>
-            </div>
-
+          <!-- Bottom: Action Link -->
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-3xs font-mono text-slate-400">
+              Presupuesto personalizado
+            </span>
             <a 
               href="#contacto"
-              class="shrink-0 text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+              class="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-1 transition-transform"
             >
-              <span>Consultar</span>
+              <span>Consultar este servicio</span>
               <ArrowRightIcon class="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
-      </div>
-
-      <!-- Trust Action Banner -->
-      <div class="rounded-2xl p-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-cyan-500/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg">
-        <div>
-          <h4 class="text-base sm:text-lg font-bold text-white">
-            ¿Necesitas una solución similar adaptada al flujo de tu empresa?
-          </h4>
-          <p class="text-xs sm:text-sm text-slate-400">
-            Diseñamos el sistema o atendemos tus cajas sin ningún costo inicial por el diagnóstico.
-          </p>
-        </div>
-        <a 
-          href="#contacto"
-          class="shrink-0 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md hover:scale-105 transition-all"
-        >
-          Solicitar Evaluación
-        </a>
       </div>
 
     </div>

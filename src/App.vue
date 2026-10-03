@@ -1,9 +1,10 @@
 <script setup>
 import Header from './components/Header.vue';
 import Hero from './components/Hero.vue';
+import ProjectsShowcase from './components/ProjectsShowcase.vue';
 import Services from './components/Services.vue';
+import TestimonialsSection from './components/TestimonialsSection.vue';
 import AboutFounder from './components/AboutFounder.vue';
-import Faq from './components/Faq.vue';
 import ContactSection from './components/ContactSection.vue';
 import Footer from './components/Footer.vue';
 import WhatsAppButton from './components/WhatsAppButton.vue';
@@ -14,9 +15,10 @@ import WhatsAppButton from './components/WhatsAppButton.vue';
     <Header />
     <main class="flex-grow">
       <Hero />
+      <ProjectsShowcase />
       <Services />
+      <TestimonialsSection />
       <AboutFounder />
-      <Faq />
       <ContactSection />
     </main>
     <Footer />
