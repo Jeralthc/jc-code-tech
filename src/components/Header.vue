@@ -49,8 +49,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-7">
-          <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
-          <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
+          <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Soluciones</a>
           <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
           <a href="#metodologia" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Cómo Trabajamos</a>
           <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Preguntas</a>
@@ -102,8 +101,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         v-if="mobileMenuOpen" 
         class="lg:hidden mx-4 mt-3 rounded-2xl glass-nav p-5 border border-white/10 shadow-2xl space-y-4 text-sm"
       >
-        <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
-        <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
+        <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Soluciones</a>
         <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
         <a @click="closeMenu" href="#metodologia" class="block text-slate-200 hover:text-cyan-400 py-1">Cómo Trabajamos</a>
         <a @click="closeMenu" href="#faq" class="block text-slate-200 hover:text-cyan-400 py-1">Preguntas Frecuentes</a>
