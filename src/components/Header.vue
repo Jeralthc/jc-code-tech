@@ -68,7 +68,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
             class="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-2"
           >
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Diagnóstico Gratuito</span>
+            <span>Contactar</span>
           </a>
         </div>
 
@@ -114,7 +114,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
             href="#contacto" 
             class="block w-full text-center rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 text-xs font-bold text-white shadow-lg"
           >
-            Solicitar Diagnóstico Gratuito
+            Contactar
           </a>
         </div>
       </div>
