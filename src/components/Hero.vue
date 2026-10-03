@@ -26,13 +26,13 @@ import {
 
       <!-- Main Headline (Optimized for SEO H1 & SEM Conversion) -->
       <h1 class="text-4xl sm:text-6xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.14] mb-6">
-        Infraestructura que <span class="gradient-text-cyan">no se cae</span>. <br class="hidden sm:inline" />
-        Software a la medida de tu comercio.
+        Software operativo que <span class="gradient-text-cyan">hace rentable</span> tu negocio. <br class="hidden sm:inline" />
+        Soporte técnico que no te deja parado.
       </h1>
 
       <!-- Clear, engaging Subtitle -->
-      <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
-        Soporte técnico para tus puntos de venta (con experiencia práctica en <strong class="text-white font-semibold">Stellar POS</strong>) y cables de red, junto con desarrollo web a medida en PHP, Laravel y Vue.js.
+      <p class="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
+        Desarrollo sistemas a medida que resuelven dolores reales: <strong class="text-white font-semibold">calculadoras de costos gastronómicos</strong>, <strong class="text-white font-semibold">sistemas de citas y logística</strong> y <strong class="text-white font-semibold">reportes ejecutivos</strong> (Laravel + Vue), además de soporte técnico a puntos de venta (<strong class="text-cyan-300 font-semibold">Stellar POS</strong>) y redes en Mérida.
       </p>
 
       <!-- Clean Action Buttons -->

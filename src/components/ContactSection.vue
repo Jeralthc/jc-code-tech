@@ -21,15 +21,15 @@ const isSubmitted = ref(false);
 
 const sendWhatsApp = () => {
   const serviceLabels = {
-    pos: 'Mantenimiento de Puntos de Venta (Stellar POS / Otros)',
+    costos: 'Calculadora de Costos & Rentabilidad (Gastronomía / Alimentos)',
+    citas: 'Sistema de Citas, Logística & Turnos (LogiSync / ERP)',
+    reportes: 'Sistema de Reportes Ejecutivos & Catálogo Web',
+    pos: 'Soporte Técnico Stellar POS & Cajas (Mérida)',
     redes: 'Instalación / Reemplazo de Cables de Red (Punto a Punto)',
-    software: 'Desarrollo Web (PHP / Laravel / Vue.js)',
-    databases: 'Digitalización de Inventarios (MySQL / PostgreSQL)',
-    soporte: 'Plan de Soporte Mensual B2B',
-    otro: 'Diagnóstico Técnico General'
+    otro: 'Diagnóstico Técnico Personalizado'
   };
 
-  const text = `¡Hola Jeralth! 👋%0A%0ASolicito un diagnóstico técnico:%0A• *Nombre:* ${encodeURIComponent(form.value.name || 'Cliente')}%0A• *Empresa/Comercio:* ${encodeURIComponent(form.value.business || 'Particular')}%0A• *Teléfono:* ${encodeURIComponent(form.value.phone || 'No especificado')}%0A• *Servicio:* ${encodeURIComponent(serviceLabels[form.value.service] || form.value.service)}%0A• *Detalle:* ${encodeURIComponent(form.value.message || 'Deseo coordinar una evaluación.')}`;
+  const text = `¡Hola Jeralth! 👋%0A%0ASolicito una consulta técnica:%0A• *Nombre:* ${encodeURIComponent(form.value.name || 'Cliente')}%0A• *Empresa/Comercio:* ${encodeURIComponent(form.value.business || 'Particular')}%0A• *Teléfono:* ${encodeURIComponent(form.value.phone || 'No especificado')}%0A• *Solución:* ${encodeURIComponent(serviceLabels[form.value.service] || form.value.service)}%0A• *Detalle:* ${encodeURIComponent(form.value.message || 'Deseo evaluar una implementación.')}`;
 
   window.open(`https://wa.me/584247130583?text=${text}`, '_blank');
   isSubmitted.value = true;
@@ -149,16 +149,16 @@ const sendWhatsApp = () => {
                   />
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Servicio Requerido *</label>
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Solución Requerida *</label>
                   <select 
                     v-model="form.service" 
                     class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-sans"
                   >
-                    <option value="pos">Mantenimiento de Puntos de Venta (Stellar POS / Otros)</option>
-                    <option value="redes">Instalación / Reemplazo de Cables de Red</option>
-                    <option value="software">Desarrollo Web (PHP / Laravel / Vue.js)</option>
-                    <option value="databases">Digitalización de Inventarios (SQL)</option>
-                    <option value="soporte">Plan de Soporte Mensual</option>
+                    <option value="costos">Calculadora de Costos &amp; Rentabilidad (Gastronomía)</option>
+                    <option value="citas">Sistema de Citas, Logística &amp; Turnos (ERP)</option>
+                    <option value="reportes">Sistema de Reportes Ejecutivos &amp; Catálogo Web</option>
+                    <option value="pos">Soporte Técnico Stellar POS &amp; Cajas (Mérida)</option>
+                    <option value="redes">Instalación de Cables de Red (Punto a Punto)</option>
                     <option value="otro">Diagnóstico Técnico General</option>
                   </select>
                 </div>

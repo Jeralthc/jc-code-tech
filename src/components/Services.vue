@@ -1,9 +1,9 @@
 <script setup>
 import { 
+  CalculatorIcon,
   CalendarDaysIcon, 
-  ComputerDesktopIcon, 
-  ServerIcon, 
-  CircleStackIcon,
+  ChartBarIcon, 
+  ComputerDesktopIcon,
   CheckCircleIcon,
   ArrowRightIcon,
   SparklesIcon
@@ -11,48 +11,56 @@ import {
 
 const solutions = [
   {
-    id: 'software',
-    title: 'Sistemas Web: Citas & Mesa de Ayuda',
-    subtitle: 'Automatización a Medida',
-    desc: 'Plataformas reactivas para agendar citas 24/7 y mesas de ayuda internas (Helpdesk) para registrar incidencias de tu equipo sin perder tiempo en chats.',
-    target: 'Clínicas, consultorios, talleres y pymes',
-    stack: ['Laravel 11', 'Vue.js 3', 'MySQL / PostgreSQL'],
+    id: 'costos',
+    title: 'Calculadoras de Costos & Rentabilidad',
+    category: 'Alimentos & Gastronomía',
+    badgeClass: 'text-amber-400 bg-amber-950/80 border-amber-500/30',
+    caseBadge: 'Caso Real: Industria Gastronómica',
+    desc: 'Costeo de recetas con merma, prorrateo inteligente de gastos fijos (alquiler, luz, nómina) y cálculo automático del margen de ganancia neto real por producto.',
+    stack: ['Laravel 11', 'Vue.js 3', 'MySQL / In-Memory Calc'],
+    target: 'Restaurantes, franquicias de comida, panaderías y mayoristas',
+    icon: CalculatorIcon,
+    accentBorder: 'hover:border-amber-500/40',
+    iconColor: 'text-amber-400'
+  },
+  {
+    id: 'logistica-citas',
+    title: 'Sistemas de Citas, Logística & Turnos',
+    category: 'Logística & Operaciones',
+    badgeClass: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
+    caseBadge: 'Caso Real: LogiSync & ERP',
+    desc: 'Plataforma para coordinar citas de proveedores y muelle de carga con sincronización ERP, ventanas horarias, control de transportistas y avisos por correo.',
+    stack: ['Laravel 11', 'Vue.js 3', 'Inertia.js', 'API ERP'],
+    target: 'Cadenas de retail, distribuidoras, muelles y consultorios',
     icon: CalendarDaysIcon,
-    accent: 'cyan',
-    badgeClass: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30'
+    accentBorder: 'hover:border-cyan-500/40',
+    iconColor: 'text-cyan-400'
   },
   {
-    id: 'pos',
-    title: 'Soporte Stellar POS & Cajas',
-    subtitle: 'Continuidad de Cobro',
-    desc: 'Atención técnica preventiva y correctiva para negocios que usan Stellar POS. Solución rápida a bloqueos de caja, fallas de impresión y base de datos local.',
-    target: 'Bodegones, supermercados y farmacias',
-    stack: ['Stellar POS', 'Impresoras Térmicas', 'Hardware POS'],
+    id: 'reportes-bi',
+    title: 'Sistemas de Reportes & Catálogo Web',
+    category: 'Empresas & Tecnología',
+    badgeClass: 'text-purple-400 bg-purple-950/80 border-purple-500/30',
+    caseBadge: 'Caso Real: Sector Tecnológico',
+    desc: 'Dashboards ejecutivos con métricas de ventas y stock, catálogo digital con pedidos automáticos a WhatsApp, exportación de PDFs y trazabilidad de seriales.',
+    stack: ['Laravel', 'Vue.js', 'Tailwind', 'Generación PDF'],
+    target: 'Empresas de tecnología, distribuidores de repuestos y comercios B2B',
+    icon: ChartBarIcon,
+    accentBorder: 'hover:border-purple-500/40',
+    iconColor: 'text-purple-400'
+  },
+  {
+    id: 'pos-soporte',
+    title: 'Soporte Stellar POS & Redes Físicas',
+    category: 'Comercios en Mérida',
+    badgeClass: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
+    caseBadge: 'Presencial en Mérida & Remoto',
+    desc: 'Atención técnica preventiva y correctiva para negocios que usan Stellar POS. Instalación de cables de red punto a punto (router a balanzas/cajas) y respaldos.',
+    stack: ['Stellar POS', 'Redes LAN RJ45', 'Respaldos Automáticos'],
+    target: 'Bodegones, supermercados, farmacias y tiendas locales',
     icon: ComputerDesktopIcon,
-    accent: 'amber',
-    badgeClass: 'text-amber-400 bg-amber-950/80 border-amber-500/30'
-  },
-  {
-    id: 'redes',
-    title: 'Puntos de Red & Cableado Comercial',
-    subtitle: 'Conectividad sin Caídas',
-    desc: 'Instalación y sustitución de cables de red punto a punto. Conexión directa y estable desde switch/router hasta tus balanzas, cajas y computadoras.',
-    target: 'Comercios con fallas o caídas de WiFi',
-    stack: ['Cableado Estructurado', 'Punto a Punto', 'RJ45'],
-    icon: ServerIcon,
-    accent: 'blue',
-    badgeClass: 'text-blue-400 bg-blue-950/80 border-blue-500/30'
-  },
-  {
-    id: 'datos',
-    title: 'Inventarios & Bases de Datos Seguras',
-    subtitle: 'Adiós al Caos de Excel',
-    desc: 'Digitalizamos y organizamos tu stock en bases de datos relacionales robustas, con control estricto de usuarios y copias de seguridad automáticas.',
-    target: 'Comercios que superaron las hojas de cálculo',
-    stack: ['PostgreSQL', 'MySQL', 'Copias Automáticas'],
-    icon: CircleStackIcon,
-    accent: 'emerald',
-    badgeClass: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30'
+    accentBorder: 'hover:border-emerald-500/40',
+    iconColor: 'text-emerald-400'
   }
 ];
 </script>
@@ -61,39 +69,47 @@ const solutions = [
   <section id="servicios" class="py-20 bg-slate-900/40 relative border-t border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- Section Header: Direct & Concise -->
+      <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-3">
           <SparklesIcon class="w-3.5 h-3.5" />
-          <span>Soluciones &amp; Proyectos</span>
+          <span>Experiencia Real en Producción</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Lo que Hacemos por tu Negocio
+          Soluciones de Software &amp; Soporte
         </h2>
         <p class="mt-3 text-sm sm:text-base text-slate-400">
-          Sin tecnicismos innecesarios: resolvemos fallas en tu punto de venta y creamos el software que tu operación necesita.
+          Sistemas probados en empresas reales para resolver finanzas, logística y continuidad operativa.
         </p>
       </div>
 
-      <!-- Solutions Grid (4 Compact Cards) -->
+      <!-- Solutions Grid (4 Compact, High-Impact Cards) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div 
           v-for="item in solutions" 
           :key="item.id"
-          class="service-card rounded-2xl p-6 sm:p-7 border border-slate-800/90 bg-slate-900/60 flex flex-col justify-between hover:border-cyan-500/40 transition-all duration-300 group"
+          :class="[
+            'service-card rounded-2xl p-6 sm:p-7 border border-slate-800/90 bg-slate-900/60 flex flex-col justify-between transition-all duration-300 group',
+            item.accentBorder
+          ]"
         >
           <div>
-            <!-- Top Row: Icon + Badge -->
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all">
-                <component :is="item.icon" class="w-5 h-5" />
+            <!-- Top Row: Icon + Badges -->
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <div class="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center group-hover:scale-105 transition-all">
+                <component :is="item.icon" :class="['w-5 h-5', item.iconColor]" />
               </div>
-              <span :class="['text-2xs font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border', item.badgeClass]">
-                {{ item.subtitle }}
-              </span>
+              <div class="flex flex-wrap items-center gap-1.5 justify-end">
+                <span class="text-3xs font-mono font-medium text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                  {{ item.caseBadge }}
+                </span>
+                <span :class="['text-3xs font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border', item.badgeClass]">
+                  {{ item.category }}
+                </span>
+              </div>
             </div>
 
-            <!-- Title & Pitch -->
+            <!-- Title & Description -->
             <h3 class="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
               {{ item.title }}
             </h3>
@@ -101,14 +117,14 @@ const solutions = [
               {{ item.desc }}
             </p>
 
-            <!-- Target Audience Line -->
-            <div class="text-2xs text-slate-400 mb-4 flex items-center gap-1.5">
-              <span class="text-cyan-400 font-semibold">Ideal para:</span>
+            <!-- Target Audience -->
+            <div class="text-2xs text-slate-400 mb-4 flex items-start gap-1.5">
+              <span class="text-cyan-400 font-semibold shrink-0">Dirigido a:</span>
               <span>{{ item.target }}</span>
             </div>
           </div>
 
-          <!-- Bottom: Tech Pills & Quick CTA -->
+          <!-- Bottom: Tech Stack & WhatsApp Action -->
           <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
             <div class="flex flex-wrap gap-1.5">
               <span 
@@ -131,14 +147,14 @@ const solutions = [
         </div>
       </div>
 
-      <!-- Compact Trust Banner -->
+      <!-- Trust Action Banner -->
       <div class="rounded-2xl p-6 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900 border border-cyan-500/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg">
         <div>
           <h4 class="text-base sm:text-lg font-bold text-white">
-            ¿Tienes una urgencia en caja o una idea de software?
+            ¿Necesitas una solución similar adaptada al flujo de tu empresa?
           </h4>
           <p class="text-xs sm:text-sm text-slate-400">
-            Realizamos una evaluación técnica inicial sin costo ni compromiso.
+            Diseñamos el sistema o atendemos tus cajas sin ningún costo inicial por el diagnóstico.
           </p>
         </div>
         <a 

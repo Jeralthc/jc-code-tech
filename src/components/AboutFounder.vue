@@ -46,16 +46,16 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
             </div>
 
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
-              Ayudo a comercios y empresas a resolver sus cuellos de botella tecnológicos. Conecto el mundo físico (soporte práctico a cajas con <strong class="text-white font-semibold">Stellar POS</strong>, terminales e instalación de cables de red) con el mundo digital (desarrollo web a medida en <strong class="text-white font-semibold">PHP, Laravel y Vue.js</strong>, bases de datos y respaldos seguros).
+              Desarrollo soluciones de software que resuelven cuellos de botella reales: he construido <strong class="text-white font-semibold">calculadoras de costos y mermas</strong> para empresas gastronómicas, <strong class="text-white font-semibold">sistemas de citas y logística sincronizados con ERP</strong> (LogiSync) y <strong class="text-white font-semibold">plataformas de reportes</strong> para empresas de tecnología. Además, brindo soporte técnico práctico a puntos de venta (<strong class="text-cyan-300 font-semibold">Stellar POS</strong>) y cables de red para comercios en Mérida.
             </p>
 
             <!-- Stack Badges -->
             <div class="flex flex-wrap justify-center sm:justify-start gap-1.5 font-mono text-3xs pt-1">
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Stellar POS &amp; Cajas</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Costeo Gastronómico</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Logística &amp; ERP</span>
               <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">PHP 8 &amp; Laravel 11</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Vue.js 3</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Redes LAN RJ45</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">MySQL &amp; PostgreSQL</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Vue.js 3 &amp; Inertia</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Stellar POS &amp; Redes</span>
             </div>
 
             <!-- Action Buttons -->
