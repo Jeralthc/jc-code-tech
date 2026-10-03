@@ -3,7 +3,7 @@ import Header from './components/Header.vue';
 import Hero from './components/Hero.vue';
 import ProjectsShowcase from './components/ProjectsShowcase.vue';
 import Services from './components/Services.vue';
-import TestimonialsSection from './components/TestimonialsSection.vue';
+import ReviewsSection from './components/ReviewsSection.vue';
 import AboutFounder from './components/AboutFounder.vue';
 import ContactSection from './components/ContactSection.vue';
 import Footer from './components/Footer.vue';
@@ -17,7 +17,7 @@ import WhatsAppButton from './components/WhatsAppButton.vue';
       <Hero />
       <ProjectsShowcase />
       <Services />
-      <TestimonialsSection />
+      <ReviewsSection />
       <AboutFounder />
       <ContactSection />
     </main>
