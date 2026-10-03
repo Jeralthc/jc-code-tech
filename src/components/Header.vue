@@ -51,7 +51,6 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         <nav class="hidden lg:flex items-center gap-7">
           <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Soluciones</a>
           <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
-          <a href="#metodologia" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Cómo Trabajamos</a>
           <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Preguntas</a>
           <a :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-blue-400 flex items-center gap-1 transition-colors">
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -103,7 +102,6 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
       >
         <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Soluciones</a>
         <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
-        <a @click="closeMenu" href="#metodologia" class="block text-slate-200 hover:text-cyan-400 py-1">Cómo Trabajamos</a>
         <a @click="closeMenu" href="#faq" class="block text-slate-200 hover:text-cyan-400 py-1">Preguntas Frecuentes</a>
         <a @click="closeMenu" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
           <span>Perfil de LinkedIn</span>

@@ -29,7 +29,6 @@ const githubUrl = 'https://github.com/Jeralthc';
         <div class="flex flex-wrap items-center justify-center gap-6 text-xs font-semibold uppercase tracking-wider text-slate-300">
           <a href="#servicios" class="hover:text-cyan-400 transition-colors">Soluciones</a>
           <a href="#nosotros" class="hover:text-cyan-400 transition-colors">Sobre Mí</a>
-          <a href="#metodologia" class="hover:text-cyan-400 transition-colors">Cómo Trabajamos</a>
           <a href="#faq" class="hover:text-cyan-400 transition-colors">Preguntas</a>
           <a href="#contacto" class="text-cyan-400 hover:underline">Contacto</a>
         </div>
