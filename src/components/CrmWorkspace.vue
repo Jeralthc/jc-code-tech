@@ -22,13 +22,81 @@ import {
   BriefcaseIcon,
   EyeIcon,
   TagIcon,
-  CheckBadgeIcon
+  CheckBadgeIcon,
+  FolderIcon,
+  ListBulletIcon,
+  ArrowUturnLeftIcon,
+  CalendarIcon,
+  CheckIcon
 } from '@heroicons/vue/24/outline';
 
-// Active Tab: 'clients' | 'builder' | 'quotes' | 'analytics'
-const activeTab = ref('builder');
+const emit = defineEmits(['exitCrm']);
 
-// --- INITIAL SEED DATA ---
+// Active Tab: 'projects' | 'clients' | 'builder' | 'quotes' | 'analytics'
+const activeTab = ref('projects');
+
+// =========================================================================
+// 1. INITIAL SEED DATA (Realistic Projects, Clients, and Quotes)
+// =========================================================================
+
+const defaultProjects = [
+  {
+    id: 'PRJ-001',
+    title: 'Calculadora de Costos & Mermas de Recetas',
+    clientId: 'cli-001',
+    company: 'Restaurante & Comida El Caldero',
+    clientName: 'Lic. Andrés Villamizar',
+    category: 'Software a Medida (Laravel + Vue)',
+    status: 'in_progress', // 'planning' | 'in_progress' | 'review' | 'completed'
+    budget: 850,
+    startDate: '2026-09-15',
+    dueDate: '2026-10-25',
+    tasks: [
+      { id: 1, text: 'Modelado relacional de insumos y recetas en MySQL', done: true },
+      { id: 2, text: 'Algoritmo de cálculo de costos unitarios y mermas en PHP/Laravel', done: true },
+      { id: 3, text: 'Interfaz interactiva de simulación de ganancias en Vue 3', done: true },
+      { id: 4, text: 'Validación operativa con el chef y gerencia de compras', done: false },
+      { id: 5, text: 'Pase a producción y entrega de manual de uso', done: false }
+    ]
+  },
+  {
+    id: 'PRJ-002',
+    title: 'Plataforma de Facturación Proforma & Remisiones',
+    clientId: 'cli-002',
+    company: 'LogiSync Distribución & Despachos',
+    clientName: 'Ing. Carlos Mendoza',
+    category: 'Desarrollo Web Full-Stack',
+    status: 'completed',
+    budget: 1406,
+    startDate: '2026-08-20',
+    dueDate: '2026-09-20',
+    tasks: [
+      { id: 1, text: 'Arquitectura Backend en Laravel 11 y roles de usuario', done: true },
+      { id: 2, text: 'Dashboard Frontend en Vue 3 con filtros dinámicos', done: true },
+      { id: 3, text: 'Generador de proformas en PDF y enlace a WhatsApp', done: true },
+      { id: 4, text: 'Despliegue en servidor en la nube con SSL y respaldos diarios', done: true }
+    ]
+  },
+  {
+    id: 'PRJ-003',
+    title: 'Instalación de 3 Terminales POS & Red Cableada Cat6',
+    clientId: 'cli-003',
+    company: 'Bodegón & Minimarket San Cristóbal',
+    clientName: 'Marcos Peña',
+    category: 'Puntos de Venta (POS) & Redes',
+    status: 'planning',
+    budget: 680,
+    startDate: '2026-10-10',
+    dueDate: '2026-10-22',
+    tasks: [
+      { id: 1, text: 'Inspección de cuartos de red y puntos de energía para cajas', done: true },
+      { id: 2, text: 'Tendido de cable estructurado Cat6 certificado para cajas y router', done: false },
+      { id: 3, text: 'Instalación de Stellar POS e impresoras térmicas en cajas 1, 2 y 3', done: false },
+      { id: 4, text: 'Servidor local MySQL con copia de seguridad en red', done: false }
+    ]
+  }
+];
+
 const defaultClients = [
   {
     id: 'cli-001',
@@ -39,7 +107,7 @@ const defaultClients = [
     category: 'Gastronomía & POS',
     status: 'in_progress', // 'lead' | 'quoting' | 'in_progress' | 'active' | 'closed'
     city: 'Mérida / San Cristóbal',
-    notes: 'Requirió Calculadora de Costos de recetas, control de mermas y enlace con comandas de cocina.',
+    notes: 'Calculadora de costos de recetas, control de mermas y sincronización operativa.',
     createdAt: '2026-09-15'
   },
   {
@@ -51,7 +119,7 @@ const defaultClients = [
     category: 'Logística & Full-Stack',
     status: 'active',
     city: 'Mérida',
-    notes: 'Desarrollo de plataforma central en Laravel + Vue con exportación de presupuestos y remisiones.',
+    notes: 'Plataforma central en Laravel + Vue con exportación de presupuestos y reportes.',
     createdAt: '2026-08-20'
   },
   {
@@ -63,7 +131,7 @@ const defaultClients = [
     category: 'Retail & POS',
     status: 'quoting',
     city: 'San Cristóbal',
-    notes: 'Cotización para 3 terminales Stellar POS, cableado de red Cat6 y servidor local MySQL.',
+    notes: '3 terminales Stellar POS, cableado estructurado Cat6 y servidor MySQL local.',
     createdAt: '2026-10-02'
   },
   {
@@ -160,19 +228,26 @@ const defaultQuotes = [
   }
 ];
 
-// --- REACTIVE STATE WITH LOCALSTORAGE PERSISTENCE ---
+// =========================================================================
+// 2. REACTIVE STATE & PERSISTENCE
+// =========================================================================
+
+const projects = ref([]);
 const clients = ref([]);
 const quotes = ref([]);
 
 const loadData = () => {
   try {
+    const savedProjects = localStorage.getItem('jc_crm_projects');
     const savedClients = localStorage.getItem('jc_crm_clients');
     const savedQuotes = localStorage.getItem('jc_crm_quotes');
-    
+
+    projects.value = savedProjects ? JSON.parse(savedProjects) : defaultProjects;
     clients.value = savedClients ? JSON.parse(savedClients) : defaultClients;
     quotes.value = savedQuotes ? JSON.parse(savedQuotes) : defaultQuotes;
   } catch (e) {
     console.error('Error cargando datos de CRM:', e);
+    projects.value = defaultProjects;
     clients.value = defaultClients;
     quotes.value = defaultQuotes;
   }
@@ -180,6 +255,7 @@ const loadData = () => {
 
 const saveData = () => {
   try {
+    localStorage.setItem('jc_crm_projects', JSON.stringify(projects.value));
     localStorage.setItem('jc_crm_clients', JSON.stringify(clients.value));
     localStorage.setItem('jc_crm_quotes', JSON.stringify(quotes.value));
   } catch (e) {
@@ -189,6 +265,7 @@ const saveData = () => {
 
 const resetToDefaults = () => {
   if (confirm('¿Restablecer datos del CRM a los valores iniciales de demostración?')) {
+    projects.value = JSON.parse(JSON.stringify(defaultProjects));
     clients.value = JSON.parse(JSON.stringify(defaultClients));
     quotes.value = JSON.parse(JSON.stringify(defaultQuotes));
     saveData();
@@ -200,11 +277,128 @@ onMounted(() => {
   loadData();
 });
 
-watch([clients, quotes], () => {
+watch([projects, clients, quotes], () => {
   saveData();
 }, { deep: true });
 
-// --- CLIENT FILTERS & SEARCH ---
+// =========================================================================
+// 3. PROJECTS MANAGEMENT LOGIC
+// =========================================================================
+
+const projectFilter = ref('all');
+const projectSearch = ref('');
+
+const filteredProjects = computed(() => {
+  return projects.value.filter(p => {
+    const matchesSearch = 
+      p.title.toLowerCase().includes(projectSearch.value.toLowerCase()) ||
+      p.company.toLowerCase().includes(projectSearch.value.toLowerCase()) ||
+      p.id.toLowerCase().includes(projectSearch.value.toLowerCase());
+    const matchesStatus = projectFilter.value === 'all' || p.status === projectFilter.value;
+    return matchesSearch && matchesStatus;
+  });
+});
+
+const getProjectProgress = (project) => {
+  if (!project.tasks || project.tasks.length === 0) return 0;
+  const completed = project.tasks.filter(t => t.done).length;
+  return Math.round((completed / project.tasks.length) * 100);
+};
+
+const toggleTask = (project, task) => {
+  task.done = !task.done;
+  if (getProjectProgress(project) === 100) {
+    project.status = 'completed';
+  } else if (project.status === 'completed' && getProjectProgress(project) < 100) {
+    project.status = 'in_progress';
+  }
+};
+
+const newMilestoneText = ref({});
+const addMilestone = (project) => {
+  const text = (newMilestoneText.value[project.id] || '').trim();
+  if (!text) return;
+  const nextId = project.tasks.length ? Math.max(...project.tasks.map(t => t.id)) + 1 : 1;
+  project.tasks.push({ id: nextId, text, done: false });
+  newMilestoneText.value[project.id] = '';
+};
+
+const getProjectStatusBadge = (status) => {
+  switch (status) {
+    case 'planning':
+      return { label: 'En Planificación', class: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
+    case 'in_progress':
+      return { label: 'En Desarrollo', class: 'bg-amber-500/10 text-amber-400 border-amber-500/30' };
+    case 'review':
+      return { label: 'En Pruebas QA', class: 'bg-purple-500/10 text-purple-400 border-purple-500/30' };
+    case 'completed':
+      return { label: 'Completado', class: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' };
+    default:
+      return { label: status, class: 'bg-slate-800 text-slate-300 border-slate-700' };
+  }
+};
+
+// Project Modal State
+const showProjectModal = ref(false);
+const newProjectForm = ref({
+  title: '',
+  clientId: '',
+  category: 'Desarrollo Web Full-Stack',
+  budget: 600,
+  dueDate: '',
+  initialMilestone: 'Levantamiento de requerimientos inicial'
+});
+
+const openNewProjectModal = () => {
+  newProjectForm.value = {
+    title: '',
+    clientId: clients.value[0]?.id || '',
+    category: 'Desarrollo Web Full-Stack',
+    budget: 600,
+    dueDate: new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10),
+    initialMilestone: 'Levantamiento de requerimientos y arquitectura'
+  };
+  showProjectModal.value = true;
+};
+
+const saveNewProject = () => {
+  if (!newProjectForm.value.title.trim()) {
+    alert('Por favor especifica el título del proyecto.');
+    return;
+  }
+  const client = clients.value.find(c => c.id === newProjectForm.value.clientId);
+  const newProj = {
+    id: 'PRJ-' + (projects.value.length + 1).toString().padStart(3, '0'),
+    title: newProjectForm.value.title,
+    clientId: newProjectForm.value.clientId,
+    company: client ? client.company : 'Cliente Directo',
+    clientName: client ? client.name : '',
+    category: newProjectForm.value.category,
+    status: 'in_progress',
+    budget: Number(newProjectForm.value.budget) || 0,
+    startDate: new Date().toISOString().slice(0, 10),
+    dueDate: newProjectForm.value.dueDate,
+    tasks: [
+      { id: 1, text: newProjectForm.value.initialMilestone || 'Planificación inicial', done: true },
+      { id: 2, text: 'Desarrollo de entregables técnicos principales', done: false },
+      { id: 3, text: 'Pruebas y entrega a satisfacción del cliente', done: false }
+    ]
+  };
+
+  projects.value.unshift(newProj);
+  showProjectModal.value = false;
+};
+
+const deleteProject = (id) => {
+  if (confirm(`¿Eliminar el proyecto ${id}?`)) {
+    projects.value = projects.value.filter(p => p.id !== id);
+  }
+};
+
+// =========================================================================
+// 4. CLIENTS CRM LOGIC
+// =========================================================================
+
 const clientSearch = ref('');
 const clientStatusFilter = ref('all');
 
@@ -220,7 +414,6 @@ const filteredClients = computed(() => {
   });
 });
 
-// Client Status Helpers
 const getClientStatusBadge = (status) => {
   switch (status) {
     case 'lead':
@@ -238,7 +431,6 @@ const getClientStatusBadge = (status) => {
   }
 };
 
-// --- CLIENT MODAL STATE ---
 const showClientModal = ref(false);
 const newClientForm = ref({
   id: '',
@@ -287,7 +479,6 @@ const deleteClient = (id) => {
   }
 };
 
-// Quick action: start quote for a specific client
 const startQuoteForClient = (client) => {
   quoteForm.value.clientId = client.id;
   quoteForm.value.clientName = client.name;
@@ -297,7 +488,10 @@ const startQuoteForClient = (client) => {
   activeTab.value = 'builder';
 };
 
-// --- QUOTE BUILDER STATE ---
+// =========================================================================
+// 5. QUOTES & BUDGET ENGINE LOGIC
+// =========================================================================
+
 const quoteForm = ref({
   id: 'COT-2026-004',
   clientId: '',
@@ -320,7 +514,6 @@ const quoteForm = ref({
   ]
 });
 
-// Watch client selector in quote builder
 const onClientSelected = () => {
   const selected = clients.value.find(c => c.id === quoteForm.value.clientId);
   if (selected) {
@@ -330,7 +523,6 @@ const onClientSelected = () => {
   }
 };
 
-// Item line manipulations
 const addItem = () => {
   const nextId = quoteForm.value.items.length ? Math.max(...quoteForm.value.items.map(i => i.id)) + 1 : 1;
   quoteForm.value.items.push({
@@ -356,7 +548,6 @@ const updateItemTotal = (item) => {
   item.total = item.quantity * item.unitPrice;
 };
 
-// Financial totals computed
 const quoteSubtotal = computed(() => {
   return quoteForm.value.items.reduce((acc, curr) => acc + (curr.quantity * curr.unitPrice), 0);
 });
@@ -378,7 +569,6 @@ const quoteTotal = computed(() => {
   return quoteSubtotalAfterDiscount.value + quoteTaxAmount.value;
 });
 
-// Presets for 1-click line item load
 const applyPreset = (presetKey) => {
   if (presetKey === 'fullstack') {
     quoteForm.value.serviceType = 'Desarrollo Web Full-Stack';
@@ -413,7 +603,6 @@ const applyPreset = (presetKey) => {
   }
 };
 
-// Save quote to list
 const saveQuote = () => {
   if (!quoteForm.value.company.trim()) {
     alert('Por favor especifica el nombre del cliente o empresa.');
@@ -435,7 +624,6 @@ const saveQuote = () => {
     quotes.value.unshift(quoteData);
   }
 
-  // Update client total or status if linked
   if (quoteData.clientId) {
     const client = clients.value.find(c => c.id === quoteData.clientId);
     if (client && client.status === 'lead') {
@@ -443,11 +631,10 @@ const saveQuote = () => {
     }
   }
 
-  alert(`Presupuesto ${quoteData.id} guardado correctamente.`);
+  alert(`Presupuesto ${quoteData.id} guardado correctamente en tu historial.`);
   activeTab.value = 'quotes';
 };
 
-// New blank quote
 const resetQuoteForm = () => {
   quoteForm.value = {
     id: 'COT-2026-' + (quotes.value.length + 1).toString().padStart(3, '0'),
@@ -471,7 +658,10 @@ const resetQuoteForm = () => {
   };
 };
 
-// --- QUOTES LIST & SEARCH ---
+// =========================================================================
+// 6. QUOTES LIST & PROFORMA MODAL
+// =========================================================================
+
 const quoteSearch = ref('');
 const quoteStatusFilter = ref('all');
 
@@ -481,7 +671,6 @@ const filteredQuotes = computed(() => {
       q.id.toLowerCase().includes(quoteSearch.value.toLowerCase()) ||
       q.company.toLowerCase().includes(quoteSearch.value.toLowerCase()) ||
       q.clientName.toLowerCase().includes(quoteSearch.value.toLowerCase());
-    
     const matchesStatus = quoteStatusFilter.value === 'all' || q.status === quoteStatusFilter.value;
     return matchesSearch && matchesStatus;
   });
@@ -498,7 +687,7 @@ const getQuoteStatusBadge = (status) => {
     case 'in_progress':
       return { label: 'En Marcha', class: 'bg-purple-500/10 text-purple-400 border-purple-500/30' };
     case 'paid':
-      return { label: 'Cobrado / Facturado', class: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' };
+      return { label: 'Cobrado / Liquidado', class: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' };
     case 'cancelled':
       return { label: 'Descartado', class: 'bg-red-500/10 text-red-400 border-red-500/30' };
     default:
@@ -512,7 +701,6 @@ const deleteQuote = (id) => {
   }
 };
 
-// --- EXPORT TO WHATSAPP FUNCTION ---
 const exportToWhatsApp = (quote) => {
   const targetPhone = quote.phone ? quote.phone.replace(/[^0-9]/g, '') : '584227130583';
   
@@ -545,7 +733,6 @@ _Para aprobar esta cotización o coordinar una sesión de trabajo, favor respond
   window.open(url, '_blank');
 };
 
-// --- PROFORMA MODAL & PRINT ENGINE ---
 const activeProformaQuote = ref(null);
 const showProformaModal = ref(false);
 
@@ -558,7 +745,10 @@ const triggerPrint = () => {
   window.print();
 };
 
-// --- ANALYTICS COMPUTED ---
+// =========================================================================
+// 7. FINANCIAL METRICS & ANALYTICS
+// =========================================================================
+
 const totalQuotedAmount = computed(() => {
   return quotes.value.reduce((acc, q) => acc + (Number(q.total) || 0), 0);
 });
@@ -580,78 +770,121 @@ const conversionRate = computed(() => {
   const closed = quotes.value.filter(q => q.status === 'approved' || q.status === 'in_progress' || q.status === 'paid').length;
   return Math.round((closed / quotes.value.length) * 100);
 });
+
+const activeProjectsCount = computed(() => {
+  return projects.value.filter(p => p.status !== 'completed').length;
+});
 </script>
 
 <template>
-  <section id="crm" class="py-20 bg-slate-950 relative border-t border-slate-800/80">
-    <!-- Ambient glow effect -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-cyan-500/5 blur-[140px] pointer-events-none rounded-full"></div>
+  <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      
-      <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-slate-800/80 gap-6">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-3">
-            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span>PORTAL CRM &amp; GESTIÓN DE PRESUPUESTOS // JC STUDIO OS</span>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Workstation Comercial &amp; Clientes
-          </h2>
-          <p class="mt-2 text-sm sm:text-base text-slate-400 max-w-2xl">
-            Herramienta ejecutiva para generar presupuestos proforma, calcular costos en tiempo real, emitir cotizaciones por WhatsApp y administrar tu cartera de clientes.
-          </p>
-        </div>
-
-        <!-- Top Global Actions -->
+    <!-- Top Application Bar -->
+    <header class="bg-slate-900/90 border-b border-slate-800 px-4 sm:px-8 py-3.5 sticky top-0 z-40 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <!-- Left: Workspace Identity & Breadcrumbs -->
         <div class="flex items-center gap-3">
           <button 
-            @click="resetToDefaults"
-            class="text-xs font-mono text-slate-400 hover:text-cyan-400 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors flex items-center gap-1.5"
-            title="Restablecer datos iniciales de prueba"
+            @click="emit('exitCrm')"
+            class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-700 shadow-sm"
+            title="Volver a la vista pública de la Landing Page"
           >
-            <ArrowPathIcon class="w-3.5 h-3.5" />
-            <span class="hidden sm:inline">Demo Data</span>
+            <ArrowUturnLeftIcon class="w-3.5 h-3.5" />
+            <span>Volver a la Web</span>
+          </button>
+
+          <div class="h-4 w-[1px] bg-slate-800 hidden sm:block"></div>
+
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-mono font-bold text-xs">
+              JC
+            </div>
+            <div>
+              <span class="text-xs font-bold text-white block leading-tight">
+                JC Studio OS <span class="text-cyan-400 font-mono">v3.0</span>
+              </span>
+              <span class="text-2xs font-mono text-slate-400 block leading-tight">
+                Enterprise Project &amp; Client Suite
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Quick Metric Badges -->
+        <div class="hidden lg:flex items-center gap-2 font-mono text-2xs">
+          <div class="px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-300 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span><strong>{{ activeProjectsCount }}</strong> Proyectos Activos</span>
+          </div>
+          <div class="px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-300">
+            <span><strong>{{ clients.length }}</strong> Clientes</span>
+          </div>
+          <div class="px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400">
+            <span><strong>${{ totalApprovedAmount.toFixed(0) }}</strong> USD en Producción</span>
+          </div>
+        </div>
+
+        <!-- Right: Primary Actions -->
+        <div class="flex items-center gap-2">
+          <button 
+            @click="resetToDefaults"
+            class="text-xs font-mono text-slate-400 hover:text-cyan-400 p-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition-colors"
+            title="Restablecer datos de muestra"
+          >
+            <ArrowPathIcon class="w-4 h-4" />
+          </button>
+
+          <button
+            @click="openNewProjectModal"
+            class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all flex items-center gap-1.5"
+          >
+            <FolderIcon class="w-3.5 h-3.5 text-cyan-400" />
+            <span>+ Proyecto</span>
           </button>
 
           <button
             @click="openNewClientModal"
-            class="text-xs font-semibold px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all flex items-center gap-2"
+            class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all flex items-center gap-1.5"
           >
-            <PlusIcon class="w-4 h-4 text-cyan-400" />
-            <span>Nuevo Cliente</span>
+            <UserGroupIcon class="w-3.5 h-3.5 text-cyan-400" />
+            <span>+ Cliente</span>
           </button>
 
           <button
             @click="activeTab = 'builder'; resetQuoteForm()"
-            class="text-xs font-bold px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+            class="text-xs font-bold px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all flex items-center gap-1.5 shadow-[0_0_20px_rgba(6,182,212,0.3)]"
           >
-            <SparklesIcon class="w-4 h-4" />
-            <span>Nuevo Presupuesto</span>
+            <SparklesIcon class="w-3.5 h-3.5" />
+            <span>+ Presupuesto</span>
           </button>
         </div>
-      </div>
 
-      <!-- Module Navigation Tabs -->
-      <div class="flex flex-wrap items-center gap-2 mb-8 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800">
+      </div>
+    </header>
+
+    <!-- Main Workspace Body -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Module Navigation Bar -->
+      <div class="flex flex-wrap items-center gap-2 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800 shadow-lg">
         <button
-          @click="activeTab = 'builder'"
+          @click="activeTab = 'projects'"
           :class="[
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
-            activeTab === 'builder' 
+            'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+            activeTab === 'projects' 
               ? 'bg-cyan-500 text-slate-950 shadow-md font-bold' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
           ]"
         >
-          <DocumentTextIcon class="w-4 h-4" />
-          <span>Generador de Presupuestos</span>
+          <FolderIcon class="w-4 h-4" />
+          <span>Proyectos &amp; Entregables ({{ projects.length }})</span>
         </button>
 
         <button
           @click="activeTab = 'clients'"
           :class="[
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+            'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
             activeTab === 'clients' 
               ? 'bg-cyan-500 text-slate-950 shadow-md font-bold' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -662,9 +895,22 @@ const conversionRate = computed(() => {
         </button>
 
         <button
+          @click="activeTab = 'builder'"
+          :class="[
+            'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+            activeTab === 'builder' 
+              ? 'bg-cyan-500 text-slate-950 shadow-md font-bold' 
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+          ]"
+        >
+          <DocumentTextIcon class="w-4 h-4" />
+          <span>Generador de Presupuestos</span>
+        </button>
+
+        <button
           @click="activeTab = 'quotes'"
           :class="[
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+            'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
             activeTab === 'quotes' 
               ? 'bg-cyan-500 text-slate-950 shadow-md font-bold' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -677,7 +923,7 @@ const conversionRate = computed(() => {
         <button
           @click="activeTab = 'analytics'"
           :class="[
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
+            'flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
             activeTab === 'analytics' 
               ? 'bg-cyan-500 text-slate-950 shadow-md font-bold' 
               : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -689,15 +935,284 @@ const conversionRate = computed(() => {
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 1: GENERADOR DE PRESUPUESTOS (BUILDER) -->
+      <!-- TAB 1: GESTIÓN DE PROYECTOS & ENTREGABLES (PROJECTS SUITE) -->
       <!-- ========================================================================= -->
-      <div v-if="activeTab === 'builder'" class="space-y-8">
+      <div v-if="activeTab === 'projects'" class="space-y-6">
         
-        <!-- Quick Preset Templates Bar -->
+        <!-- Filter and Search Header -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+          <div class="relative w-full sm:w-80">
+            <MagnifyingGlassIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input 
+              type="text" 
+              v-model="projectSearch"
+              placeholder="Buscar por proyecto, empresa o código..."
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+            />
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+            <button
+              v-for="st in [
+                { key: 'all', label: 'Todos' },
+                { key: 'in_progress', label: 'En Desarrollo' },
+                { key: 'planning', label: 'Planificación' },
+                { key: 'completed', label: 'Completados' }
+              ]"
+              :key="st.key"
+              @click="projectFilter = st.key"
+              :class="[
+                'px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap',
+                projectFilter === st.key ? 'bg-cyan-500 text-slate-950 font-bold' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+              ]"
+            >
+              {{ st.label }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Projects Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div 
+            v-for="project in filteredProjects" 
+            :key="project.id"
+            class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/30 transition-all space-y-5 shadow-xl flex flex-col justify-between"
+          >
+            <div>
+              <!-- Project Top Bar -->
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-mono font-bold text-cyan-400">{{ project.id }}</span>
+                    <span class="text-2xs font-mono px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-400">{{ project.category }}</span>
+                  </div>
+                  <h3 class="text-base font-bold text-white tracking-tight">{{ project.title }}</h3>
+                  <span class="text-xs text-slate-400 font-mono">{{ project.company }} • {{ project.clientName }}</span>
+                </div>
+
+                <div class="text-right">
+                  <span 
+                    :class="[
+                      'text-2xs font-mono px-2.5 py-1 rounded-full border font-semibold inline-block mb-1',
+                      getProjectStatusBadge(project.status).class
+                    ]"
+                  >
+                    {{ getProjectStatusBadge(project.status).label }}
+                  </span>
+                  <div class="text-sm font-extrabold text-white font-mono">${{ project.budget }} USD</div>
+                </div>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="space-y-1.5 pt-2">
+                <div class="flex items-center justify-between text-2xs font-mono">
+                  <span class="text-slate-400">Avance de Entregables:</span>
+                  <span class="text-cyan-400 font-bold">{{ getProjectProgress(project) }}%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+                  <div 
+                    class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-300" 
+                    :style="{ width: getProjectProgress(project) + '%' }"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Milestones / Task Checklist -->
+              <div class="pt-4 space-y-2">
+                <span class="text-2xs font-mono uppercase text-slate-400 font-bold block">Hitos &amp; Checklist de Entrega:</span>
+                <div class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                  <label 
+                    v-for="task in project.tasks" 
+                    :key="task.id"
+                    class="flex items-center gap-2.5 p-2 rounded-xl bg-slate-950/80 border border-slate-800/80 hover:border-slate-700 cursor-pointer text-xs"
+                  >
+                    <input 
+                      type="checkbox" 
+                      :checked="task.done"
+                      @change="toggleTask(project, task)"
+                      class="rounded text-cyan-500 focus:ring-0 bg-slate-900 border-slate-700 w-3.5 h-3.5 cursor-pointer"
+                    />
+                    <span :class="task.done ? 'line-through text-slate-400' : 'text-slate-200'">
+                      {{ task.text }}
+                    </span>
+                  </label>
+                </div>
+
+                <!-- Add quick milestone -->
+                <div class="flex items-center gap-2 pt-2">
+                  <input 
+                    type="text" 
+                    v-model="newMilestoneText[project.id]"
+                    @keyup.enter="addMilestone(project)"
+                    placeholder="Agregar nuevo hito..."
+                    class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500"
+                  />
+                  <button 
+                    @click="addMilestone(project)"
+                    class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-semibold"
+                  >
+                    + Hito
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Bottom Bar: Dates & Actions -->
+            <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-2xs font-mono text-slate-400">
+              <div class="flex items-center gap-2">
+                <CalendarIcon class="w-3.5 h-3.5 text-slate-500" />
+                <span>Límite: <strong class="text-slate-300">{{ project.dueDate }}</strong></span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <select 
+                  v-model="project.status"
+                  class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-2xs text-slate-300 focus:outline-none focus:border-cyan-500"
+                >
+                  <option value="planning">Planificación</option>
+                  <option value="in_progress">En Desarrollo</option>
+                  <option value="review">En Pruebas QA</option>
+                  <option value="completed">Completado</option>
+                </select>
+
+                <button 
+                  @click="deleteProject(project.id)"
+                  class="p-1.5 text-slate-400 hover:text-red-400 transition-colors"
+                  title="Eliminar proyecto"
+                >
+                  <TrashIcon class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 2: DIRECTORIO DE CLIENTES (CRM) -->
+      <!-- ========================================================================= -->
+      <div v-else-if="activeTab === 'clients'" class="space-y-6">
+        
+        <!-- Filters Bar -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+          <div class="relative w-full sm:w-80">
+            <MagnifyingGlassIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input 
+              type="text" 
+              v-model="clientSearch"
+              placeholder="Buscar por cliente, empresa o teléfono..."
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+            />
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+            <button
+              v-for="st in [
+                { key: 'all', label: 'Todos' },
+                { key: 'lead', label: 'Prospectos' },
+                { key: 'quoting', label: 'Cotizando' },
+                { key: 'in_progress', label: 'En Marcha' },
+                { key: 'active', label: 'Soporte Activo' }
+              ]"
+              :key="st.key"
+              @click="clientStatusFilter = st.key"
+              :class="[
+                'px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap',
+                clientStatusFilter === st.key ? 'bg-cyan-500 text-slate-950 font-bold' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+              ]"
+            >
+              {{ st.label }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Clients Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div 
+            v-for="client in filteredClients" 
+            :key="client.id"
+            class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group shadow-xl"
+          >
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono font-bold text-sm">
+                    {{ client.company.charAt(0) }}
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">
+                      {{ client.company }}
+                    </h3>
+                    <span class="text-xs text-slate-400">{{ client.name }}</span>
+                  </div>
+                </div>
+
+                <span 
+                  :class="[
+                    'text-2xs font-mono px-2.5 py-1 rounded-full border font-semibold',
+                    getClientStatusBadge(client.status).class
+                  ]"
+                >
+                  {{ getClientStatusBadge(client.status).label }}
+                </span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2 mb-3 text-2xs font-mono text-slate-400">
+                <span class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800">{{ client.category }}</span>
+                <span>• {{ client.city }}</span>
+              </div>
+
+              <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+                {{ client.notes || 'Sin observaciones registradas.' }}
+              </p>
+
+              <div class="space-y-1.5 text-xs text-slate-300 font-mono pt-3 border-t border-slate-800/80 mb-4">
+                <div class="flex items-center gap-2">
+                  <PhoneIcon class="w-3.5 h-3.5 text-cyan-400" />
+                  <a :href="'https://wa.me/' + client.phone.replace(/[^0-9]/g, '')" target="_blank" class="hover:underline text-cyan-400">
+                    {{ client.phone }}
+                  </a>
+                </div>
+                <div class="flex items-center gap-2 text-slate-400">
+                  <EnvelopeIcon class="w-3.5 h-3.5 text-slate-500" />
+                  <span class="truncate">{{ client.email }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <button
+                @click="startQuoteForClient(client)"
+                class="flex-grow text-xs font-semibold py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 border border-cyan-500/30 hover:border-cyan-500 transition-all flex items-center justify-center gap-1.5"
+              >
+                <DocumentTextIcon class="w-3.5 h-3.5" />
+                <span>Presupuesto</span>
+              </button>
+
+              <button
+                @click="deleteClient(client.id)"
+                class="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-950 rounded-xl transition-colors"
+                title="Eliminar cliente"
+              >
+                <TrashIcon class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 3: GENERADOR DE PRESUPUESTOS (QUOTES BUILDER) -->
+      <!-- ========================================================================= -->
+      <div v-else-if="activeTab === 'builder'" class="space-y-8">
+        
+        <!-- Presets -->
         <div class="p-4 rounded-2xl bg-slate-900/40 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2 text-xs text-slate-400">
             <SparklesIcon class="w-4 h-4 text-cyan-400" />
-            <span class="font-mono uppercase font-bold text-slate-300">Plantillas Rápidas de Servicio:</span>
+            <span class="font-mono uppercase font-bold text-slate-300">Plantillas Rápidas:</span>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <button 
@@ -729,15 +1244,14 @@ const conversionRate = computed(() => {
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          <!-- Left: Main Form (8 Cols) -->
+          <!-- Form (8 cols) -->
           <div class="lg:col-span-8 space-y-6">
             
-            <!-- Document Header Box -->
             <div class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-5">
               <div class="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs uppercase font-bold">
                   <DocumentTextIcon class="w-4 h-4" />
-                  <span>Datos del Presupuesto &amp; Destinatario</span>
+                  <span>Datos del Presupuesto &amp; Receptor</span>
                 </div>
                 <div class="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-bold">
                   Folio: {{ quoteForm.id }}
@@ -745,70 +1259,64 @@ const conversionRate = computed(() => {
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Select Existing Client -->
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Vincular Cliente Registrado:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Cliente Vinculado:</label>
                   <select 
                     v-model="quoteForm.clientId" 
                     @change="onClientSelected"
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
                   >
-                    <option value="">-- Cliente Manual / Nuevo --</option>
+                    <option value="">-- Manual / Sin Vincular --</option>
                     <option v-for="c in clients" :key="c.id" :value="c.id">
                       {{ c.company }} ({{ c.name }})
                     </option>
                   </select>
                 </div>
 
-                <!-- Company Name -->
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Empresa / Negocio Receptor *:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Empresa / Negocio *:</label>
                   <input 
                     type="text" 
                     v-model="quoteForm.company" 
                     placeholder="Ej. Distribuidora Los Andes C.A."
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
 
-                <!-- Contact Person -->
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Persona de Contacto / Cargo:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Persona de Contacto:</label>
                   <input 
                     type="text" 
                     v-model="quoteForm.clientName" 
-                    placeholder="Ej. Lic. Carlos Gómez (Gerente)"
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                    placeholder="Ej. Carlos Mendoza (Gerente)"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
 
-                <!-- WhatsApp / Phone -->
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Teléfono / WhatsApp de Envío:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">WhatsApp / Teléfono:</label>
                   <input 
                     type="text" 
                     v-model="quoteForm.phone" 
                     placeholder="+58 412 1234567"
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
                 </div>
 
-                <!-- Service Category -->
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Categoría Principal:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Categoría:</label>
                   <select 
                     v-model="quoteForm.serviceType"
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
                   >
                     <option value="Desarrollo Web Full-Stack">Desarrollo Web Full-Stack (Laravel + Vue)</option>
-                    <option value="Puntos de Venta (POS) & Redes">Puntos de Venta (POS) &amp; Cableado de Red</option>
-                    <option value="Base de Datos & Optimización">Bases de Datos Relacionales &amp; Auditoría</option>
+                    <option value="Puntos de Venta (POS) & Redes">Puntos de Venta (POS) &amp; Red LAN</option>
+                    <option value="Base de Datos & Optimización">Bases de Datos &amp; Optimización SQL</option>
                     <option value="Póliza Mensual de Soporte Integral">Póliza Mensual de Mantenimiento</option>
                     <option value="Software a Medida & Costos">Software Especializado de Costos</option>
                   </select>
                 </div>
 
-                <!-- Validity & Date -->
                 <div class="grid grid-cols-2 gap-2">
                   <div>
                     <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Fecha:</label>
@@ -826,14 +1334,13 @@ const conversionRate = computed(() => {
                     >
                       <option :value="15">15 Días</option>
                       <option :value="30">30 Días</option>
-                      <option :value="60">60 Días</option>
                     </select>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Dynamic Line Items (Partidas) -->
+            <!-- Items -->
             <div class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
               <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                 <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs uppercase font-bold">
@@ -849,7 +1356,6 @@ const conversionRate = computed(() => {
                 </button>
               </div>
 
-              <!-- Items Table -->
               <div class="space-y-3">
                 <div 
                   v-for="(item, idx) in quoteForm.items" 
@@ -858,19 +1364,15 @@ const conversionRate = computed(() => {
                 >
                   <div class="flex items-start justify-between gap-3">
                     <span class="text-xs font-mono font-bold text-slate-400 pt-2 w-6">#{{ idx + 1 }}</span>
-                    
-                    <!-- Description -->
                     <div class="flex-grow">
                       <label class="block text-2xs font-mono text-slate-400 uppercase mb-1">Descripción del Entregable:</label>
                       <textarea
                         v-model="item.description"
                         rows="2"
-                        placeholder="Ej. Configuración de Base de Datos MySQL con índices optimizados y replicación de respaldo."
-                        class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 resize-none transition-colors"
+                        placeholder="Descripción técnica del trabajo o componente..."
+                        class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 resize-none"
                       ></textarea>
                     </div>
-
-                    <!-- Remove Item -->
                     <button 
                       @click="removeItem(idx)"
                       class="text-slate-400 hover:text-red-400 p-2 rounded-lg hover:bg-slate-900 transition-colors"
@@ -880,7 +1382,6 @@ const conversionRate = computed(() => {
                     </button>
                   </div>
 
-                  <!-- Quantity & Unit Price & Subtotal -->
                   <div class="grid grid-cols-3 gap-3 pt-1 border-t border-slate-900">
                     <div>
                       <label class="block text-2xs font-mono text-slate-400 uppercase mb-1">Cantidad / Horas:</label>
@@ -914,16 +1415,16 @@ const conversionRate = computed(() => {
               </div>
             </div>
 
-            <!-- Delivery & Payment Conditions -->
+            <!-- Conditions -->
             <div class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4">
               <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs uppercase font-bold pb-2 border-b border-slate-800">
                 <CheckBadgeIcon class="w-4 h-4" />
-                <span>Condiciones Comerciales &amp; Garantía</span>
+                <span>Condiciones Comerciales</span>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Tiempo Estimado de Entrega:</label>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Tiempo Estimado:</label>
                   <input 
                     type="text" 
                     v-model="quoteForm.deliveryTime"
@@ -943,7 +1444,7 @@ const conversionRate = computed(() => {
               </div>
 
               <div>
-                <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Garantía Técnica / Observaciones:</label>
+                <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Garantía / Respaldo:</label>
                 <input 
                   type="text" 
                   v-model="quoteForm.notes"
@@ -955,23 +1456,21 @@ const conversionRate = computed(() => {
 
           </div>
 
-          <!-- Right: Summary Card & Action Center (4 Cols Sticky) -->
+          <!-- Sticky Financial Summary (4 cols) -->
           <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
             
-            <div class="p-6 rounded-3xl bg-slate-900/90 border border-cyan-500/30 shadow-[0_10px_35px_rgba(0,0,0,0.6)] space-y-6">
+            <div class="p-6 rounded-3xl bg-slate-900/90 border border-cyan-500/30 shadow-2xl space-y-6">
               <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                 <span class="text-xs font-mono text-cyan-400 uppercase font-bold tracking-wider">RESUMEN FINANCIERO</span>
                 <span class="text-2xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">USD ($)</span>
               </div>
 
-              <!-- Financial Breakdown -->
               <div class="space-y-3 font-mono text-xs">
                 <div class="flex items-center justify-between text-slate-300">
                   <span>Subtotal Bruto:</span>
                   <span class="font-bold">${{ quoteSubtotal.toFixed(2) }}</span>
                 </div>
 
-                <!-- Discount -->
                 <div class="flex items-center justify-between text-slate-300">
                   <div class="flex items-center gap-1.5">
                     <span>Descuento:</span>
@@ -987,7 +1486,6 @@ const conversionRate = computed(() => {
                   <span class="text-emerald-400 font-bold">-${{ quoteDiscountAmount.toFixed(2) }}</span>
                 </div>
 
-                <!-- Tax / IVA Toggle -->
                 <div class="flex items-center justify-between text-slate-300 pt-1 border-t border-slate-800/80">
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input 
@@ -1000,7 +1498,6 @@ const conversionRate = computed(() => {
                   <span>${{ quoteTaxAmount.toFixed(2) }}</span>
                 </div>
 
-                <!-- Total -->
                 <div class="pt-3 border-t border-slate-700 flex items-baseline justify-between text-white">
                   <span class="text-sm font-bold uppercase tracking-wider font-sans">TOTAL NETO:</span>
                   <div class="text-right">
@@ -1010,9 +1507,8 @@ const conversionRate = computed(() => {
                 </div>
               </div>
 
-              <!-- Status Selector for Quote -->
               <div class="pt-2">
-                <label class="block text-2xs font-mono text-slate-400 uppercase mb-1.5">Estado de la Propuesta:</label>
+                <label class="block text-2xs font-mono text-slate-400 uppercase mb-1.5">Estado Inicial:</label>
                 <select 
                   v-model="quoteForm.status"
                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono"
@@ -1025,9 +1521,7 @@ const conversionRate = computed(() => {
                 </select>
               </div>
 
-              <!-- Main Action Buttons -->
               <div class="space-y-3 pt-2">
-                <!-- Save in System -->
                 <button
                   @click="saveQuote"
                   class="w-full py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2"
@@ -1036,7 +1530,6 @@ const conversionRate = computed(() => {
                   <span>Guardar Cotización</span>
                 </button>
 
-                <!-- Export to WhatsApp -->
                 <button
                   @click="exportToWhatsApp({ ...quoteForm, subtotal: quoteSubtotal, discountAmount: quoteDiscountAmount, taxAmount: quoteTaxAmount, total: quoteTotal })"
                   class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
@@ -1045,7 +1538,6 @@ const conversionRate = computed(() => {
                   <span>Enviar por WhatsApp</span>
                 </button>
 
-                <!-- Print Preview / PDF -->
                 <button
                   @click="openProforma({ ...quoteForm, subtotal: quoteSubtotal, discountAmount: quoteDiscountAmount, taxAmount: quoteTaxAmount, total: quoteTotal })"
                   class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-2 border border-slate-700"
@@ -1054,10 +1546,6 @@ const conversionRate = computed(() => {
                   <span>Vista Previa / Imprimir PDF</span>
                 </button>
               </div>
-
-              <div class="text-2xs text-slate-400 text-center leading-relaxed">
-                El presupuesto queda sincronizado y disponible para descarga en PDF formal con membrete.
-              </div>
             </div>
 
           </div>
@@ -1066,139 +1554,10 @@ const conversionRate = computed(() => {
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 2: DIRECTORIO DE CLIENTES (CLIENTS CRM) -->
-      <!-- ========================================================================= -->
-      <div v-else-if="activeTab === 'clients'" class="space-y-6">
-        
-        <!-- Search and Filters Bar -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-          <div class="relative w-full sm:w-80">
-            <MagnifyingGlassIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input 
-              type="text" 
-              v-model="clientSearch"
-              placeholder="Buscar por cliente, empresa o teléfono..."
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
-            />
-          </div>
-
-          <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
-            <button
-              v-for="st in [
-                { key: 'all', label: 'Todos' },
-                { key: 'lead', label: 'Prospectos' },
-                { key: 'quoting', label: 'Cotizando' },
-                { key: 'in_progress', label: 'En Marcha' },
-                { key: 'active', label: 'Soporte Activo' }
-              ]"
-              :key="st.key"
-              @click="clientStatusFilter = st.key"
-              :class="[
-                'px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap',
-                clientStatusFilter === st.key ? 'bg-cyan-500 text-slate-950 font-bold' : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-              ]"
-            >
-              {{ st.label }}
-            </button>
-          </div>
-        </div>
-
-        <!-- Client Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
-            v-for="client in filteredClients" 
-            :key="client.id"
-            class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group shadow-lg"
-          >
-            <div>
-              <!-- Header: Avatar & Status -->
-              <div class="flex items-start justify-between gap-3 mb-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono font-bold text-sm">
-                    {{ client.company.charAt(0) }}
-                  </div>
-                  <div>
-                    <h3 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">
-                      {{ client.company }}
-                    </h3>
-                    <span class="text-xs text-slate-400">{{ client.name }}</span>
-                  </div>
-                </div>
-
-                <span 
-                  :class="[
-                    'text-2xs font-mono px-2.5 py-1 rounded-full border font-semibold',
-                    getClientStatusBadge(client.status).class
-                  ]"
-                >
-                  {{ getClientStatusBadge(client.status).label }}
-                </span>
-              </div>
-
-              <!-- Category and City -->
-              <div class="flex flex-wrap items-center gap-2 mb-3 text-2xs font-mono text-slate-400">
-                <span class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800">{{ client.category }}</span>
-                <span>• {{ client.city }}</span>
-              </div>
-
-              <!-- Notes / Description -->
-              <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
-                {{ client.notes || 'Sin observaciones registradas.' }}
-              </p>
-
-              <!-- Contact Info -->
-              <div class="space-y-1.5 text-xs text-slate-300 font-mono pt-3 border-t border-slate-800/80 mb-4">
-                <div class="flex items-center gap-2">
-                  <PhoneIcon class="w-3.5 h-3.5 text-cyan-400" />
-                  <a :href="'https://wa.me/' + client.phone.replace(/[^0-9]/g, '')" target="_blank" class="hover:underline text-cyan-400">
-                    {{ client.phone }}
-                  </a>
-                </div>
-                <div class="flex items-center gap-2 text-slate-400">
-                  <EnvelopeIcon class="w-3.5 h-3.5 text-slate-500" />
-                  <span class="truncate">{{ client.email }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Footer: Actions -->
-            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button
-                @click="startQuoteForClient(client)"
-                class="flex-grow text-xs font-semibold py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 border border-cyan-500/30 hover:border-cyan-500 transition-all flex items-center justify-center gap-1.5"
-              >
-                <DocumentTextIcon class="w-3.5 h-3.5" />
-                <span>Generar Presupuesto</span>
-              </button>
-
-              <button
-                @click="deleteClient(client.id)"
-                class="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-950 rounded-xl transition-colors"
-                title="Eliminar cliente"
-              >
-                <TrashIcon class="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="filteredClients.length === 0" class="text-center py-16 bg-slate-900/30 rounded-3xl border border-dashed border-slate-800">
-          <UserGroupIcon class="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h4 class="text-base font-bold text-white mb-1">No se encontraron clientes</h4>
-          <p class="text-xs text-slate-400 mb-4">No hay resultados para el término de búsqueda o filtro seleccionado.</p>
-          <button @click="openNewClientModal" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold">
-            Registrar Primer Cliente
-          </button>
-        </div>
-
-      </div>
-
-      <!-- ========================================================================= -->
-      <!-- TAB 3: HISTORIAL DE COTIZACIONES (QUOTES LIST) -->
+      <!-- TAB 4: HISTORIAL DE COTIZACIONES -->
       <!-- ========================================================================= -->
       <div v-else-if="activeTab === 'quotes'" class="space-y-6">
         
-        <!-- Search and Filters Bar -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
           <div class="relative w-full sm:w-80">
             <MagnifyingGlassIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -1231,7 +1590,6 @@ const conversionRate = computed(() => {
           </div>
         </div>
 
-        <!-- Quotes Table -->
         <div class="rounded-3xl bg-slate-900/60 border border-slate-800 overflow-hidden shadow-xl">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-300">
@@ -1284,7 +1642,6 @@ const conversionRate = computed(() => {
                   </td>
                   <td class="py-4 px-4 text-right whitespace-nowrap">
                     <div class="flex items-center justify-end gap-1.5">
-                      <!-- Proforma Preview -->
                       <button
                         @click="openProforma(quote)"
                         class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
@@ -1293,16 +1650,14 @@ const conversionRate = computed(() => {
                         <EyeIcon class="w-4 h-4 text-cyan-400" />
                       </button>
 
-                      <!-- WhatsApp Share -->
                       <button
                         @click="exportToWhatsApp(quote)"
                         class="p-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-400 transition-colors"
-                        title="Enviar resumen a WhatsApp"
+                        title="Enviar a WhatsApp"
                       >
                         <ShareIcon class="w-4 h-4" />
                       </button>
 
-                      <!-- Delete -->
                       <button
                         @click="deleteQuote(quote.id)"
                         class="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-red-400 transition-colors"
@@ -1321,55 +1676,53 @@ const conversionRate = computed(() => {
       </div>
 
       <!-- ========================================================================= -->
-      <!-- TAB 4: BALANCE & KPIS (ANALYTICS) -->
+      <!-- TAB 5: BALANCE FINANCIERO & KPIS -->
       <!-- ========================================================================= -->
       <div v-else-if="activeTab === 'analytics'" class="space-y-8">
         
-        <!-- KPI Cards Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800">
+          <div class="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 shadow-lg">
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-mono text-slate-400 uppercase">Volumen Cotizado</span>
               <CurrencyDollarIcon class="w-5 h-5 text-cyan-400" />
             </div>
             <div class="text-2xl font-extrabold text-white font-mono">${{ totalQuotedAmount.toFixed(2) }}</div>
-            <span class="text-2xs text-slate-400 mt-1 block font-mono">{{ quotes.length }} propuestas emitidas</span>
+            <span class="text-2xs text-slate-400 mt-1 block font-mono">{{ quotes.length }} cotizaciones generadas</span>
           </div>
 
-          <div class="p-6 rounded-3xl bg-slate-900/60 border border-emerald-500/20">
+          <div class="p-6 rounded-3xl bg-slate-900/60 border border-emerald-500/20 shadow-lg">
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-mono text-emerald-400 uppercase font-semibold">Cerrado / Cobrado</span>
               <CheckBadgeIcon class="w-5 h-5 text-emerald-400" />
             </div>
             <div class="text-2xl font-extrabold text-emerald-400 font-mono">${{ totalApprovedAmount.toFixed(2) }}</div>
-            <span class="text-2xs text-slate-400 mt-1 block font-mono">En producción y finalizado</span>
+            <span class="text-2xs text-slate-400 mt-1 block font-mono">Proyectos en marcha y liquidados</span>
           </div>
 
-          <div class="p-6 rounded-3xl bg-slate-900/60 border border-amber-500/20">
+          <div class="p-6 rounded-3xl bg-slate-900/60 border border-amber-500/20 shadow-lg">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-mono text-amber-400 uppercase font-semibold">En Pipeline / Enviadas</span>
+              <span class="text-xs font-mono text-amber-400 uppercase font-semibold">En Pipeline / Negociación</span>
               <ClockIcon class="w-5 h-5 text-amber-400" />
             </div>
             <div class="text-2xl font-extrabold text-amber-400 font-mono">${{ totalPendingAmount.toFixed(2) }}</div>
-            <span class="text-2xs text-slate-400 mt-1 block font-mono">Pendientes de confirmación</span>
+            <span class="text-2xs text-slate-400 mt-1 block font-mono">Propuestas en revisión por clientes</span>
           </div>
 
-          <div class="p-6 rounded-3xl bg-slate-900/60 border border-purple-500/20">
+          <div class="p-6 rounded-3xl bg-slate-900/60 border border-purple-500/20 shadow-lg">
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-mono text-purple-400 uppercase font-semibold">Tasa de Conversión</span>
               <ChartBarIcon class="w-5 h-5 text-purple-400" />
             </div>
             <div class="text-2xl font-extrabold text-purple-400 font-mono">{{ conversionRate }}%</div>
-            <span class="text-2xs text-slate-400 mt-1 block font-mono">{{ clients.length }} clientes registrados</span>
+            <span class="text-2xs text-slate-400 mt-1 block font-mono">{{ clients.length }} empresas en cartera</span>
           </div>
         </div>
 
-        <!-- Breakdown by Service Line -->
-        <div class="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-6">
+        <div class="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-6 shadow-xl">
           <div class="flex items-center justify-between border-b border-slate-800 pb-4">
             <div>
-              <h3 class="text-lg font-bold text-white">Especialización &amp; Demanda de Servicios</h3>
-              <p class="text-xs text-slate-400">Distribución de presupuesto y soluciones solicitadas por comercios.</p>
+              <h3 class="text-lg font-bold text-white">Especialización &amp; Líneas de Ingreso</h3>
+              <p class="text-xs text-slate-400">Distribución de demanda por tecnología y tipo de soporte.</p>
             </div>
             <span class="text-xs font-mono text-cyan-400 uppercase font-bold">100% OPERATIVO</span>
           </div>
@@ -1387,7 +1740,7 @@ const conversionRate = computed(() => {
 
             <div>
               <div class="flex items-center justify-between text-xs font-mono text-slate-300 mb-1.5">
-                <span>Puntos de Venta (POS) &amp; Cableado de Red LAN</span>
+                <span>Puntos de Venta (POS) &amp; Cableado de Red LAN Cat6</span>
                 <span class="text-purple-400 font-bold">25% de Facturación</span>
               </div>
               <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -1409,14 +1762,117 @@ const conversionRate = computed(() => {
 
       </div>
 
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL: CREAR NUEVO PROYECTO -->
+    <!-- ========================================================================= -->
+    <div 
+      v-if="showProjectModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md"
+    >
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs uppercase font-bold">
+            <FolderIcon class="w-4 h-4" />
+            <span>Crear Nuevo Proyecto Técnico</span>
+          </div>
+          <button @click="showProjectModal = false" class="text-slate-400 hover:text-white">
+            <XMarkIcon class="w-5 h-5" />
+          </button>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div>
+            <label class="block font-mono text-slate-400 uppercase mb-1">Título del Proyecto *:</label>
+            <input 
+              type="text" 
+              v-model="newProjectForm.title" 
+              placeholder="Ej. Sistema de Inventario &amp; Facturación en Red"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-mono text-slate-400 uppercase mb-1">Cliente Vinculado:</label>
+              <select 
+                v-model="newProjectForm.clientId"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500 font-mono"
+              >
+                <option v-for="c in clients" :key="c.id" :value="c.id">
+                  {{ c.company }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-mono text-slate-400 uppercase mb-1">Categoría Técnica:</label>
+              <select 
+                v-model="newProjectForm.category"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500 font-mono"
+              >
+                <option value="Desarrollo Web Full-Stack">Desarrollo Web Full-Stack</option>
+                <option value="Puntos de Venta (POS) & Redes">Puntos de Venta (POS) &amp; Redes</option>
+                <option value="Software a Medida & Costos">Software a Medida &amp; Costos</option>
+                <option value="Auditoría de Base de Datos">Auditoría de Base de Datos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-mono text-slate-400 uppercase mb-1">Presupuesto ($ USD):</label>
+              <input 
+                type="number" 
+                v-model.number="newProjectForm.budget" 
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500 font-mono"
+              />
+            </div>
+            <div>
+              <label class="block font-mono text-slate-400 uppercase mb-1">Fecha Estimada de Entrega:</label>
+              <input 
+                type="date" 
+                v-model="newProjectForm.dueDate" 
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500 font-mono"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-mono text-slate-400 uppercase mb-1">Primer Hito Técnico:</label>
+            <input 
+              type="text" 
+              v-model="newProjectForm.initialMilestone" 
+              placeholder="Ej. Levantamiento de requerimientos y modelado de datos"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-500"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <button 
+            @click="showProjectModal = false"
+            class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700"
+          >
+            Cancelar
+          </button>
+          <button 
+            @click="saveNewProject"
+            class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold shadow-lg"
+          >
+            Crear Proyecto
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL: REGISTRAR NUEVO CLIENTE -->
+    <!-- MODAL: REGISTRAR CLIENTE -->
     <!-- ========================================================================= -->
     <div 
       v-if="showClientModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md"
     >
       <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 sm:p-8 space-y-6 shadow-2xl relative">
         <div class="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -1536,7 +1992,6 @@ const conversionRate = computed(() => {
     >
       <div class="w-full max-w-3xl my-8">
         
-        <!-- Controls Bar (Hidden during print) -->
         <div class="print-hide flex items-center justify-between bg-slate-900 border border-slate-800 px-6 py-3.5 rounded-t-3xl text-xs">
           <div class="flex items-center gap-2 text-cyan-400 font-mono font-bold">
             <DocumentTextIcon class="w-4 h-4" />
@@ -1559,10 +2014,8 @@ const conversionRate = computed(() => {
           </div>
         </div>
 
-        <!-- Formal Printable Sheet (Light corporate background for printing) -->
         <div id="printable-proforma" class="bg-white text-slate-900 p-8 sm:p-12 rounded-b-3xl shadow-2xl font-sans">
           
-          <!-- Corporate Header -->
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b-2 border-slate-900 pb-6 mb-6 gap-4">
             <div>
               <div class="flex items-center gap-2 mb-1">
@@ -1583,7 +2036,6 @@ const conversionRate = computed(() => {
             </div>
           </div>
 
-          <!-- Client Info Box -->
           <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 text-xs grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <span class="text-2xs font-mono text-slate-500 uppercase font-bold block mb-1">CLIENTE / EMPRESA:</span>
@@ -1599,7 +2051,6 @@ const conversionRate = computed(() => {
             </div>
           </div>
 
-          <!-- Items Table -->
           <table class="w-full text-left text-xs mb-6 border-collapse">
             <thead>
               <tr class="border-b-2 border-slate-900 text-2xs font-mono uppercase text-slate-700">
@@ -1623,7 +2074,6 @@ const conversionRate = computed(() => {
             </tbody>
           </table>
 
-          <!-- Financial Summary -->
           <div class="flex justify-end mb-8">
             <div class="w-64 space-y-2 text-xs font-mono">
               <div class="flex justify-between text-slate-600">
@@ -1645,14 +2095,12 @@ const conversionRate = computed(() => {
             </div>
           </div>
 
-          <!-- Notes & Terms -->
           <div class="border-t border-slate-200 pt-4 mb-8 text-2xs text-slate-600 space-y-1.5">
             <p><strong>Condiciones de Pago:</strong> {{ activeProformaQuote.paymentTerms }}</p>
             <p><strong>Garantía &amp; Respaldo:</strong> {{ activeProformaQuote.notes }}</p>
             <p class="text-slate-400">Este documento es una cotización técnica formal y no constituye una factura fiscal definitiva hasta el cobro correspondiente.</p>
           </div>
 
-          <!-- Signatures -->
           <div class="grid grid-cols-2 gap-12 pt-8 border-t border-slate-300 text-center text-xs">
             <div>
               <div class="h-12 border-b border-slate-400 mb-2"></div>
@@ -1671,12 +2119,11 @@ const conversionRate = computed(() => {
       </div>
     </div>
 
-  </section>
+  </div>
 </template>
 
 <style scoped>
 @media print {
-  /* Hide all elements on page except the printable proforma */
   body * {
     visibility: hidden;
   }

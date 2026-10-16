@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
+const emit = defineEmits(['openCrm']);
+
 const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
 
@@ -51,12 +53,19 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         <nav class="hidden lg:flex items-center gap-6">
           <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
           <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
-          <a href="#crm" class="text-xs font-semibold uppercase tracking-wider text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span>CRM &amp; Presupuestos</span>
-          </a>
+          <a href="#cotizador" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Simulador</a>
           <a href="#comentarios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Opiniones</a>
           <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
+          
+          <button 
+            @click="emit('openCrm')"
+            class="text-xs font-semibold uppercase tracking-wider text-cyan-400 hover:text-slate-950 hover:bg-cyan-400 px-3 py-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 transition-all flex items-center gap-1.5 shadow-sm"
+            title="Abrir espacio de trabajo operativo de gestión"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>Portal CRM</span>
+          </button>
+
           <a :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-blue-400 flex items-center gap-1 transition-colors">
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
@@ -107,10 +116,16 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
       >
         <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
         <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
-        <a @click="closeMenu" href="#crm" class="block text-cyan-400 font-semibold py-1 flex items-center gap-2">
+        <a @click="closeMenu" href="#cotizador" class="block text-slate-200 hover:text-cyan-400 py-1">Simulador de Presupuesto</a>
+        
+        <button 
+          @click="closeMenu(); emit('openCrm')"
+          class="w-full text-left text-cyan-400 font-semibold py-1 flex items-center gap-2"
+        >
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          <span>CRM &amp; Presupuestos</span>
-        </a>
+          <span>Acceder a Portal CRM</span>
+        </button>
+
         <a @click="closeMenu" href="#comentarios" class="block text-slate-200 hover:text-cyan-400 py-1">Opiniones</a>
         <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
         <a @click="closeMenu" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
