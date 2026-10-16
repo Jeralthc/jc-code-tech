@@ -48,9 +48,13 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         </a>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden lg:flex items-center gap-7">
+        <nav class="hidden lg:flex items-center gap-6">
           <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
           <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
+          <a href="#crm" class="text-xs font-semibold uppercase tracking-wider text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>CRM &amp; Presupuestos</span>
+          </a>
           <a href="#comentarios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Opiniones</a>
           <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
           <a :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-blue-400 flex items-center gap-1 transition-colors">
@@ -103,6 +107,10 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
       >
         <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
         <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
+        <a @click="closeMenu" href="#crm" class="block text-cyan-400 font-semibold py-1 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span>CRM &amp; Presupuestos</span>
+        </a>
         <a @click="closeMenu" href="#comentarios" class="block text-slate-200 hover:text-cyan-400 py-1">Opiniones</a>
         <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
         <a @click="closeMenu" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
