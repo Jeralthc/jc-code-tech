@@ -10,24 +10,28 @@ const toggleFaq = (index) => {
 
 const faqs = [
   {
-    q: '¿Brindan soporte a comercios que utilizan Stellar POS?',
-    a: 'Sí. Contamos con experiencia práctica atendiendo comercios que operan con Stellar POS para resolver fallas en terminales de cobro, configuración de impresoras, conexión con bases de datos y mantenimiento preventivo de las computadoras de caja.'
+    q: '¿Cuánto tiempo toma la entrega de un proyecto o servicio?',
+    a: 'Somos 100% transparentes con los tiempos: una revisión de equipos o diagnóstico de cajas y red se realiza en 24 a 48 horas. Una instalación de puntos de red suele tomar de 1 a 3 días según la cantidad de terminales. Un sistema web a medida (como calculadora de costos o control de inventarios) toma entre 2 y 4 semanas, con entregas progresivas por etapas para que pruebes avances funcionales desde la primera semana. Siempre acordamos un cronograma formal y realista antes de empezar.'
+  },
+  {
+    q: '¿Brindan soporte presencial a comercios con Stellar POS y cajas en Mérida?',
+    a: 'Sí. Atendemos presencialmente en locales comerciales de Mérida para resolver bloqueos de caja en horas pico, fallas en el software Stellar POS, configuración de lectoras láser de códigos, impresoras térmicas de tickets y balanzas.'
   },
   {
     q: '¿El diagnóstico inicial tiene algún costo o compromiso?',
-    a: 'No, es 100% gratuito y sin ningún compromiso. Evaluamos el estado de tus puntos de venta (incluyendo Stellar POS), tus cables de red o los requerimientos de software en PHP, Laravel o Vue que necesitas, y te entregamos un diagnóstico claro con una propuesta técnica y económica transparente.'
+    a: 'No, es 100% gratuito. Evaluamos el estado de tus puntos de venta, tus cables de red o lo que deseas construir para tu negocio, y te entregamos una propuesta clara con tiempos reales y presupuesto cerrado, sin costos ocultos.'
   },
   {
-    q: '¿Prestan servicio presencial en Mérida y soporte remoto a otras ciudades?',
-    a: 'Sí. Atendemos presencialmente en Mérida para instalación de cables de red punto a punto, mantenimiento de computadoras comerciales y cajas con Stellar POS. Para desarrollo de software web en PHP / Laravel y Vue, bases de datos y consultoría, brindamos soporte remoto a nivel nacional e internacional.'
+    q: '¿Pueden digitalizar mi negocio si actualmente llevo todo en hojas de Excel?',
+    a: 'Totalmente. Extraemos y ordenamos tus productos, proveedores y precios, y te construimos un sistema web privado y fácil de usar desde cualquier computadora o celular, con copias de seguridad automáticas para que nunca pierdas datos por un archivo dañado.'
+  },
+  {
+    q: '¿Prestan servicio en Mérida y también soporte a distancia para otras ciudades?',
+    a: 'Sí. El trabajo físico (cables de red, revisión de computadoras y cajas) se realiza presencialmente en Mérida. Para desarrollo de sistemas web, calculadoras operativas y asesoría técnica, brindamos soporte remoto a nivel nacional con la misma atención cercana y directa.'
   },
   {
     q: '¿Ofrecen planes de mantenimiento preventivo y soporte mensual?',
-    a: 'Sí. Diseñamos planes mensuales a la medida de tu comercio para realizar mantenimiento preventivo periódico, verificación de copias de seguridad automáticas y atención técnica prioritaria cuando ocurra una eventualidad en tus cajas.'
-  },
-  {
-    q: '¿Pueden digitalizar mi inventario si actualmente lo llevo en Excel?',
-    a: 'Por supuesto. Extraemos y limpiamos la información de tus productos, la estructuramos en una base de datos relacional segura (MySQL o PostgreSQL) y te desarrollamos un panel web moderno con PHP, Laravel y Vue.js para que el stock se actualice en tiempo real.'
+    a: 'Sí. Para negocios que necesitan continuidad absoluta y no pueden detener sus cajas de venta, contamos con planes mensuales de póliza técnica: mantenimiento preventivo programado, verificación de respaldos y canal prioritario para emergencias.'
   }
 ];
 </script>

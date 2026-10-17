@@ -15,7 +15,7 @@ const submitted = ref(false);
 const newReview = ref({
   name: '',
   business: '',
-  service: 'Desarrollo Web Full-Stack',
+  service: 'Sistemas & Software Web a Medida',
   rating: 5,
   comment: ''
 });
@@ -63,7 +63,7 @@ const submitReview = () => {
   newReview.value = {
     name: '',
     business: '',
-    service: 'Desarrollo Web Full-Stack',
+    service: 'Sistemas & Software Web a Medida',
     rating: 5,
     comment: ''
   };
@@ -160,7 +160,7 @@ const getInitials = (name) => {
                   v-model="newReview.service"
                   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400"
                 >
-                  <option value="Desarrollo Web Full-Stack">Desarrollo Web Full-Stack (Software a Medida)</option>
+                  <option value="Sistemas & Software Web a Medida">Sistemas &amp; Software Web a Medida</option>
                   <option value="Calculadora de Costos">Calculadora de Costos &amp; Rentabilidad</option>
                   <option value="Sistema de Citas y Logística">Sistema de Citas, Turnos o Logística</option>
                   <option value="Sistemas de Reportes">Sistema de Reportes &amp; Catálogo Web</option>

@@ -65,7 +65,7 @@ const generatedWhatsAppUrl = computed(() => {
   const nameStr = clientName.value ? encodeURIComponent(clientName.value) : 'Cliente Interesado';
   const bizStr = businessName.value ? encodeURIComponent(businessName.value) : 'Comercio / Empresa';
   
-  const text = `¡Hola Jeralth! 👋%0A%0AHe armado una propuesta técnica con el *Simulador de Presupuesto* en tu web:%0A• *Contacto:* ${nameStr}%0A• *Empresa / Negocio:* ${bizStr}%0A• *Infraestructura POS:* ${encodeURIComponent(posCount.value)}%0A• *Cableado LAN / WiFi:* ${needsNetworking.value ? 'Sí, requerido' : 'No requerido'}%0A• *Base de Datos / Inventario SQL:* ${needsDatabase.value ? 'Sí, requerido' : 'No requerido'}%0A• *Software / App Web a Medida:* ${needsWebApp.value ? 'Sí, requerido' : 'No requerido'}%0A• *Modalidad:* ${supportType.value === 'mensual' ? 'Póliza Mensual B2B' : 'Diagnóstico Inicial'}%0A• *Estimado Calculado:* ${encodeURIComponent(estimatedInvestment.value.range)}%0A%0A¿Podemos coordinar para evaluar el levantamiento técnico y afinar los detalles?`;
+  const text = `¡Hola Jeralth! 👋%0A%0AHe armado una propuesta técnica con el *Simulador de Presupuesto* en tu web:%0A• *Contacto:* ${nameStr}%0A• *Empresa / Negocio:* ${bizStr}%0A• *Infraestructura POS:* ${encodeURIComponent(posCount.value)}%0A• *Cableado de Red / WiFi:* ${needsNetworking.value ? 'Sí, requerido' : 'No requerido'}%0A• *Control de Inventario / Datos:* ${needsDatabase.value ? 'Sí, requerido' : 'No requerido'}%0A• *Software / Sistema Web a Medida:* ${needsWebApp.value ? 'Sí, requerido' : 'No requerido'}%0A• *Modalidad:* ${supportType.value === 'mensual' ? 'Póliza Mensual' : 'Diagnóstico Inicial'}%0A• *Estimado Calculado:* ${encodeURIComponent(estimatedInvestment.value.range)}%0A%0A¿Podemos coordinar para evaluar el levantamiento técnico y afinar los detalles?`;
 
   return `https://wa.me/584227130583?text=${text}`;
 });
@@ -123,7 +123,7 @@ const generatedWhatsAppUrl = computed(() => {
             <div class="pt-2">
               <label class="flex items-center justify-between p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/30 cursor-pointer transition-colors">
                 <div class="text-xs text-slate-300 pr-3">
-                  <strong class="text-white block font-mono">Cableado LAN Cat6 &amp; Optimización WiFi</strong>
+                  <strong class="text-white block font-mono">Cableado de Red &amp; Conexión de Cajas</strong>
                   <span class="text-2xs text-slate-400">Conectar cajas de forma directa para evitar cobros caídos y lentitud de red.</span>
                 </div>
                 <input type="checkbox" v-model="needsNetworking" class="rounded text-cyan-500 focus:ring-0 bg-slate-900 border-slate-700 w-4 h-4" />
@@ -141,16 +141,16 @@ const generatedWhatsAppUrl = computed(() => {
             <div class="space-y-3 font-mono text-xs">
               <label class="flex items-center justify-between p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-purple-500/30 cursor-pointer transition-colors">
                 <div class="text-xs text-slate-300 pr-3 font-sans">
-                  <strong class="text-white block font-mono text-xs">Estructuración de Inventarios (SQL)</strong>
-                  <span class="text-2xs text-slate-400">Migración de hojas de cálculo a base de datos relacional MySQL / SQL Server con respaldos.</span>
+                  <strong class="text-white block font-mono text-xs">Inventario Digital Organizado</strong>
+                  <span class="text-2xs text-slate-400">Migra tus hojas de Excel a un sistema seguro con respaldos automáticos y acceso desde cualquier equipo.</span>
                 </div>
                 <input type="checkbox" v-model="needsDatabase" class="rounded text-purple-500 focus:ring-0 bg-slate-900 border-slate-700 w-4 h-4" />
               </label>
 
               <label class="flex items-center justify-between p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-purple-500/30 cursor-pointer transition-colors">
                 <div class="text-xs text-slate-300 pr-3 font-sans">
-                  <strong class="text-white block font-mono text-xs">Software a Medida (Web App / Dashboards)</strong>
-                  <span class="text-2xs text-slate-400">Calculadora de costos de recetas, plataforma de presupuestos o gestión de turnos en Laravel + Vue.</span>
+                  <strong class="text-white block font-mono text-xs">Software a Medida (Sistemas Web)</strong>
+                  <span class="text-2xs text-slate-400">Calculadora de costos, plataforma de presupuestos o gestión de turnos, accesible desde el navegador.</span>
                 </div>
                 <input type="checkbox" v-model="needsWebApp" class="rounded text-purple-500 focus:ring-0 bg-slate-900 border-slate-700 w-4 h-4" />
               </label>
@@ -239,7 +239,7 @@ const generatedWhatsAppUrl = computed(() => {
                 <span :class="needsNetworking ? 'text-emerald-400 font-semibold' : 'text-slate-600'">{{ needsNetworking ? 'Incluido' : 'No' }}</span>
               </div>
               <div class="flex items-center justify-between text-2xs">
-                <span>Inventario SQL:</span>
+                <span>Inventario Digital:</span>
                 <span :class="needsDatabase ? 'text-purple-400 font-semibold' : 'text-slate-600'">{{ needsDatabase ? 'Incluido' : 'No' }}</span>
               </div>
               <div class="flex items-center justify-between text-2xs">
@@ -275,7 +275,7 @@ const generatedWhatsAppUrl = computed(() => {
 
             <div class="flex items-center justify-center gap-2 text-2xs text-slate-400 font-mono">
               <ShieldCheckIcon class="w-4 h-4 text-cyan-400" />
-              <span>Respuesta técnica directa en menos de 2 horas.</span>
+              <span>Respuesta técnica directa el mismo día hábil. Presupuesto sin compromiso.</span>
             </div>
 
           </div>

@@ -11,8 +11,8 @@ import {
 
 const services = [
   {
-    id: 'fullstack',
-    title: 'Desarrollo Web Full-Stack a Medida',
+    id: 'software',
+    title: 'Desarrollo de Software Web a Medida',
     badge: 'Software Personalizado',
     badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
     desc: 'Construimos el sistema web exacto que tu negocio necesita: calculadoras de costos, portales para clientes, paneles de control y automatización para dejar atrás las hojas de Excel.',

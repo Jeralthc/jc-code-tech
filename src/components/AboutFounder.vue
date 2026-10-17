@@ -41,21 +41,23 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
                 Jeralth Contreras
               </h2>
               <p class="text-xs sm:text-sm text-cyan-300/90 font-medium">
-                Analista de Soporte TI &bull; Desarrollador Web Full-Stack
+                Especialista en Soporte TI &bull; Sistemas &amp; Software para Comercios
               </p>
             </div>
 
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
-              Desarrollo soluciones de software que resuelven cuellos de botella reales: he construido <strong class="text-white font-semibold">calculadoras de costos y mermas</strong> para empresas gastronómicas, <strong class="text-white font-semibold">sistemas de citas y logística sincronizados con ERP</strong> (LogiSync) y <strong class="text-white font-semibold">plataformas de reportes</strong> para empresas de tecnología. Además, brindo soporte técnico práctico a puntos de venta (<strong class="text-cyan-300 font-semibold">Stellar POS</strong>) y cables de red para comercios en Mérida.
+              Llevo <strong class="text-white font-semibold">más de 3 años ayudando a negocios</strong> en Mérida a dejar atrás las hojas de Excel, los cobros caídos y el desorden operativo. Mi misión es simple: que tu negocio funcione mejor con tecnología confiable, sin complicaciones y a un costo justo.
+            </p>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
+              He trabajado con <strong class="text-white font-semibold">restaurantes, distribuidoras, empresas de logística y comercios minoristas</strong>, resolviendo desde cajas de cobro que se traban hasta sistemas completos de gestión en la nube. Cada proyecto que ves en esta web es un cliente real que hoy opera mejor.
             </p>
 
-            <!-- Stack Badges -->
+            <!-- Trust Badges -->
             <div class="flex flex-wrap justify-center sm:justify-start gap-1.5 font-mono text-3xs pt-1">
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Costeo Gastronómico</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Logística &amp; ERP</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">PHP 8 &amp; Laravel 11</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Vue.js 3 &amp; Inertia</span>
-              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Stellar POS &amp; Redes</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">+5 Proyectos Entregados</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">+3 Años de Experiencia</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Atención Presencial en Mérida</span>
+              <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Soporte Remoto Nacional</span>
             </div>
 
             <!-- Action Buttons -->

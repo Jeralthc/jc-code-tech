@@ -2,9 +2,12 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import Header from './components/Header.vue';
 import Hero from './components/Hero.vue';
+import PainPoints from './components/PainPoints.vue';
 import ProjectsShowcase from './components/ProjectsShowcase.vue';
 import Services from './components/Services.vue';
+import Methodology from './components/Methodology.vue';
 import ProjectConfigurator from './components/ProjectConfigurator.vue';
+import Faq from './components/Faq.vue';
 import CrmWorkspace from './components/CrmWorkspace.vue';
 import CrmLoginModal from './components/CrmLoginModal.vue';
 import ReviewsSection from './components/ReviewsSection.vue';
@@ -69,43 +72,17 @@ onUnmounted(() => {
       <Header @openCrm="requestCrmAccess" />
       <main class="flex-grow">
         <Hero />
+        <PainPoints />
         <ProjectsShowcase />
         <Services />
+        <Methodology />
         <ProjectConfigurator />
-        
-        <!-- Executive CRM Workspace Access Banner -->
-        <section class="py-12 bg-slate-900/40 border-y border-slate-800/80">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-950 border border-cyan-500/30 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div class="space-y-2 text-center lg:text-left">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider">
-                  <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                  <span>JC STUDIO OS // SUITE OPERATIVA PRIVADA</span>
-                </div>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  Portal CRM &amp; Gestión Integral de Proyectos
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-400 max-w-2xl">
-                  Acceso protegido para administrar cartera de clientes, hitos técnicos de proyectos activos, emitir presupuestos proforma en PDF y supervisar balances comerciales.
-                </p>
-              </div>
-              
-              <button
-                @click="requestCrmAccess"
-                class="px-6 py-3.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono uppercase tracking-wider transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:scale-105 flex items-center gap-2 whitespace-nowrap cursor-pointer"
-              >
-                <span>Acceder a Mi Portal CRM</span>
-                <span>→</span>
-              </button>
-            </div>
-          </div>
-        </section>
-
+        <Faq />
         <ReviewsSection />
         <AboutFounder />
         <ContactSection />
       </main>
-      <Footer />
+      <Footer @openCrm="requestCrmAccess" />
       <WhatsAppButton />
 
       <!-- CRM Login Modal with Credentials & Quick Demo Login -->

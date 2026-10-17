@@ -16,22 +16,22 @@ import {
 const projects = [
   {
     id: 'logisync',
-    title: 'LogiSync: Portal de Citas & Recepción con ERP',
+    title: 'LogiSync: Portal de Citas & Recepción de Carga',
     client: 'Sector Logístico & Cadenas Comerciales',
     badge: 'Sistema Empresarial',
     badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
-    summary: 'Plataforma para programar ventanas de descarga de camiones, sincronizada con el ERP corporativo. Reemplazó cientos de llamadas y desorden en muelle.',
+    summary: 'Plataforma web para programar turnos de descarga de camiones, conectada directamente al sistema administrativo central. Eliminó cientos de llamadas diarias y el desorden en muelles.',
     features: [
-      'Selector interactivo de horarios por turno y muelle',
-      'Validación de facturas, peso en toneladas y tipo de vehículo',
-      'Notificaciones automáticas por correo a compradores y transportistas',
-      'Sincronización bidireccional automática con ERP'
+      'Selector interactivo de horarios por turno y muelle de carga',
+      'Validación automática de facturas, peso en toneladas y tipo de camión',
+      'Notificaciones automáticas por correo a compradores y choferes',
+      'Sincronización inmediata con el sistema de inventario y compras'
     ],
-    tags: ['Desarrollo Web Full-Stack', 'Integración ERP', 'Gestión de Turnos'],
+    tags: ['Logística Inteligente', 'Control de Turnos', 'Sistemas a Medida'],
     images: [
       {
         src: '/images/projects/logisync-dashboard.png',
-        caption: 'Panel de Citas Programadas con estado en tiempo real y sincronización ERP'
+        caption: 'Panel de Citas Programadas con estado en tiempo real'
       },
       {
         src: '/images/projects/logisync-horarios.png',
@@ -49,14 +49,14 @@ const projects = [
     client: 'Industria de Alimentos & Restaurantes (El Caldero)',
     badge: 'Software Financiero',
     badgeColor: 'text-amber-400 bg-amber-950/80 border-amber-500/30',
-    summary: 'Sistema especializado en costeo de recetas culinarias con factor de merma, matriz de prorrateo de gastos fijos (alquiler, nómina, luz) y margen neto garantizado.',
+    summary: 'Sistema especializado en costeo de recetas culinarias: calcula el costo real por gramo, descuenta mermas, reparte gastos fijos (alquiler, nómina, luz) y define el precio de venta ideal con margen neto asegurado.',
     features: [
-      'Costeo exacto de ingredientes por gramo y rendimiento neto',
-      'Distribución matricial de gastos fijos entre múltiples productos',
-      'Cálculo automático de precio de venta sugerido según margen de ganancia',
-      'Base de datos en la nube con acceso seguro multi-dispositivo'
+      'Costeo exacto de ingredientes por gramo y rendimiento neto de porciones',
+      'Distribución inteligente de gastos fijos de local entre cada plato o producto',
+      'Cálculo automático del precio de venta sugerido según la ganancia deseada',
+      'Acceso seguro en la nube desde el celular, tablet o computadora'
     ],
-    tags: ['Costeo de Recetas', 'Finanzas Gastronómicas', 'Desarrollo a Medida'],
+    tags: ['Costeo de Recetas', 'Finanzas Gastronómicas', 'Control de Márgenes'],
     images: [
       {
         src: '/images/projects/caldero-app.png',
@@ -70,14 +70,14 @@ const projects = [
     client: 'Empresas de Tecnología & Seguridad',
     badge: 'Inteligencia de Negocio',
     badgeColor: 'text-purple-400 bg-purple-950/80 border-purple-500/30',
-    summary: 'Dashboard administrativo para trazabilidad de ventas, generación automática de presupuestos en PDF, control de seriales y catálogo con pedidos a WhatsApp.',
+    summary: 'Panel administrativo para control total de ventas, generación instantánea de presupuestos oficiales en PDF, registro de seriales de garantía y catálogo con pedidos directos a WhatsApp.',
     features: [
-      'Métricas gerenciales de facturación y productos más rentables',
-      'Catálogo interactivo para clientes con carrito de compras directo a WhatsApp',
-      'Exportación oficial de presupuestos, pedidos y notas de entrega en PDF',
-      'Trazabilidad de números de serie para garantías de equipos'
+      'Resumen visual de ventas diarias y productos más rentables del negocio',
+      'Catálogo interactivo para clientes con pedidos enviados directamente a WhatsApp',
+      'Generación formal de presupuestos y notas de entrega en PDF con 1 clic',
+      'Control de números de serie para responder garantías de equipos sin confusiones'
     ],
-    tags: ['Dashboards Ejecutivos', 'Catálogo WhatsApp', 'Generación de PDFs'],
+    tags: ['Reportes de Ventas', 'Catálogo a WhatsApp', 'Generación de PDFs'],
     images: [
       {
         src: '/images/projects/sistemareportes-app.png',
@@ -91,10 +91,10 @@ const projects = [
     client: 'Bodegones, Supermercados & Retail en Mérida',
     badge: 'Soporte Físico & POS',
     badgeColor: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
-    summary: 'Puesta en marcha y soporte a terminales de cobro: instalación de Stellar POS, configuración de lectoras láser de códigos, impresoras térmicas fiscales y balanzas.',
+    summary: 'Puesta en marcha y soporte continuo a terminales de cobro: instalación de Stellar POS, configuración de lectoras láser de códigos, impresoras térmicas fiscales y balanzas.',
     features: [
       'Configuración integral de software Stellar POS y periféricos de cobro',
-      'Base de datos MySQL / SQL Server local con respaldo automatizado diario',
+      'Base de datos protegida con respaldo automático todos los días',
       'Conexión en red local para sincronizar inventarios entre múltiples cajas',
       'Mantenimiento preventivo para eliminar bloqueos de caja en horas pico'
     ],
@@ -108,18 +108,18 @@ const projects = [
   },
   {
     id: 'redes_cableado',
-    title: 'Cableado Estructurado Cat6 & Servidores Locales',
+    title: 'Red de Alta Velocidad & Servidores Locales',
     client: 'Comercios & Oficinas Corporativas',
     badge: 'Redes & Conectividad',
     badgeColor: 'text-blue-400 bg-blue-950/80 border-blue-500/30',
-    summary: 'Infraestructura de red de alta fidelidad para empresas: cableado de red Cat6 certificado, balanceo de WiFi para puntos de cobro y servidores de datos protegidos.',
+    summary: 'Infraestructura de red estable para comercios: tendido de cables de alta velocidad punto a punto, balanceo de WiFi para puntos de cobro y servidores de datos protegidos.',
     features: [
-      'Tendido de cable Cat6 blindado punto a punto para cajas y routers',
+      'Tendido de cable de red de alta velocidad punto a punto para cajas y routers',
       'Eliminación de zonas muertas e intermitencias en transacciones bancarias',
-      'Auditoría y optimización de consultas en MySQL y SQL Server',
-      'Esquema de contingencia eléctrica con respaldo UPS'
+      'Mantenimiento a la base de datos para que los cobros nunca se tranquen',
+      'Esquema de contingencia eléctrica con respaldo UPS ante cortes de luz'
     ],
-    tags: ['Redes Cat6', 'Servidores MySQL', 'Cero Caídas'],
+    tags: ['Red de Alta Velocidad', 'Servidores Protegidos', 'Cero Caídas'],
     images: [
       {
         src: '/images/projects/logisync-dashboard.png',

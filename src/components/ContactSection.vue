@@ -22,7 +22,7 @@ const isSubmitted = ref(false);
 const sendWhatsApp = () => {
   const serviceLabels = {
     costos: 'Calculadora de Costos & Rentabilidad (Gastronomía / Alimentos)',
-    citas: 'Sistema de Citas, Logística & Turnos (LogiSync / ERP)',
+    citas: 'Sistema de Citas, Logística & Turnos para Empresas',
     reportes: 'Sistema de Reportes Ejecutivos & Catálogo Web',
     pos: 'Soporte Técnico Stellar POS & Cajas (Mérida)',
     redes: 'Instalación / Reemplazo de Cables de Red (Punto a Punto)',
@@ -55,7 +55,7 @@ const sendWhatsApp = () => {
           </h2>
 
           <p class="text-base text-slate-300 leading-relaxed font-sans font-normal">
-            Conversemos sobre tu negocio, tus computadoras de caja, tus cables de red o tu idea de software en PHP, Laravel o Vue. Te responderé rápidamente con una propuesta adaptada a tus necesidades.
+            Conversemos sobre tu negocio: ya sea que necesites reparar tus cajas de cobro, cablear tu local o construir un sistema web a medida. Te responderé rápidamente con una propuesta clara y adaptada.
           </p>
 
           <!-- Contact Cards List -->
@@ -154,12 +154,12 @@ const sendWhatsApp = () => {
                     v-model="form.service" 
                     class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-sans"
                   >
-                    <option value="costos">Calculadora de Costos &amp; Rentabilidad (Gastronomía)</option>
-                    <option value="citas">Sistema de Citas, Logística &amp; Turnos (ERP)</option>
-                    <option value="reportes">Sistema de Reportes Ejecutivos &amp; Catálogo Web</option>
-                    <option value="pos">Soporte Técnico Stellar POS &amp; Cajas (Mérida)</option>
-                    <option value="redes">Instalación de Cables de Red (Punto a Punto)</option>
-                    <option value="otro">Diagnóstico Técnico General</option>
+                    <option value="costos">Calculadora de Costos y Rentabilidad para mi Negocio</option>
+                    <option value="citas">Sistema de Citas, Turnos o Reservas Automáticas</option>
+                    <option value="reportes">Reportes de Ventas, Catálogo Web o Presupuestos</option>
+                    <option value="pos">Soporte para mis Cajas de Cobro / Punto de Venta</option>
+                    <option value="redes">Instalación de Cables de Red para mi Local</option>
+                    <option value="otro">Tengo otra necesidad (Diagnóstico General)</option>
                   </select>
                 </div>
               </div>

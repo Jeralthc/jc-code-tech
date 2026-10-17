@@ -1,6 +1,8 @@
 <script setup>
 const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
 const githubUrl = 'https://github.com/Jeralthc';
+
+const emit = defineEmits(['openCrm']);
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const githubUrl = 'https://github.com/Jeralthc';
           </div>
 
           <p class="text-xs sm:text-sm text-slate-400 max-w-md">
-            Soporte técnico para puntos de venta (POS), redes comerciales y desarrollo web a medida con Laravel y Vue.js. Sede en Mérida, Venezuela.
+            Soporte técnico para puntos de venta (POS), redes comerciales y desarrollo de software web a medida. Sede en Mérida, Venezuela.
           </p>
         </div>
 
@@ -66,7 +68,16 @@ const githubUrl = 'https://github.com/Jeralthc';
       <!-- Bottom Credits -->
       <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono text-center sm:text-left">
         <p>&copy; {{ new Date().getFullYear() }} JC Code &amp; Tech. Todos los derechos reservados.</p>
-        <p class="text-slate-400">Conectamos tu infraestructura. Programamos tus soluciones.</p>
+        <div class="flex items-center gap-4">
+          <p class="text-slate-400">Conectamos tu infraestructura. Programamos tus soluciones.</p>
+          <button 
+            @click="emit('openCrm')" 
+            class="text-slate-600 hover:text-cyan-400 transition-colors text-2xs font-mono cursor-pointer"
+            title="Acceso administrador"
+          >
+            Área Privada
+          </button>
+        </div>
       </div>
 
     </div>

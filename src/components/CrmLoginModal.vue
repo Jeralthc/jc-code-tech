@@ -5,7 +5,6 @@ import {
   KeyIcon, 
   UserIcon, 
   XMarkIcon, 
-  SparklesIcon, 
   CheckCircleIcon,
   ShieldCheckIcon,
   EyeIcon,
@@ -21,7 +20,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'loginSuccess']);
 
-const username = ref('jeralthc@gmail.com');
+const username = ref('');
 const password = ref('');
 const showPassword = ref(false);
 const errorMessage = ref('');
@@ -31,14 +30,14 @@ const handleLogin = () => {
   errorMessage.value = '';
   
   if (!username.value.trim() || !password.value.trim()) {
-    errorMessage.value = 'Por favor ingresa usuario y contraseña.';
+    errorMessage.value = 'Por favor ingresa tu usuario y contraseña.';
     return;
   }
 
   isLoading.value = true;
 
   setTimeout(() => {
-    // Valid passwords: 'admin', 'admin123', 'jeralth', 'jeralth123'
+    // Valid admin users and passwords
     const validUsers = ['admin', 'jeralth', 'jeralthc@gmail.com', 'admin@jccode.tech'];
     const validPass = ['admin123', 'admin', 'jeralth123', '123456'];
 
@@ -48,15 +47,9 @@ const handleLogin = () => {
       emit('loginSuccess');
     } else {
       isLoading.value = false;
-      errorMessage.value = 'Credenciales no válidas. Prueba con: admin / admin123 o pulsa Acceso Rápido.';
+      errorMessage.value = 'Credenciales no válidas. Verifica tu usuario y contraseña.';
     }
   }, 400);
-};
-
-const quickAccess = () => {
-  username.value = 'jeralthc@gmail.com';
-  password.value = 'admin123';
-  handleLogin();
 };
 </script>
 
@@ -147,19 +140,6 @@ const quickAccess = () => {
           <span>{{ isLoading ? 'Verificando...' : 'Iniciar Sesión en CRM' }}</span>
         </button>
       </form>
-
-      <!-- Quick Demo Access (1-Click for Jeralth) -->
-      <div class="pt-4 border-t border-slate-800/80 text-center space-y-2">
-        <span class="text-2xs font-mono text-slate-500 block">¿Acceso rápido para demostración o dueño?</span>
-        <button
-          @click="quickAccess"
-          type="button"
-          class="w-full py-2 px-3 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/30 text-cyan-400 text-xs font-mono font-medium transition-colors flex items-center justify-center gap-1.5"
-        >
-          <SparklesIcon class="w-3.5 h-3.5" />
-          <span>Acceso Rápido con 1 Clic (Auto-login)</span>
-        </button>
-      </div>
 
     </div>
   </div>
