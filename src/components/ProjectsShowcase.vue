@@ -101,8 +101,8 @@ const projects = [
     tags: ['Stellar POS', 'Cajas & Periféricos', 'Soporte en Sitio'],
     images: [
       {
-        src: '/images/projects/sistemareportes-app.png',
-        caption: 'Arquitectura de control y sincronización de puntos de venta'
+        src: '/images/projects/pos-checkout-setup.jpg',
+        caption: 'Terminal de cobro comercial con software POS, balanza digital, lector láser e impresora térmica'
       }
     ]
   },
@@ -122,8 +122,8 @@ const projects = [
     tags: ['Red de Alta Velocidad', 'Servidores Protegidos', 'Cero Caídas'],
     images: [
       {
-        src: '/images/projects/logisync-dashboard.png',
-        caption: 'Monitoreo de enlaces y sincronización de datos continua'
+        src: '/images/projects/network-server-rack.jpg',
+        caption: 'Gabinete de servidor y cableado de red de alta velocidad con respaldo eléctrico continuo'
       }
     ]
   }
