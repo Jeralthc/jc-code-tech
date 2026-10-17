@@ -6,6 +6,7 @@ import ProjectsShowcase from './components/ProjectsShowcase.vue';
 import Services from './components/Services.vue';
 import ProjectConfigurator from './components/ProjectConfigurator.vue';
 import CrmWorkspace from './components/CrmWorkspace.vue';
+import CrmLoginModal from './components/CrmLoginModal.vue';
 import ReviewsSection from './components/ReviewsSection.vue';
 import AboutFounder from './components/AboutFounder.vue';
 import ContactSection from './components/ContactSection.vue';
@@ -14,18 +15,21 @@ import WhatsAppButton from './components/WhatsAppButton.vue';
 
 // Mode: 'public' | 'crm'
 const currentMode = ref('public');
+const showLoginModal = ref(false);
 
-const checkRouteMode = () => {
-  if (window.location.hash === '#crm') {
+const requestCrmAccess = () => {
+  const isAuth = localStorage.getItem('jc_crm_auth') === 'true';
+  if (isAuth) {
     currentMode.value = 'crm';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
-    currentMode.value = 'public';
+    showLoginModal.value = true;
   }
 };
 
-const enterCrm = () => {
+const handleLoginSuccess = () => {
+  showLoginModal.value = false;
   currentMode.value = 'crm';
-  window.location.hash = '#crm';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -33,6 +37,14 @@ const exitCrm = () => {
   currentMode.value = 'public';
   history.replaceState(null, null, ' ');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const checkRouteMode = () => {
+  if (window.location.hash === '#crm') {
+    requestCrmAccess();
+  } else {
+    currentMode.value = 'public';
+  }
 };
 
 onMounted(() => {
@@ -54,7 +66,7 @@ onUnmounted(() => {
 
     <!-- Public High-Converting Sales Landing Page -->
     <div v-else class="min-h-screen flex flex-col relative bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-slate-950">
-      <Header @openCrm="enterCrm" />
+      <Header @openCrm="requestCrmAccess" />
       <main class="flex-grow">
         <Hero />
         <ProjectsShowcase />
@@ -74,12 +86,12 @@ onUnmounted(() => {
                   Portal CRM &amp; Gestión Integral de Proyectos
                 </h3>
                 <p class="text-xs sm:text-sm text-slate-400 max-w-2xl">
-                  Acceso exclusivo para administrar cartera de clientes, hitos técnicos de proyectos activos, emitir presupuestos proforma en PDF y supervisar balances comerciales.
+                  Acceso protegido para administrar cartera de clientes, hitos técnicos de proyectos activos, emitir presupuestos proforma en PDF y supervisar balances comerciales.
                 </p>
               </div>
               
               <button
-                @click="enterCrm"
+                @click="requestCrmAccess"
                 class="px-6 py-3.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono uppercase tracking-wider transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:scale-105 flex items-center gap-2 whitespace-nowrap cursor-pointer"
               >
                 <span>Acceder a Mi Portal CRM</span>
@@ -95,6 +107,13 @@ onUnmounted(() => {
       </main>
       <Footer />
       <WhatsAppButton />
+
+      <!-- CRM Login Modal with Credentials & Quick Demo Login -->
+      <CrmLoginModal 
+        :isOpen="showLoginModal" 
+        @close="showLoginModal = false" 
+        @loginSuccess="handleLoginSuccess" 
+      />
     </div>
   </div>
 </template>

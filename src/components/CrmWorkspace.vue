@@ -27,10 +27,16 @@ import {
   ListBulletIcon,
   ArrowUturnLeftIcon,
   CalendarIcon,
-  CheckIcon
+  CheckIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/vue/24/outline';
 
 const emit = defineEmits(['exitCrm']);
+
+const logout = () => {
+  localStorage.removeItem('jc_crm_auth');
+  emit('exitCrm');
+};
 
 // Active Tab: 'projects' | 'clients' | 'builder' | 'quotes' | 'analytics'
 const activeTab = ref('projects');
@@ -857,6 +863,15 @@ const activeProjectsCount = computed(() => {
           >
             <SparklesIcon class="w-3.5 h-3.5" />
             <span>+ Presupuesto</span>
+          </button>
+
+          <button
+            @click="logout"
+            class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-950 hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/30 transition-all flex items-center gap-1.5"
+            title="Cerrar sesión y salir del CRM"
+          >
+            <ArrowRightOnRectangleIcon class="w-4 h-4" />
+            <span class="hidden sm:inline">Cerrar Sesión</span>
           </button>
         </div>
 
