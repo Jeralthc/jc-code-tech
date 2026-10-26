@@ -7,6 +7,9 @@
   --color-brand-emerald: #10b981;
   --color-slate-925: #050b1a;
   --color-slate-950: #020617;
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 @layer base {
@@ -60,4 +63,85 @@
   background: linear-gradient(135deg, #a5f3fc 0%, #06b6d4 50%, #3b82f6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+/* =========================================================================
+   CRM — componentes base
+   ========================================================================= */
+@layer components {
+  .crm-card {
+    @apply rounded-2xl border border-slate-800/80 bg-slate-900/60 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)];
+  }
+  .crm-label {
+    @apply mb-1.5 block text-xs font-medium text-slate-400;
+  }
+  .crm-input {
+    @apply w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-sm text-white placeholder-slate-600 transition-colors focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20;
+  }
+  .crm-input-sm {
+    @apply w-full rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-xs text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none;
+  }
+  .crm-btn, .crm-btn-primary, .crm-btn-secondary, .crm-btn-ghost, .crm-btn-danger, .crm-btn-whatsapp {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .crm-btn-primary {
+    @apply bg-cyan-500 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:bg-cyan-400;
+  }
+  .crm-btn-secondary {
+    @apply border border-slate-700 bg-slate-800 text-slate-100 hover:bg-slate-700;
+  }
+  .crm-btn-ghost {
+    @apply text-slate-400 hover:bg-slate-800/70 hover:text-white;
+  }
+  .crm-btn-danger {
+    @apply bg-rose-600 text-white hover:bg-rose-500;
+  }
+  .crm-btn-whatsapp {
+    @apply bg-emerald-600 text-white hover:bg-emerald-500;
+  }
+  .crm-icon-btn {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white;
+  }
+  .crm-chip {
+    @apply cursor-pointer whitespace-nowrap rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs font-medium text-slate-400 transition-all hover:text-white;
+  }
+  .crm-chip-active {
+    @apply border-cyan-500/40 bg-cyan-500/15 text-cyan-300;
+  }
+  .crm-badge {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset;
+  }
+  .crm-th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+  .crm-td {
+    @apply px-4 py-3.5 align-middle;
+  }
+}
+
+.crm-fade-enter-active, .crm-fade-leave-active { transition: opacity .2s ease; }
+.crm-fade-enter-from, .crm-fade-leave-to { opacity: 0; }
+.crm-slide-enter-active, .crm-slide-leave-active { transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), opacity .2s; }
+.crm-slide-enter-from, .crm-slide-leave-to { transform: translateX(100%); opacity: .5; }
+
+/* Impresión de cotizaciones: solo se imprime el documento, sin la interfaz. */
+@media print {
+  @page { margin: 12mm; }
+  body.printing-doc > #app { display: none !important; }
+  body.printing-doc .print-chrome { display: none !important; }
+  body.printing-doc .print-overlay {
+    position: static !important;
+    background: #fff !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+  }
+  body.printing-doc .print-sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  body.printing-doc { background: #fff !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

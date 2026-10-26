@@ -1,146 +1,141 @@
 <script setup>
-import { ref } from 'vue';
-import { 
-  LockClosedIcon, 
-  KeyIcon, 
-  UserIcon, 
-  XMarkIcon, 
-  CheckCircleIcon,
-  ShieldCheckIcon,
-  EyeIcon,
-  EyeSlashIcon
+import { ref, watch } from 'vue';
+import {
+  LockClosedIcon, EnvelopeIcon, KeyIcon, XMarkIcon, EyeIcon, EyeSlashIcon, SparklesIcon, ArrowRightIcon,
+  ShieldCheckIcon, CheckCircleIcon
 } from '@heroicons/vue/24/outline';
+import { signIn, sendPasswordReset, updatePassword } from '../crm/auth';
 
 const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    default: false
-  }
+  isOpen: { type: Boolean, default: false },
+  recovery: { type: Boolean, default: false } // llegó desde el correo de "olvidé mi contraseña"
 });
+const emit = defineEmits(['close', 'loginSuccess', 'openDemo', 'recovered']);
 
-const emit = defineEmits(['close', 'loginSuccess']);
-
-const username = ref('');
+const mode = ref('login'); // login | forgot | sent | recovery
+const email = ref('');
 const password = ref('');
+const password2 = ref('');
 const showPassword = ref(false);
-const errorMessage = ref('');
-const isLoading = ref(false);
+const error = ref('');
+const loading = ref(false);
 
-const handleLogin = () => {
-  errorMessage.value = '';
-  
-  if (!username.value.trim() || !password.value.trim()) {
-    errorMessage.value = 'Por favor ingresa tu usuario y contraseña.';
-    return;
-  }
+watch(() => [props.isOpen, props.recovery], () => {
+  error.value = '';
+  password.value = password2.value = '';
+  mode.value = props.recovery ? 'recovery' : 'login';
+}, { immediate: true });
 
-  isLoading.value = true;
-
-  setTimeout(() => {
-    // Valid admin users and passwords
-    const validUsers = ['admin', 'jeralth', 'jeralthc@gmail.com', 'admin@jccode.tech'];
-    const validPass = ['admin123', 'admin', 'jeralth123', '123456'];
-
-    if (validUsers.includes(username.value.toLowerCase().trim()) && validPass.includes(password.value.trim())) {
-      localStorage.setItem('jc_crm_auth', 'true');
-      isLoading.value = false;
-      emit('loginSuccess');
-    } else {
-      isLoading.value = false;
-      errorMessage.value = 'Credenciales no válidas. Verifica tu usuario y contraseña.';
-    }
-  }, 400);
+const run = async (fn) => {
+  error.value = '';
+  loading.value = true;
+  try { await fn(); } catch (e) { error.value = e.message; } finally { loading.value = false; }
 };
+
+const login = () => run(async () => {
+  if (!email.value.trim() || !password.value) throw new Error('Ingresa tu correo y contraseña.');
+  const session = await signIn(email.value, password.value);
+  emit('loginSuccess', session);
+});
+const forgot = () => run(async () => {
+  if (!email.value.trim()) throw new Error('Escribe el correo de tu cuenta.');
+  await sendPasswordReset(email.value);
+  mode.value = 'sent';
+});
+const setNewPassword = () => run(async () => {
+  if (password.value.length < 8) throw new Error('Usa al menos 8 caracteres.');
+  if (password.value !== password2.value) throw new Error('Las contraseñas no coinciden.');
+  await updatePassword(password.value);
+  emit('recovered');
+});
 </script>
 
 <template>
-  <div 
-    v-if="isOpen"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
-  >
-    <div class="relative w-full max-w-md rounded-3xl bg-slate-900 border border-cyan-500/30 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-6">
-      
-      <!-- Close Button -->
-      <button 
-        @click="emit('close')"
-        class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
-      >
+  <div v-if="isOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto" @mousedown.self="emit('close')">
+    <div class="relative w-full max-w-3xl my-8 grid md:grid-cols-2 rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+      <button class="absolute top-4 right-4 z-10 text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800" aria-label="Cerrar" @click="emit('close')">
         <XMarkIcon class="w-5 h-5" />
       </button>
 
-      <!-- Header Icon & Titles -->
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.3)]">
-          <ShieldCheckIcon class="w-7 h-7" />
+      <!-- Demo pública -->
+      <div class="relative p-7 sm:p-8 bg-gradient-to-br from-cyan-600/25 via-blue-700/15 to-slate-900 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col">
+        <div class="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-400/10 ring-1 ring-cyan-400/30 text-cyan-200 text-xs font-semibold">
+          <SparklesIcon class="w-4 h-4" />Sin registro
         </div>
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-2xs font-mono uppercase tracking-wider">
-          <span>ÁREA PRIVADA // JC STUDIO OS</span>
-        </div>
-        <h3 class="text-xl font-bold text-white tracking-tight">
-          Acceso al Panel CRM
-        </h3>
-        <p class="text-xs text-slate-400 max-w-xs mx-auto">
-          Ingresa tus credenciales para administrar tus clientes, proyectos en curso y presupuestos formales.
-        </p>
+        <h3 class="text-xl font-bold text-white mt-4">Prueba el CRM en vivo</h3>
+        <p class="text-sm text-slate-300 mt-2 leading-relaxed">Explora una versión completa con datos de ejemplo: pipeline de ventas, clientes, cotizaciones en PDF, proyectos y cobranzas.</p>
+        <ul class="mt-5 space-y-2 text-sm text-slate-300">
+          <li v-for="f in ['Pipeline con arrastrar y soltar', 'Cotizaciones por WhatsApp y PDF', 'Control de cobros y saldos', 'Agenda de seguimientos']" :key="f" class="flex items-center gap-2">
+            <CheckCircleIcon class="w-4 h-4 text-cyan-300 shrink-0" />{{ f }}
+          </li>
+        </ul>
+        <button class="mt-auto pt-7 group" @click="emit('openDemo')">
+          <span class="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-slate-950 font-bold text-sm group-hover:bg-cyan-100 transition-colors">
+            Abrir demo interactiva <ArrowRightIcon class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </span>
+        </button>
       </div>
 
-      <!-- Login Form -->
-      <form @submit.prevent="handleLogin" class="space-y-4">
-        
-        <!-- Username / Email -->
-        <div>
-          <label class="block text-2xs font-mono uppercase text-slate-400 mb-1.5">Usuario o Correo:</label>
-          <div class="relative">
-            <UserIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input 
-              type="text" 
-              v-model="username" 
-              placeholder="ej. jeralthc@gmail.com o admin"
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 font-mono transition-colors"
-              required
-            />
-          </div>
+      <!-- Acceso privado -->
+      <div class="p-7 sm:p-8">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+          <ShieldCheckIcon class="w-6 h-6" />
         </div>
 
-        <!-- Password -->
-        <div>
-          <label class="block text-2xs font-mono uppercase text-slate-400 mb-1.5">Contraseña:</label>
-          <div class="relative">
-            <KeyIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input 
-              :type="showPassword ? 'text' : 'password'" 
-              v-model="password" 
-              placeholder="••••••••"
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 font-mono transition-colors"
-              required
-            />
-            <button 
-              type="button" 
-              @click="showPassword = !showPassword"
-              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-            >
-              <EyeSlashIcon v-if="showPassword" class="w-4 h-4" />
-              <EyeIcon v-else class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <template v-if="mode === 'login'">
+          <h3 class="text-xl font-bold text-white mt-4">Mi espacio privado</h3>
+          <p class="text-sm text-slate-400 mt-1">Acceso exclusivo para administrar tus clientes reales.</p>
+          <form class="space-y-4 mt-6" @submit.prevent="login">
+            <div>
+              <label class="crm-label">Correo</label>
+              <div class="relative">
+                <EnvelopeIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input v-model="email" type="email" autocomplete="username" class="crm-input pl-10" placeholder="tu@correo.com" />
+              </div>
+            </div>
+            <div>
+              <label class="crm-label">Contraseña</label>
+              <div class="relative">
+                <KeyIcon class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input v-model="password" :type="showPassword ? 'text' : 'password'" autocomplete="current-password" class="crm-input pl-10 pr-10" placeholder="••••••••" />
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300" :aria-label="showPassword ? 'Ocultar' : 'Mostrar'" @click="showPassword = !showPassword">
+                  <EyeSlashIcon v-if="showPassword" class="w-4 h-4" /><EyeIcon v-else class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <p v-if="error" class="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-sm">{{ error }}</p>
+            <button type="submit" class="crm-btn-primary w-full" :disabled="loading"><LockClosedIcon class="w-4 h-4" />{{ loading ? 'Verificando…' : 'Iniciar sesión' }}</button>
+            <button type="button" class="w-full text-xs text-slate-400 hover:text-cyan-300" @click="mode = 'forgot'; error = ''">¿Olvidaste tu contraseña?</button>
+          </form>
+        </template>
 
-        <!-- Error Alert -->
-        <div v-if="errorMessage" class="p-3 rounded-xl bg-red-950/60 border border-red-500/40 text-red-400 text-xs">
-          {{ errorMessage }}
-        </div>
+        <template v-else-if="mode === 'forgot'">
+          <h3 class="text-xl font-bold text-white mt-4">Recuperar acceso</h3>
+          <p class="text-sm text-slate-400 mt-1">Te enviaremos un enlace para crear una nueva contraseña.</p>
+          <form class="space-y-4 mt-6" @submit.prevent="forgot">
+            <input v-model="email" type="email" class="crm-input" placeholder="tu@correo.com" />
+            <p v-if="error" class="text-sm text-rose-300">{{ error }}</p>
+            <button type="submit" class="crm-btn-primary w-full" :disabled="loading">{{ loading ? 'Enviando…' : 'Enviar enlace' }}</button>
+            <button type="button" class="w-full text-xs text-slate-400 hover:text-white" @click="mode = 'login'">Volver</button>
+          </form>
+        </template>
 
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          :disabled="isLoading"
-          class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs font-mono uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-        >
-          <LockClosedIcon class="w-4 h-4" />
-          <span>{{ isLoading ? 'Verificando...' : 'Iniciar Sesión en CRM' }}</span>
-        </button>
-      </form>
+        <template v-else-if="mode === 'sent'">
+          <h3 class="text-xl font-bold text-white mt-4">Revisa tu correo</h3>
+          <p class="text-sm text-slate-400 mt-2">Si <strong class="text-white">{{ email }}</strong> tiene una cuenta, recibirás un enlace para restablecer tu contraseña.</p>
+          <button class="crm-btn-secondary w-full mt-6" @click="mode = 'login'">Volver al inicio de sesión</button>
+        </template>
 
+        <template v-else>
+          <h3 class="text-xl font-bold text-white mt-4">Crea tu nueva contraseña</h3>
+          <form class="space-y-4 mt-6" @submit.prevent="setNewPassword">
+            <input v-model="password" type="password" autocomplete="new-password" class="crm-input" placeholder="Nueva contraseña (mín. 8)" />
+            <input v-model="password2" type="password" autocomplete="new-password" class="crm-input" placeholder="Repite la contraseña" />
+            <p v-if="error" class="text-sm text-rose-300">{{ error }}</p>
+            <button type="submit" class="crm-btn-primary w-full" :disabled="loading">{{ loading ? 'Guardando…' : 'Guardar y entrar' }}</button>
+          </form>
+        </template>
+      </div>
     </div>
   </div>
 </template>

@@ -52,6 +52,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-6">
           <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
+          <a href="#sistema-crm" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">CRM</a>
           <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
           <a href="#cotizador" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Simulador</a>
           <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Preguntas</a>
@@ -118,6 +119,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         class="lg:hidden mx-4 mt-3 rounded-2xl glass-nav p-5 border border-white/10 shadow-2xl space-y-4 text-sm"
       >
         <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
+        <a @click="closeMenu" href="#sistema-crm" class="block text-slate-200 hover:text-cyan-400 py-1">CRM para tu negocio</a>
         <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
         <a @click="closeMenu" href="#cotizador" class="block text-slate-200 hover:text-cyan-400 py-1">Simulador de Presupuesto</a>
         <a @click="closeMenu" href="#faq" class="block text-slate-200 hover:text-cyan-400 py-1">Preguntas Frecuentes</a>
