@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 
-const openIndex = ref(0);
+const openIndex = ref(-1);
 
 const toggleFaq = (index) => {
   openIndex.value = openIndex.value === index ? -1 : index;
@@ -26,10 +26,6 @@ const faqs = [
     a: 'Totalmente. Extraemos y ordenamos tus productos, proveedores y precios, y te construimos un sistema web privado y fácil de usar desde cualquier computadora o celular, con copias de seguridad automáticas para que nunca pierdas datos por un archivo dañado.'
   },
   {
-    q: '¿Prestan servicio en Mérida y también soporte a distancia para otras ciudades?',
-    a: 'Sí. El trabajo físico (cables de red, revisión de computadoras y cajas) se realiza presencialmente en Mérida. Para desarrollo de sistemas web, calculadoras operativas y asesoría técnica, brindamos soporte remoto a nivel nacional con la misma atención cercana y directa.'
-  },
-  {
     q: '¿Ofrecen planes de mantenimiento preventivo y soporte mensual?',
     a: 'Sí. Para negocios que necesitan continuidad absoluta y no pueden detener sus cajas de venta, contamos con planes mensuales de póliza técnica: mantenimiento preventivo programado, verificación de respaldos y canal prioritario para emergencias.'
   }
@@ -37,7 +33,7 @@ const faqs = [
 </script>
 
 <template>
-  <section id="faq" class="py-24 bg-slate-950 relative border-t border-slate-800/80">
+  <section id="faq" class="py-14 sm:py-20 bg-slate-950 relative border-t border-slate-800/80">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->

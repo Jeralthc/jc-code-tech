@@ -2,48 +2,18 @@
 import {
   ArrowDownIcon,
   MapPinIcon,
-  CodeBracketSquareIcon,
-  ComputerDesktopIcon,
-  CircleStackIcon,
-  ServerIcon,
   CheckCircleIcon,
   BoltIcon
 } from '@heroicons/vue/24/outline';
 
 const whatsappUrl = 'https://wa.me/584247130583?text=' + encodeURIComponent('¡Hola Jeralth! 👋 Vi tu página y quiero consultarte sobre mi negocio.');
 
-const pillars = [
-  {
-    title: 'Cajas y puntos de venta',
-    desc: 'Soporte a Stellar POS, impresoras, lectores y balanzas para que no se traben en horas pico.',
-    icon: ComputerDesktopIcon,
-    color: 'text-amber-400 bg-amber-500/10 ring-amber-500/30'
-  },
-  {
-    title: 'Sistemas web a medida',
-    desc: 'Costos, inventario, citas y cotizaciones: deja atrás el Excel y controla tu negocio desde el celular.',
-    icon: CodeBracketSquareIcon,
-    color: 'text-cyan-400 bg-cyan-500/10 ring-cyan-500/30'
-  },
-  {
-    title: 'Redes estables',
-    desc: 'Cableado directo para que tus cajas, routers y equipos no pierdan conexión.',
-    icon: ServerIcon,
-    color: 'text-blue-400 bg-blue-500/10 ring-blue-500/30'
-  },
-  {
-    title: 'Respaldos y seguridad',
-    desc: 'Copias automáticas de tus ventas para que nunca pierdas información.',
-    icon: CircleStackIcon,
-    color: 'text-emerald-400 bg-emerald-500/10 ring-emerald-500/30'
-  }
-];
 
 const commitments = ['Respuesta el mismo día hábil', 'Atención en tu local en Mérida', 'Presupuestos cerrados, sin sorpresas'];
 </script>
 
 <template>
-  <section class="relative pt-32 sm:pt-36 pb-20 overflow-hidden">
+  <section class="relative pt-28 sm:pt-36 pb-14 sm:pb-20 overflow-hidden">
     <!-- Luces de fondo -->
     <div class="absolute inset-0 pointer-events-none">
       <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-cyan-500/10 blur-3xl"></div>
@@ -114,16 +84,6 @@ const commitments = ['Respuesta el mismo día hábil', 'Atención en tu local en
         </div>
       </div>
 
-      <!-- Pilares -->
-      <div class="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div v-for="p in pillars" :key="p.title" class="service-card rounded-2xl p-5">
-          <div :class="['w-10 h-10 rounded-xl ring-1 flex items-center justify-center', p.color]">
-            <component :is="p.icon" class="w-5 h-5" />
-          </div>
-          <h2 class="mt-4 text-base font-bold text-white">{{ p.title }}</h2>
-          <p class="mt-1.5 text-sm text-slate-400 leading-relaxed">{{ p.desc }}</p>
-        </div>
-      </div>
     </div>
   </section>
 </template>

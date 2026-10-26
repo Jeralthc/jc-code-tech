@@ -1,123 +1,92 @@
 <script setup>
-import { 
+import {
   CodeBracketSquareIcon,
-  CalendarDaysIcon, 
-  ComputerDesktopIcon, 
+  CalendarDaysIcon,
+  ComputerDesktopIcon,
   ServerIcon,
-  CheckCircleIcon,
-  ArrowRightIcon,
-  SparklesIcon
+  ArrowRightIcon
 } from '@heroicons/vue/24/outline';
+import { WHATSAPP_NUMBER } from '../siteConfig';
 
+// Cada servicio parte del problema real que el cliente reconoce.
 const services = [
   {
     id: 'software',
-    title: 'Desarrollo de Software Web a Medida',
-    badge: 'Software Personalizado',
-    badgeColor: 'text-cyan-400 bg-cyan-950/80 border-cyan-500/30',
-    desc: 'Construimos el sistema web exacto que tu negocio necesita: calculadoras de costos, portales para clientes, paneles de control y automatización para dejar atrás las hojas de Excel.',
-    benefit: 'Ahorra horas de trabajo manual y centraliza tus datos en la nube de forma segura.',
-    icon: CodeBracketSquareIcon
+    title: 'Sistemas web a medida',
+    problem: '¿Todo en Excel, descuadres y datos que se pierden?',
+    desc: 'Costos, inventario, cotizaciones y reportes en un sistema propio, desde el celular o la PC.',
+    icon: CodeBracketSquareIcon,
+    color: 'text-cyan-400 bg-cyan-500/10 ring-cyan-500/30'
   },
   {
     id: 'citas',
-    title: 'Sistemas de Citas, Turnos & Reservas',
-    badge: 'Automatización 24/7',
-    badgeColor: 'text-amber-400 bg-amber-950/80 border-amber-500/30',
-    desc: 'Plataformas interactivas para que tus clientes, pacientes o proveedores agenden citas automáticamente según tus horarios disponibles y capacidad de atención.',
-    benefit: 'Elimina el 80% de llamadas y mensajes repetitivos de WhatsApp.',
-    icon: CalendarDaysIcon
+    title: 'Citas, turnos y reservas',
+    problem: '¿Pasas el día respondiendo WhatsApp para agendar?',
+    desc: 'Tus clientes reservan solos según tus horarios. Menos mensajes repetitivos y cero cruces.',
+    icon: CalendarDaysIcon,
+    color: 'text-amber-400 bg-amber-500/10 ring-amber-500/30'
   },
   {
     id: 'pos',
-    title: 'Soporte y Continuidad para Cajas (Stellar POS)',
-    badge: 'Presencial en Mérida',
-    badgeColor: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/30',
-    desc: 'Atención técnica preventiva y de emergencia para comercios con Stellar POS. Solucionamos cuelgues de caja, errores de software y fallas de impresoras térmicas.',
-    benefit: 'Garantiza que tus puntos de cobro nunca se detengan en horas pico.',
-    icon: ComputerDesktopIcon
+    title: 'Soporte a cajas (Stellar POS)',
+    problem: '¿Cajas trabadas o impresoras que fallan con fila de clientes?',
+    desc: 'Atención preventiva y de emergencia en tu local en Mérida: software, impresoras, lectores y balanzas.',
+    icon: ComputerDesktopIcon,
+    color: 'text-emerald-400 bg-emerald-500/10 ring-emerald-500/30'
   },
   {
     id: 'redes',
-    title: 'Puntos de Red & Cableado Comercial',
-    badge: 'Conectividad Estable',
-    badgeColor: 'text-blue-400 bg-blue-950/80 border-blue-500/30',
-    desc: 'Instalación y sustitución de cables de red punto a punto para conectar de forma fija y rápida tus balanzas, cajas registradoras, impresoras y computadoras.',
-    benefit: 'Olvídate de la lentitud y las caídas de señal del WiFi en tus equipos de venta.',
-    icon: ServerIcon
+    title: 'Redes y cableado',
+    problem: '¿Equipos que pierden conexión o WiFi inestable?',
+    desc: 'Cableado directo y estable para cajas, balanzas, impresoras y computadoras.',
+    icon: ServerIcon,
+    color: 'text-blue-400 bg-blue-500/10 ring-blue-500/30'
   }
 ];
+
+const steps = [
+  { title: 'Diagnóstico gratis', desc: 'Reviso tu caso sin costo ni compromiso.' },
+  { title: 'Presupuesto cerrado', desc: 'Precio y plazo claros antes de empezar.' },
+  { title: 'Entrega y soporte', desc: 'Garantía y canal directo para emergencias.' }
+];
+
+const ask = (s) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`¡Hola Jeralth! 👋 Me interesa el servicio de ${s.title.toLowerCase()} para mi negocio.`)}`;
 </script>
 
 <template>
-  <section id="servicios" class="py-20 bg-slate-900/40 relative border-t border-slate-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Section Header -->
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-3">
-          <SparklesIcon class="w-3.5 h-3.5" />
-          <span>Servicios Profesionales</span>
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          ¿Cómo Puedo Ayudar a tu Negocio?
-        </h2>
-        <p class="mt-2 text-sm sm:text-base text-slate-400">
-          Soluciones claras, explicadas en tu idioma y enfocadas en rentabilidad y tranquilidad operativa.
-        </p>
+  <section id="servicios" class="py-14 sm:py-20 border-t border-slate-800/80">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="text-xs font-semibold uppercase tracking-widest text-cyan-400">Servicios</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">¿En qué te puedo ayudar?</h2>
       </div>
 
-      <!-- 4 Services Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <div 
-          v-for="item in services" 
-          :key="item.id"
-          class="service-card rounded-2xl p-6 sm:p-7 border border-slate-800/90 bg-slate-900/60 flex flex-col justify-between hover:border-cyan-500/40 transition-all duration-300 group"
-        >
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <article v-for="s in services" :key="s.id" class="service-card rounded-2xl p-4 sm:p-5 flex flex-col">
+          <div class="flex items-center gap-3 lg:flex-col lg:items-start">
+            <div :class="['w-10 h-10 shrink-0 rounded-xl ring-1 flex items-center justify-center', s.color]">
+              <component :is="s.icon" class="w-5 h-5" />
+            </div>
+            <h3 class="text-lg font-bold text-white leading-tight">{{ s.title }}</h3>
+          </div>
+          <p class="mt-2 lg:mt-1 text-sm font-medium text-amber-200/90">{{ s.problem }}</p>
+          <p class="mt-2 text-sm text-slate-400 leading-relaxed flex-1">{{ s.desc }}</p>
+          <a :href="ask(s)" target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 hover:text-cyan-200">
+            Consultar <ArrowRightIcon class="w-4 h-4" />
+          </a>
+        </article>
+      </div>
+
+      <!-- Cómo trabajo -->
+      <ol class="mt-8 grid sm:grid-cols-3 gap-3">
+        <li v-for="(st, i) in steps" :key="st.title" class="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/40 px-4 py-3">
+          <span class="w-8 h-8 shrink-0 rounded-lg bg-cyan-500/10 ring-1 ring-cyan-500/30 text-cyan-300 font-bold text-sm flex items-center justify-center">{{ i + 1 }}</span>
           <div>
-            <!-- Top: Icon & Badge -->
-            <div class="flex items-center justify-between gap-3 mb-4">
-              <div class="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all">
-                <component :is="item.icon" class="w-5 h-5" />
-              </div>
-              <span :class="['text-3xs font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border', item.badgeColor]">
-                {{ item.badge }}
-              </span>
-            </div>
-
-            <!-- Title & Description -->
-            <h3 class="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-              {{ item.title }}
-            </h3>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4 font-normal">
-              {{ item.desc }}
-            </p>
-
-            <!-- Direct Benefit Line -->
-            <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 mb-4 flex items-start gap-2">
-              <CheckCircleIcon class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-              <p class="text-2xs sm:text-xs text-emerald-300/90 font-medium">
-                {{ item.benefit }}
-              </p>
-            </div>
+            <p class="text-sm font-semibold text-white">{{ st.title }}</p>
+            <p class="text-xs text-slate-400">{{ st.desc }}</p>
           </div>
-
-          <!-- Bottom: Action Link -->
-          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-            <span class="text-3xs font-mono text-slate-400">
-              Presupuesto personalizado
-            </span>
-            <a 
-              href="#contacto"
-              class="inline-flex items-center gap-1 text-xs font-bold text-cyan-400 hover:text-cyan-300 group-hover:translate-x-1 transition-transform"
-            >
-              <span>Consultar este servicio</span>
-              <ArrowRightIcon class="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-      </div>
-
+        </li>
+      </ol>
     </div>
   </section>
 </template>

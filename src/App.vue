@@ -2,11 +2,9 @@
 import { ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue';
 import Header from './components/Header.vue';
 import Hero from './components/Hero.vue';
-import PainPoints from './components/PainPoints.vue';
 import ProjectsShowcase from './components/ProjectsShowcase.vue';
 import CrmShowcase from './components/CrmShowcase.vue';
 import Services from './components/Services.vue';
-import Methodology from './components/Methodology.vue';
 import ProjectConfigurator from './components/ProjectConfigurator.vue';
 import Faq from './components/Faq.vue';
 import CrmLoginModal from './components/CrmLoginModal.vue';
@@ -127,11 +125,9 @@ onUnmounted(() => {
       <Header @openCrm="openAccess" />
       <main class="flex-grow">
         <Hero />
-        <PainPoints />
         <Services />
         <ProjectsShowcase />
         <CrmShowcase @openDemo="openDemo" />
-        <Methodology />
         <ProjectConfigurator />
         <AboutFounder />
         <ReviewsSection />

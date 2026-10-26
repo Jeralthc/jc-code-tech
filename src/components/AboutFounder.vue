@@ -11,7 +11,7 @@ const linkedInUrl = LINKEDIN_URL;
 </script>
 
 <template>
-  <section id="nosotros" class="py-16 bg-slate-950 relative border-t border-slate-800/80">
+  <section id="nosotros" class="py-12 sm:py-16 bg-slate-950 relative border-t border-slate-800/80">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="service-card rounded-3xl p-6 sm:p-10 border border-slate-800 bg-slate-900/60 shadow-xl relative overflow-hidden">
@@ -46,15 +46,12 @@ const linkedInUrl = LINKEDIN_URL;
               </p>
             </div>
 
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
-              Llevo <strong class="text-white font-semibold">más de 3 años ayudando a negocios</strong> en Mérida a dejar atrás las hojas de Excel, los cobros caídos y el desorden operativo. Mi misión es simple: que tu negocio funcione mejor con tecnología confiable, sin complicaciones y a un costo justo.
-            </p>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans font-normal">
-              He trabajado con <strong class="text-white font-semibold">restaurantes, distribuidoras, empresas de logística y comercios minoristas</strong>, resolviendo desde cajas de cobro que se traban hasta sistemas completos de gestión en la nube. Cada proyecto que ves en esta web es un cliente real que hoy opera mejor.
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Llevo <strong class="text-white font-semibold">más de 3 años</strong> ayudando a restaurantes, distribuidoras, empresas de logística y comercios de Mérida a dejar atrás el Excel, los cobros caídos y el desorden. Tecnología confiable, sin complicaciones y a un costo justo.
             </p>
 
             <!-- Trust Badges -->
-            <div class="flex flex-wrap justify-center sm:justify-start gap-1.5 font-mono text-3xs pt-1">
+            <div class="flex flex-wrap justify-center sm:justify-start gap-1.5 text-xs pt-1">
               <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">+5 Proyectos Entregados</span>
               <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">+3 Años de Experiencia</span>
               <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Atención Presencial en Mérida</span>

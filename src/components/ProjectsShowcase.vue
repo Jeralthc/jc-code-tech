@@ -4,7 +4,6 @@ import {
   ChevronLeftIcon, 
   ChevronRightIcon, 
   EyeIcon, 
-  SparklesIcon, 
   CheckBadgeIcon, 
   ArrowTopRightOnSquareIcon,
   CpuChipIcon,
@@ -16,6 +15,7 @@ import {
 const projects = [
   {
     id: 'logisync',
+    short: 'LogiSync',
     title: 'LogiSync: Portal de Citas & Recepción de Carga',
     client: 'Sector Logístico & Cadenas Comerciales',
     badge: 'Sistema Empresarial',
@@ -45,6 +45,7 @@ const projects = [
   },
   {
     id: 'caldero',
+    short: 'Costos El Caldero',
     title: 'Calculadora de Costos & Rentabilidad Gastronómica',
     client: 'Industria de Alimentos & Restaurantes (El Caldero)',
     badge: 'Software Financiero',
@@ -66,6 +67,7 @@ const projects = [
   },
   {
     id: 'reportes',
+    short: 'Reportes y catálogo',
     title: 'Sistema de Reportes Ejecutivos & Catálogo Web',
     client: 'Empresas de Tecnología & Seguridad',
     badge: 'Inteligencia de Negocio',
@@ -87,6 +89,7 @@ const projects = [
   },
   {
     id: 'pos_stellar',
+    short: 'Cajas POS',
     title: 'Modernización de Puntos de Venta (POS) & Cajas',
     client: 'Bodegones, Supermercados & Retail en Mérida',
     badge: 'Soporte Físico & POS',
@@ -109,6 +112,7 @@ const projects = [
   },
   {
     id: 'redes_cableado',
+    short: 'Redes y servidores',
     title: 'Red de Alta Velocidad & Servidores Locales',
     client: 'Comercios & Oficinas Corporativas',
     badge: 'Redes & Conectividad',
@@ -151,46 +155,39 @@ const prevImage = () => {
 </script>
 
 <template>
-  <section id="proyectos" class="py-24 bg-slate-950 relative border-t border-slate-800/80 overflow-hidden">
+  <section id="proyectos" class="py-14 sm:py-20 bg-slate-950 relative border-t border-slate-800/80 overflow-hidden">
     <!-- Ambient Lighting Glow -->
     <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[750px] h-[380px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-14">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-4">
-          <SparklesIcon class="w-4 h-4" />
-          <span>PROYECTOS DESARROLLADOS // CASOS REALES EN PRODUCCIÓN</span>
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-          Soluciones de Software &amp; Soporte en Marcha
-        </h2>
-        <p class="mt-4 text-base sm:text-lg text-slate-400">
-          No mostramos plantillas vacías: estos son sistemas reales construidos para empresas que hoy en día optimizan sus costos, controlan inventarios y operan sin caídas.
-        </p>
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <span class="text-xs font-semibold uppercase tracking-widest text-cyan-400">Proyectos reales</span>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Sistemas que ya están funcionando</h2>
+        <p class="mt-3 text-slate-400">Trabajos entregados a negocios que hoy controlan mejor sus costos, inventario y ventas.</p>
       </div>
 
       <!-- Project Selector Tabs -->
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
+      <div class="flex sm:flex-wrap sm:justify-center gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
         <button
           v-for="(proj, idx) in projects"
           :key="proj.id"
           @click="selectProject(idx)"
           :class="[
-            'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 border flex items-center gap-2 cursor-pointer',
+            'shrink-0 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 border flex items-center gap-2 cursor-pointer whitespace-nowrap',
             selectedProjectIndex === idx
-              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)] scale-105'
+              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
               : 'bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
           ]"
         >
           <CheckBadgeIcon class="w-4 h-4 shrink-0 text-cyan-300" />
-          <span>{{ proj.title.split(':')[0] }}</span>
+          <span>{{ proj.short }}</span>
         </button>
       </div>
 
       <!-- Main Showcase Container -->
-      <div class="service-card rounded-3xl p-6 sm:p-10 border border-slate-800 bg-slate-900/60 shadow-2xl mb-14">
+      <div class="service-card rounded-3xl p-4 sm:p-8 border border-slate-800 bg-slate-900/60 shadow-2xl">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
           <!-- Left: Screenshot Frame / Carousel (7 Columns) -->
@@ -299,46 +296,8 @@ const prevImage = () => {
               </ul>
             </div>
 
-            <!-- Tags -->
-            <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-800">
-              <span 
-                v-for="(tag, tIdx) in projects[selectedProjectIndex].tags" 
-                :key="tIdx"
-                class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-2xs font-mono text-slate-400"
-              >
-                #{{ tag }}
-              </span>
-            </div>
-
           </div>
 
-        </div>
-      </div>
-
-      <!-- Quick All Projects Summary Cards (Cards Grid showing all 5 solutions at a glance) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div 
-          v-for="(proj, idx) in projects" 
-          :key="proj.id"
-          @click="selectProject(idx)"
-          :class="[
-            'p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between group',
-            selectedProjectIndex === idx 
-              ? 'bg-slate-900 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.2)]' 
-              : 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/80'
-          ]"
-        >
-          <div>
-            <span :class="['text-3xs font-mono px-2 py-0.5 rounded border inline-block mb-2', proj.badgeColor]">
-              {{ proj.badge }}
-            </span>
-            <h4 class="text-xs font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-2">
-              {{ proj.title }}
-            </h4>
-          </div>
-          <span class="text-3xs font-mono text-slate-400 mt-3 block pt-2 border-t border-slate-800/80">
-            {{ proj.client.split('(')[0] }}
-          </span>
         </div>
       </div>
 

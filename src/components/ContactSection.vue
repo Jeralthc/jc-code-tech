@@ -37,7 +37,7 @@ const sendWhatsApp = () => {
 </script>
 
 <template>
-  <section id="contacto" class="py-24 bg-slate-900/50 relative border-t border-slate-800/80">
+  <section id="contacto" class="py-14 sm:py-20 bg-slate-900/50 relative border-t border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -80,7 +80,7 @@ const sendWhatsApp = () => {
             <!-- Email -->
             <a 
               href="mailto:jeralthc@gmail.com" 
-              class="service-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 flex items-center gap-4 group transition-all"
+              class="service-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 hidden sm:flex items-center gap-4 group transition-all"
             >
               <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all">
                 <EnvelopeIcon class="w-6 h-6" />
@@ -93,7 +93,7 @@ const sendWhatsApp = () => {
             </a>
 
             <!-- Location -->
-            <div class="service-card rounded-2xl p-5 border border-slate-800 flex items-center gap-4">
+            <div class="service-card rounded-2xl p-5 border border-slate-800 hidden sm:flex items-center gap-4">
               <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <MapPinIcon class="w-6 h-6" />
               </div>
@@ -109,13 +109,13 @@ const sendWhatsApp = () => {
 
         <!-- Right: Fast Form -->
         <div class="lg:col-span-7">
-          <div class="service-card rounded-3xl p-8 sm:p-10 border border-slate-800 shadow-2xl">
+          <div class="service-card rounded-3xl p-5 sm:p-8 border border-slate-800 shadow-2xl">
             <h3 class="text-2xl font-bold text-white mb-2">Envía tu Solicitud</h3>
-            <p class="text-sm text-slate-400 mb-8 font-normal">Completa los datos y te responderé lo antes posible para coordinar tu atención.</p>
+            <p class="text-sm text-slate-400 mb-5 font-normal">Completa los datos y te responderé lo antes posible para coordinar tu atención.</p>
 
-            <form @submit.prevent="sendWhatsApp" class="space-y-5">
+            <form @submit.prevent="sendWhatsApp" class="space-y-4">
               
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Tu Nombre *</label>
                   <input 
@@ -137,7 +137,7 @@ const sendWhatsApp = () => {
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Teléfono de Contacto *</label>
                   <input 
@@ -168,7 +168,7 @@ const sendWhatsApp = () => {
                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">¿Qué necesitas resolver o construir? *</label>
                 <textarea 
                   v-model="form.message" 
-                  rows="4" 
+                  rows="3" 
                   required 
                   placeholder="Detalla brevemente la falla que presentan tus equipos o la solución que deseas desarrollar..."
                   class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none font-sans"

@@ -68,11 +68,11 @@ const formatDate = (iso) => new Date(iso).toLocaleDateString('es-VE', { year: 'n
 </script>
 
 <template>
-  <section id="comentarios" class="py-20 bg-slate-900/50 relative border-t border-slate-800/80">
+  <section id="comentarios" class="py-12 sm:py-16 bg-slate-900/50 relative border-t border-slate-800/80">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Section Header -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 mb-12">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-5 mb-8">
         <div class="text-center sm:text-left">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-2">
             <ChatBubbleLeftRightIcon class="w-3.5 h-3.5" />
@@ -190,7 +190,7 @@ const formatDate = (iso) => new Date(iso).toLocaleDateString('es-VE', { year: 'n
       </div>
 
       <!-- Sin opiniones aún -->
-      <div v-else-if="!loading" class="text-center p-10 rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 max-w-xl mx-auto space-y-3">
+      <div v-else-if="!loading" class="text-center p-6 rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 max-w-xl mx-auto space-y-3">
         <div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400 mx-auto">
           <ChatBubbleLeftRightIcon class="w-6 h-6" />
         </div>
