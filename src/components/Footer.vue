@@ -1,5 +1,6 @@
 <script setup>
-const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
+import { LINKEDIN_URL } from '../siteConfig';
+const linkedInUrl = LINKEDIN_URL;
 const githubUrl = 'https://github.com/Jeralthc';
 
 const emit = defineEmits(['openCrm']);
@@ -39,7 +40,7 @@ const emit = defineEmits(['openCrm']);
         <!-- Social Icons -->
         <div class="flex items-center gap-3">
           <a 
-            :href="linkedInUrl" 
+            v-if="linkedInUrl" :href="linkedInUrl" 
             target="_blank" 
             rel="noopener noreferrer"
             class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/10 flex items-center justify-center text-slate-400 hover:text-blue-400 transition-all"

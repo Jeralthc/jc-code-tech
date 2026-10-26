@@ -1,4 +1,5 @@
 <script setup>
+import { LINKEDIN_URL } from '../siteConfig';
 import { ref, onMounted, onUnmounted } from 'vue';
 
 const emit = defineEmits(['openCrm']);
@@ -22,7 +23,17 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 
-const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
+const linkedInUrl = LINKEDIN_URL;
+
+// En el mismo orden que las secciones de la página.
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#sistema-crm', label: 'Demo CRM' },
+  { href: '#cotizador', label: 'Cotizador' },
+  { href: '#nosotros', label: 'Sobre mí' },
+  { href: '#faq', label: 'Preguntas' }
+];
 </script>
 
 <template>
@@ -51,19 +62,11 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-6">
-          <a href="#proyectos" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Proyectos</a>
-          <a href="#sistema-crm" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">CRM</a>
-          <a href="#servicios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Servicios</a>
-          <a href="#cotizador" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Simulador</a>
-          <a href="#faq" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Preguntas</a>
-          <a href="#comentarios" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Opiniones</a>
-          <a href="#nosotros" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">Sobre Mí</a>
-          
-          <a :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-blue-400 flex items-center gap-1 transition-colors">
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+          <a v-for="l in links" :key="l.href" :href="l.href" class="text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-cyan-400 transition-colors">{{ l.label }}</a>
+          <a v-if="linkedInUrl" :href="linkedInUrl" target="_blank" rel="noopener noreferrer" class="text-slate-300 hover:text-blue-400 transition-colors" aria-label="LinkedIn">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
             </svg>
-            <span>LinkedIn</span>
           </a>
         </nav>
 
@@ -118,14 +121,9 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
         v-if="mobileMenuOpen" 
         class="lg:hidden mx-4 mt-3 rounded-2xl glass-nav p-5 border border-white/10 shadow-2xl space-y-4 text-sm"
       >
-        <a @click="closeMenu" href="#proyectos" class="block text-slate-200 hover:text-cyan-400 py-1">Proyectos</a>
-        <a @click="closeMenu" href="#sistema-crm" class="block text-slate-200 hover:text-cyan-400 py-1">CRM para tu negocio</a>
-        <a @click="closeMenu" href="#servicios" class="block text-slate-200 hover:text-cyan-400 py-1">Servicios</a>
-        <a @click="closeMenu" href="#cotizador" class="block text-slate-200 hover:text-cyan-400 py-1">Simulador de Presupuesto</a>
-        <a @click="closeMenu" href="#faq" class="block text-slate-200 hover:text-cyan-400 py-1">Preguntas Frecuentes</a>
+        <a v-for="l in links" :key="l.href" @click="closeMenu" :href="l.href" class="block text-slate-200 hover:text-cyan-400 py-1">{{ l.label }}</a>
         <a @click="closeMenu" href="#comentarios" class="block text-slate-200 hover:text-cyan-400 py-1">Opiniones</a>
-        <a @click="closeMenu" href="#nosotros" class="block text-slate-200 hover:text-cyan-400 py-1">Sobre Mí</a>
-        
+
         <button 
           @click="closeMenu(); emit('openCrm')"
           class="w-full text-left text-slate-400 hover:text-cyan-400 font-mono text-xs py-1 flex items-center gap-2 pt-2 border-t border-slate-800"
@@ -135,7 +133,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
           </svg>
           <span>Área Privada (Gestión)</span>
         </button>
-        <a @click="closeMenu" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
+        <a @click="closeMenu" v-if="linkedInUrl" :href="linkedInUrl" target="_blank" class="block text-blue-400 py-1 flex items-center gap-1.5">
           <span>Perfil de LinkedIn</span>
         </a>
         <div class="pt-2 border-t border-slate-800">

@@ -9,6 +9,7 @@ export const VIEWS = [
   { key: 'projects', label: 'Proyectos', slug: 'proyectos' },
   { key: 'payments', label: 'Cobranzas', slug: 'cobranzas' },
   { key: 'agenda', label: 'Agenda', slug: 'agenda' },
+  { key: 'reviews', label: 'Opiniones web', slug: 'opiniones', privateOnly: true },
   { key: 'settings', label: 'Ajustes', slug: 'ajustes' }
 ];
 

@@ -30,15 +30,15 @@ const projects = [
     tags: ['Logística Inteligente', 'Control de Turnos', 'Sistemas a Medida'],
     images: [
       {
-        src: '/images/projects/logisync-dashboard.png',
+        src: '/images/projects/logisync-dashboard.webp',
         caption: 'Panel de Citas Programadas con estado en tiempo real'
       },
       {
-        src: '/images/projects/logisync-horarios.png',
+        src: '/images/projects/logisync-horarios.webp',
         caption: 'Selector interactivo de horarios disponibles por muelle y día'
       },
       {
-        src: '/images/projects/logisync-formulario.png',
+        src: '/images/projects/logisync-formulario.webp',
         caption: 'Formulario inteligente de despacho con cálculo de horas de descarga'
       }
     ]
@@ -59,7 +59,7 @@ const projects = [
     tags: ['Costeo de Recetas', 'Finanzas Gastronómicas', 'Control de Márgenes'],
     images: [
       {
-        src: '/images/projects/caldero-app.png',
+        src: '/images/projects/caldero-app.webp',
         caption: 'Interfaz de acceso y panel de la Calculadora de Costos en producción'
       }
     ]
@@ -80,7 +80,7 @@ const projects = [
     tags: ['Reportes de Ventas', 'Catálogo a WhatsApp', 'Generación de PDFs'],
     images: [
       {
-        src: '/images/projects/sistemareportes-app.png',
+        src: '/images/projects/sistemareportes-app.webp',
         caption: 'Módulo de Catálogo y Reportes Ejecutivos para clientes comerciales'
       }
     ]
@@ -101,7 +101,8 @@ const projects = [
     tags: ['Stellar POS', 'Cajas & Periféricos', 'Soporte en Sitio'],
     images: [
       {
-        src: '/images/projects/pos-checkout-setup.jpg',
+        src: '/images/projects/pos-checkout-setup.webp',
+        illustrative: true,
         caption: 'Terminal de cobro comercial con software POS, balanza digital, lector láser e impresora térmica'
       }
     ]
@@ -122,7 +123,8 @@ const projects = [
     tags: ['Red de Alta Velocidad', 'Servidores Protegidos', 'Cero Caídas'],
     images: [
       {
-        src: '/images/projects/network-server-rack.jpg',
+        src: '/images/projects/network-server-rack.webp',
+        illustrative: true,
         caption: 'Gabinete de servidor y cableado de red de alta velocidad con respaldo eléctrico continuo'
       }
     ]
@@ -206,7 +208,7 @@ const prevImage = () => {
                   </span>
                 </div>
                 <span class="text-3xs font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-500/30">
-                  Captura de Sistema Real
+                  {{ projects[selectedProjectIndex].images[activeImageIndex].illustrative ? 'Imagen de referencia' : 'Captura del sistema real' }}
                 </span>
               </div>
 
@@ -215,6 +217,8 @@ const prevImage = () => {
                 <img 
                   :src="projects[selectedProjectIndex].images[activeImageIndex].src" 
                   :alt="projects[selectedProjectIndex].title"
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-[1.02]"
                 />
 

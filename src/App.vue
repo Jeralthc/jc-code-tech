@@ -27,7 +27,6 @@ const workspace = ref('demo');
 const view = ref('dashboard');
 const session = ref(null);
 const showLogin = ref(false);
-const recovery = ref(false);
 
 const parseHash = () => {
   const [root, slug] = window.location.hash.replace(/^#/, '').split('/');
@@ -72,10 +71,6 @@ const onLogin = (s) => {
   session.value = s;
   setHash('#crm');
 };
-const onRecovered = () => {
-  recovery.value = false;
-  setHash('#crm');
-};
 const onNavigate = (v) => {
   const root = workspace.value === 'demo' ? 'demo' : 'crm';
   const hash = v === 'dashboard' ? `#${root}` : `#${root}/${slugFromView(v)}`;
@@ -94,7 +89,6 @@ const logout = async () => {
 };
 const closeLogin = () => {
   showLogin.value = false;
-  recovery.value = false;
   if (parseHash().root === 'crm') history.replaceState(null, '', window.location.pathname);
 };
 
@@ -104,10 +98,6 @@ onMounted(async () => {
   window.addEventListener('popstate', route);
   unsubscribe = onAuthChange((event, s) => {
     session.value = s;
-    if (event === 'PASSWORD_RECOVERY') {
-      recovery.value = true;
-      showLogin.value = true;
-    }
     if (event === 'SIGNED_OUT' && workspace.value === 'private' && mode.value === 'crm') exitCrm();
   });
   session.value = await getSession();
@@ -138,14 +128,14 @@ onUnmounted(() => {
       <main class="flex-grow">
         <Hero />
         <PainPoints />
+        <Services />
         <ProjectsShowcase />
         <CrmShowcase @openDemo="openDemo" />
-        <Services />
         <Methodology />
         <ProjectConfigurator />
-        <Faq />
-        <ReviewsSection />
         <AboutFounder />
+        <ReviewsSection />
+        <Faq />
         <ContactSection />
       </main>
       <Footer @openCrm="openAccess" />
@@ -154,11 +144,9 @@ onUnmounted(() => {
 
     <CrmLoginModal
       :isOpen="showLogin"
-      :recovery="recovery"
       @close="closeLogin"
       @loginSuccess="onLogin"
       @openDemo="openDemo"
-      @recovered="onRecovered"
     />
   </div>
 </template>

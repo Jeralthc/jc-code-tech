@@ -1,4 +1,5 @@
 <script setup>
+import { LINKEDIN_URL } from '../siteConfig';
 import { 
   SparklesIcon, 
   MapPinIcon, 
@@ -6,7 +7,7 @@ import {
   CheckBadgeIcon
 } from '@heroicons/vue/24/outline';
 
-const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact_info%3BYvU0JnRKSNi6Tv%2B03l%2FOdg%3D%3D';
+const linkedInUrl = LINKEDIN_URL;
 </script>
 
 <template>
@@ -71,7 +72,7 @@ const linkedInUrl = 'https://www.linkedin.com/public-profile/settings/?lipi=urn%
               </a>
 
               <a 
-                :href="linkedInUrl" 
+                v-if="linkedInUrl" :href="linkedInUrl" 
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:border-blue-400 transition-all"

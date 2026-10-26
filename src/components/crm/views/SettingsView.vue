@@ -6,7 +6,7 @@ import { SERVICE_TYPES } from '../../../crm/constants';
 import { downloadFile, todayISO } from '../../../crm/utils';
 import { updatePassword } from '../../../crm/auth';
 
-const props = defineProps({ userEmail: { type: String, default: '' } });
+const props = defineProps({ username: { type: String, default: '' } });
 const crm = useCrm();
 const ui = useUi();
 // computed: al restaurar un respaldo, settings se reemplaza por un objeto nuevo.
@@ -149,7 +149,7 @@ const changePassword = async () => {
     <!-- Cuenta -->
     <section v-if="!crm.isDemo" class="crm-card p-5 sm:p-6">
       <h3 class="font-semibold text-white flex items-center gap-2"><CloudIcon class="w-5 h-5 text-cyan-400" />Cuenta y sincronización</h3>
-      <p class="text-sm text-slate-400 mt-1">Sesión iniciada como <strong class="text-white">{{ props.userEmail }}</strong>. Tus datos se guardan en la nube (Supabase) y puedes entrar desde cualquier dispositivo.</p>
+      <p class="text-sm text-slate-400 mt-1">Sesión iniciada como <strong class="text-white">{{ props.username }}</strong>. Tus datos se guardan en la nube (Supabase) y puedes entrar desde cualquier dispositivo.</p>
       <form class="grid sm:grid-cols-3 gap-3 mt-4 items-end" @submit.prevent="changePassword">
         <div><label class="crm-label">Nueva contraseña</label><input v-model="pass1" type="password" autocomplete="new-password" class="crm-input" /></div>
         <div><label class="crm-label">Repetir contraseña</label><input v-model="pass2" type="password" autocomplete="new-password" class="crm-input" /></div>

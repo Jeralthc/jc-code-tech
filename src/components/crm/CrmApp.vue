@@ -3,10 +3,12 @@ import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue';
 import {
   HomeIcon, FunnelIcon, UserGroupIcon, DocumentTextIcon, FolderIcon, BanknotesIcon, CalendarDaysIcon, Cog6ToothIcon,
   ArrowUturnLeftIcon, ArrowRightOnRectangleIcon, Bars3Icon, XMarkIcon, MagnifyingGlassIcon, PlusIcon,
-  CheckCircleIcon, ExclamationCircleIcon, CloudIcon, ArrowPathIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon
+  CheckCircleIcon, ExclamationCircleIcon, CloudIcon, ArrowPathIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon, StarIcon
 } from '@heroicons/vue/24/outline';
+import { supabase } from '../../crm/supabase';
 import { createCrmStore } from '../../crm/store';
 import { createUi, VIEWS } from '../../crm/ui';
+import { usernameOf } from '../../crm/auth';
 import { matches, initials, whatsappUrl, todayISO } from '../../crm/utils';
 import { OWNER_WHATSAPP, QUOTE_STATUS, stageOf } from '../../crm/constants';
 import DashboardView from './views/DashboardView.vue';
@@ -17,6 +19,7 @@ import ProjectsView from './views/ProjectsView.vue';
 import PaymentsView from './views/PaymentsView.vue';
 import AgendaView from './views/AgendaView.vue';
 import SettingsView from './views/SettingsView.vue';
+import ReviewsView from './views/ReviewsView.vue';
 import ClientDrawer from './ClientDrawer.vue';
 import ProformaModal from './ProformaModal.vue';
 import ClientForm from './forms/ClientForm.vue';
@@ -33,23 +36,34 @@ const emit = defineEmits(['navigate', 'exit', 'logout']);
 
 const crm = createCrmStore(props.workspace, { userId: props.user?.id });
 const ui = createUi((view) => emit('navigate', view));
-ui.view = props.view;
+const navViews = VIEWS.filter(v => !(v.privateOnly && props.workspace === 'demo'));
+const allowed = (v) => navViews.some(x => x.key === v) ? v : 'dashboard';
+ui.view = allowed(props.view);
 provide('crm', crm);
 provide('ui', ui);
-watch(() => props.view, (v) => { if (v !== ui.view) ui.go(v); });
+watch(() => props.view, (v) => { if (allowed(v) !== ui.view) ui.go(allowed(v)); });
 
 const s = crm.state;
 const isDemo = crm.isDemo;
 const sidebarOpen = ref(false);
 const quickOpen = ref(false);
 
-const icons = { dashboard: HomeIcon, pipeline: FunnelIcon, clients: UserGroupIcon, quotes: DocumentTextIcon, projects: FolderIcon, payments: BanknotesIcon, agenda: CalendarDaysIcon, settings: Cog6ToothIcon };
-const views = { dashboard: DashboardView, pipeline: PipelineView, clients: ClientsView, quotes: QuotesView, projects: ProjectsView, payments: PaymentsView, agenda: AgendaView, settings: SettingsView };
+const icons = { dashboard: HomeIcon, pipeline: FunnelIcon, clients: UserGroupIcon, quotes: DocumentTextIcon, projects: FolderIcon, payments: BanknotesIcon, agenda: CalendarDaysIcon, reviews: StarIcon, settings: Cog6ToothIcon };
+const views = { dashboard: DashboardView, pipeline: PipelineView, clients: ClientsView, quotes: QuotesView, projects: ProjectsView, payments: PaymentsView, agenda: AgendaView, reviews: ReviewsView, settings: SettingsView };
 const today = todayISO();
+// Opiniones pendientes de aprobar en la web (solo espacio privado).
+const pendingReviews = ref(0);
+const loadPendingReviews = async () => {
+  if (isDemo) return;
+  const { count } = await supabase.from('testimonials').select('id', { count: 'exact', head: true }).eq('approved', false);
+  pendingReviews.value = count || 0;
+};
 const badges = computed(() => ({
   agenda: s.tasks.filter(t => !t.done && t.dueDate && t.dueDate <= today).length,
-  quotes: s.quotes.filter(q => q.status === 'sent').length
+  quotes: s.quotes.filter(q => q.status === 'sent').length,
+  reviews: pendingReviews.value
 }));
+watch(() => ui.view, (v, old) => { if (old === 'reviews') loadPendingReviews(); });
 const navigate = (key) => { ui.go(key); sidebarOpen.value = false; };
 
 // ---------------- Búsqueda global (Ctrl/Cmd + K)
@@ -94,7 +108,7 @@ const beforeUnload = (e) => { if (crm.hasPending()) { e.preventDefault(); e.retu
 onMounted(() => {
   document.addEventListener('keydown', onGlobalKey);
   window.addEventListener('beforeunload', beforeUnload);
-  if (!isDemo) crm.load();
+  if (!isDemo) { crm.load(); loadPendingReviews(); }
 });
 onUnmounted(() => {
   document.removeEventListener('keydown', onGlobalKey);
@@ -135,7 +149,7 @@ const quickActions = [
 
       <nav class="flex-1 px-3 space-y-0.5 overflow-y-auto">
         <button
-          v-for="v in VIEWS" :key="v.key"
+          v-for="v in navViews" :key="v.key"
           :class="['w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
             ui.view === v.key ? 'bg-cyan-500/15 text-cyan-200 ring-1 ring-inset ring-cyan-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60',
             v.key === 'settings' && 'mt-4']"
@@ -155,7 +169,7 @@ const quickActions = [
           <span class="flex-1 truncate">{{ syncLabel }}</span>
           <button v-if="status.error" class="underline" @click="crm.syncNow()">Reintentar</button>
         </div>
-        <p v-if="user" class="px-3 text-2xs text-slate-600 truncate">{{ user.email }}</p>
+        <p v-if="user" class="px-3 text-2xs text-slate-600 truncate">Usuario: {{ usernameOf(user) }}</p>
         <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-slate-800/60" @click="emit('exit')">
           <ArrowUturnLeftIcon class="w-5 h-5" />Volver a la web
         </button>
@@ -227,7 +241,7 @@ const quickActions = [
           <span class="flex-1">Importamos a la nube los clientes, cotizaciones y proyectos que tenías guardados en este navegador.</span>
           <button class="text-emerald-300" @click="status.migrated = false"><XMarkIcon class="w-4 h-4" /></button>
         </div>
-        <component :is="views[ui.view]" v-bind="ui.view === 'settings' ? { userEmail: user?.email } : {}" />
+        <component :is="views[ui.view]" v-bind="ui.view === 'settings' ? { username: usernameOf(user) } : {}" />
       </template>
     </main>
 

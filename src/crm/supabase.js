@@ -6,5 +6,5 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ugemygtznaunr
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_Byuykn7j7rqZN7vcAWWc4A_qOs7e1g9';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' }
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
 });
