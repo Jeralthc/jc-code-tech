@@ -86,6 +86,25 @@ export const TONE_DOT = {
   rose: 'bg-rose-400'
 };
 
+export const TICKET_STATUS = {
+  open: { label: 'Abierto', tone: 'rose' },
+  in_progress: { label: 'En atención', tone: 'cyan' },
+  waiting: { label: 'En espera', tone: 'amber' },
+  resolved: { label: 'Resuelto', tone: 'emerald' }
+};
+
+// sla: horas máximas para resolver según la prioridad.
+export const TICKET_PRIORITY = {
+  urgent: { label: 'Urgente', tone: 'rose', sla: 4 },
+  high: { label: 'Alta', tone: 'amber', sla: 24 },
+  normal: { label: 'Normal', tone: 'blue', sla: 72 },
+  low: { label: 'Baja', tone: 'slate', sla: 168 }
+};
+
+export const TICKET_CATEGORIES = ['Caja POS', 'Impresora', 'Red / Internet', 'Computador', 'Software / Sistema', 'Respaldo de datos', 'Otro'];
+
+export const EXPENSE_CATEGORIES = ['Materiales y repuestos', 'Transporte', 'Software y hosting', 'Subcontratación', 'Publicidad', 'Herramientas', 'Otro'];
+
 export const stageOf = (key) => STAGES.find(s => s.key === key) || STAGES[0];
 
 export const OWNER_WHATSAPP = '584247130583';

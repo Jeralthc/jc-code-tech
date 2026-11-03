@@ -121,3 +121,65 @@ export const toCSV = (rows) =>
   rows
     .map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','))
     .join('\n');
+
+// ID único corto (sin choques entre dispositivos): CLI-7F3K2Q.
+const ID_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+export const uid = (prefix, length = 6) => {
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  return `${prefix}-${Array.from(bytes, b => ID_CHARS[b % ID_CHARS.length]).join('')}`;
+};
+
+// Bolívares con separadores venezolanos: Bs. 1.234,56
+const vesFmt = new Intl.NumberFormat('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export const formatBs = (value) => `Bs. ${vesFmt.format(Number(value) || 0)}`;
+export const formatRate = (value) => vesFmt.format(Number(value) || 0);
+
+// Mes en formato YYYY-MM y su nombre largo ("octubre 2026").
+export const monthKeyOf = (iso) => String(iso || '').slice(0, 7);
+const longMonthFmt = new Intl.DateTimeFormat('es-VE', { month: 'long', year: 'numeric' });
+export const longMonthLabel = (key) => longMonthFmt.format(parseISO(`${key}-01`));
+
+// Tiempo transcurrido legible desde una fecha/hora ISO: "hace 3 h", "hace 2 días".
+export const timeAgo = (iso) => {
+  if (!iso) return '';
+  const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 1) return 'ahora';
+  if (mins < 60) return `hace ${mins} min`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `hace ${hours} h`;
+  const days = Math.round(hours / 24);
+  return `hace ${days} día${days === 1 ? '' : 's'}`;
+};
+
+const dateTimeFmt = new Intl.DateTimeFormat('es-VE', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+export const formatDateTime = (iso) => (iso ? dateTimeFmt.format(new Date(iso)) : '—');
+
+// Totales de una cotización (compartido por el CRM y el portal del cliente).
+export const computeQuoteTotals = (q, defaultTaxRate = 16) => {
+  const subtotal = (q.items || []).reduce((acc, i) => acc + (Number(i.quantity) || 0) * (Number(i.unitPrice) || 0), 0);
+  const pct = Math.min(100, Math.max(0, Number(q.discountPercent) || 0));
+  const discount = subtotal * pct / 100;
+  const rate = q.taxRate ?? defaultTaxRate;
+  const tax = q.applyTax ? (subtotal - discount) * rate / 100 : 0;
+  return { subtotal, discount, tax, taxRate: rate, total: subtotal - discount + tax };
+};
+
+// Reduce una imagen a un cuadrado pequeño en data URL (para el logo del negocio).
+export const imageToDataUrl = (file, size = 160) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+  reader.onload = () => {
+    const img = new Image();
+    img.onerror = () => reject(new Error('El archivo no es una imagen válida.'));
+    img.onload = () => {
+      const scale = Math.min(size / img.width, size / img.height, 1);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});

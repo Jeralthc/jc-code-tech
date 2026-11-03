@@ -3,7 +3,8 @@ import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue';
 import {
   HomeIcon, FunnelIcon, UserGroupIcon, DocumentTextIcon, FolderIcon, BanknotesIcon, CalendarDaysIcon, Cog6ToothIcon,
   ArrowUturnLeftIcon, ArrowRightOnRectangleIcon, Bars3Icon, XMarkIcon, MagnifyingGlassIcon, PlusIcon,
-  CheckCircleIcon, ExclamationCircleIcon, CloudIcon, ArrowPathIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon, StarIcon
+  CheckCircleIcon, ExclamationCircleIcon, CloudIcon, ArrowPathIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon, StarIcon,
+  LifebuoyIcon, ArrowPathRoundedSquareIcon, ReceiptPercentIcon, SignalIcon
 } from '@heroicons/vue/24/outline';
 import { supabase } from '../../crm/supabase';
 import { createCrmStore } from '../../crm/store';
@@ -26,6 +27,15 @@ import ClientForm from './forms/ClientForm.vue';
 import ProjectForm from './forms/ProjectForm.vue';
 import PaymentForm from './forms/PaymentForm.vue';
 import TaskForm from './forms/TaskForm.vue';
+import TicketsView from './views/TicketsView.vue';
+import SubscriptionsView from './views/SubscriptionsView.vue';
+import ExpensesView from './views/ExpensesView.vue';
+import TicketForm from './forms/TicketForm.vue';
+import SubscriptionForm from './forms/SubscriptionForm.vue';
+import ExpenseForm from './forms/ExpenseForm.vue';
+import ClientPortal from './ClientPortal.vue';
+import { loadBcvRate } from '../../crm/rates';
+import { TICKET_PRIORITY } from '../../crm/constants';
 
 const props = defineProps({
   workspace: { type: String, required: true }, // 'demo' | 'private'
@@ -48,8 +58,8 @@ const isDemo = crm.isDemo;
 const sidebarOpen = ref(false);
 const quickOpen = ref(false);
 
-const icons = { dashboard: HomeIcon, pipeline: FunnelIcon, clients: UserGroupIcon, quotes: DocumentTextIcon, projects: FolderIcon, payments: BanknotesIcon, agenda: CalendarDaysIcon, reviews: StarIcon, settings: Cog6ToothIcon };
-const views = { dashboard: DashboardView, pipeline: PipelineView, clients: ClientsView, quotes: QuotesView, projects: ProjectsView, payments: PaymentsView, agenda: AgendaView, reviews: ReviewsView, settings: SettingsView };
+const icons = { dashboard: HomeIcon, pipeline: FunnelIcon, clients: UserGroupIcon, quotes: DocumentTextIcon, projects: FolderIcon, payments: BanknotesIcon, agenda: CalendarDaysIcon, reviews: StarIcon, settings: Cog6ToothIcon, tickets: LifebuoyIcon, subscriptions: ArrowPathRoundedSquareIcon, expenses: ReceiptPercentIcon };
+const views = { dashboard: DashboardView, pipeline: PipelineView, clients: ClientsView, quotes: QuotesView, projects: ProjectsView, payments: PaymentsView, agenda: AgendaView, reviews: ReviewsView, settings: SettingsView, tickets: TicketsView, subscriptions: SubscriptionsView, expenses: ExpensesView };
 const today = todayISO();
 // Opiniones pendientes de aprobar en la web (solo espacio privado).
 const pendingReviews = ref(0);
@@ -61,8 +71,14 @@ const loadPendingReviews = async () => {
 const badges = computed(() => ({
   agenda: s.tasks.filter(t => !t.done && t.dueDate && t.dueDate <= today).length,
   quotes: s.quotes.filter(q => q.status === 'sent').length,
-  reviews: pendingReviews.value
+  reviews: pendingReviews.value,
+  tickets: s.tickets.filter(t => crm.ticketOverdue(t, TICKET_PRIORITY[t.priority]?.sla || 72)).length,
+  subscriptions: s.subscriptions.filter(x => crm.planStatus(x) === 'overdue').length
 }));
+// Encabezado de sección cuando cambia el grupo del menú.
+const showGroup = (i) => navViews[i].group && navViews[i].group !== navViews[i - 1]?.group;
+const portalPreview = computed(() => ui.portalClientId ? crm.portalSnapshot(ui.portalClientId) : null);
+const approvePreview = (id, name) => crm.setQuoteStatus(id, 'approved', name);
 watch(() => ui.view, (v, old) => { if (old === 'reviews') loadPendingReviews(); });
 const navigate = (key) => { ui.go(key); sidebarOpen.value = false; };
 
@@ -80,6 +96,8 @@ const results = computed(() => {
     .forEach(x => out.push({ key: x.id, type: 'Cotización', title: `${x.id} · ${crm.client(x.clientId)?.company || ''}`, sub: `${crm.money(crm.quoteTotals(x).total)} · ${QUOTE_STATUS[crm.quoteStatus(x)].label}`, run: () => ui.openProforma(x.id) }));
   s.projects.filter(p => matches(q, p.id, p.title, crm.client(p.clientId)?.company)).slice(0, 4)
     .forEach(p => out.push({ key: p.id, type: 'Proyecto', title: p.title, sub: crm.client(p.clientId)?.company, run: () => ui.go('projects') }));
+  s.tickets.filter(t => matches(q, t.id, t.title, t.device, crm.client(t.clientId)?.company)).slice(0, 4)
+    .forEach(t => out.push({ key: t.id, type: 'Soporte', title: `${t.id} · ${t.title}`, sub: crm.client(t.clientId)?.company, run: () => ui.editTicket(t) }));
   return out;
 });
 const onSearchBlur = () => setTimeout(() => { searchFocus.value = false; }, 150);
@@ -108,6 +126,7 @@ const beforeUnload = (e) => { if (crm.hasPending()) { e.preventDefault(); e.retu
 onMounted(() => {
   document.addEventListener('keydown', onGlobalKey);
   window.addEventListener('beforeunload', beforeUnload);
+  loadBcvRate();
   if (!isDemo) { crm.load(); loadPendingReviews(); }
 });
 onUnmounted(() => {
@@ -127,7 +146,10 @@ const quickActions = [
   { label: 'Cotización', icon: DocumentTextIcon, run: () => ui.editQuote() },
   { label: 'Proyecto', icon: FolderIcon, run: () => ui.editProject() },
   { label: 'Cobro', icon: BanknotesIcon, run: () => ui.addPayment() },
-  { label: 'Tarea', icon: CalendarDaysIcon, run: () => ui.editTask() }
+  { label: 'Tarea', icon: CalendarDaysIcon, run: () => ui.editTask() },
+  { label: 'Ticket de soporte', icon: LifebuoyIcon, run: () => ui.editTicket() },
+  { label: 'Plan mensual', icon: ArrowPathRoundedSquareIcon, run: () => ui.editSubscription() },
+  { label: 'Gasto', icon: ReceiptPercentIcon, run: () => ui.editExpense() }
 ];
 </script>
 
@@ -148,17 +170,18 @@ const quickActions = [
       </div>
 
       <nav class="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <template v-for="(v, i) in navViews" :key="v.key">
+        <p v-if="showGroup(i)" class="px-3 pt-4 pb-1 text-2xs font-semibold uppercase tracking-wider text-slate-600">{{ v.group }}</p>
         <button
-          v-for="v in navViews" :key="v.key"
           :class="['w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-            ui.view === v.key ? 'bg-cyan-500/15 text-cyan-200 ring-1 ring-inset ring-cyan-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60',
-            v.key === 'settings' && 'mt-4']"
+            ui.view === v.key ? 'bg-cyan-500/15 text-cyan-200 ring-1 ring-inset ring-cyan-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60']"
           @click="navigate(v.key)"
         >
           <component :is="icons[v.key]" class="w-5 h-5" />
           <span class="flex-1 text-left">{{ v.label }}</span>
           <span v-if="badges[v.key]" class="text-2xs font-bold px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-200">{{ badges[v.key] }}</span>
         </button>
+        </template>
       </nav>
 
       <div class="p-3 border-t border-slate-800 space-y-1">
@@ -167,6 +190,7 @@ const quickActions = [
           <ArrowPathIcon v-else-if="status.saving || status.dirty" class="w-4 h-4 animate-spin" />
           <CloudIcon v-else class="w-4 h-4 text-emerald-400" />
           <span class="flex-1 truncate">{{ syncLabel }}</span>
+          <span v-if="status.live && !status.error" class="flex items-center gap-1 text-2xs text-emerald-400" title="Los cambios de otros dispositivos llegan al instante"><SignalIcon class="w-3.5 h-3.5" />En vivo</span>
           <button v-if="status.error" class="underline" @click="crm.syncNow()">Reintentar</button>
         </div>
         <p v-if="user" class="px-3 text-2xs text-slate-600 truncate">Usuario: {{ usernameOf(user) }}</p>
@@ -251,6 +275,10 @@ const quickActions = [
     <ProjectForm v-if="ui.projectForm" :project="ui.projectForm.project" :prefill="ui.projectForm.prefill" @close="ui.projectForm = null" />
     <PaymentForm v-if="ui.paymentForm" :payment="ui.paymentForm.payment" :prefill="ui.paymentForm.prefill" @close="ui.paymentForm = null" />
     <TaskForm v-if="ui.taskForm" :task="ui.taskForm.task" :prefill="ui.taskForm.prefill" @close="ui.taskForm = null" />
+    <TicketForm v-if="ui.ticketForm" :ticket="ui.ticketForm.ticket" :prefill="ui.ticketForm.prefill" @close="ui.ticketForm = null" />
+    <SubscriptionForm v-if="ui.subscriptionForm" :plan="ui.subscriptionForm.plan" :prefill="ui.subscriptionForm.prefill" @close="ui.subscriptionForm = null" />
+    <ExpenseForm v-if="ui.expenseForm" :expense="ui.expenseForm.expense" :prefill="ui.expenseForm.prefill" @close="ui.expenseForm = null" />
+    <ClientPortal v-if="portalPreview" :key="ui.portalClientId" :preview="portalPreview" @close="ui.portalClientId = null" @approve="approvePreview" />
     <ProformaModal v-if="ui.proformaId && crm.quote(ui.proformaId)" :quote-id="ui.proformaId" @close="ui.proformaId = null" />
 
     <!-- Confirmación -->
@@ -286,7 +314,8 @@ const quickActions = [
           >
             <ExclamationCircleIcon v-if="t.type === 'error'" class="w-5 h-5 text-rose-400 shrink-0" />
             <CheckCircleIcon v-else class="w-5 h-5 text-emerald-400 shrink-0" />
-            {{ t.message }}
+            <span class="flex-1">{{ t.message }}</span>
+            <button v-if="t.action" class="shrink-0 font-semibold text-cyan-300 hover:text-cyan-200 underline-offset-2 hover:underline" @click="t.action.run(); ui.dismissToast(t.id)">{{ t.action.label }}</button>
           </div>
         </TransitionGroup>
       </div>

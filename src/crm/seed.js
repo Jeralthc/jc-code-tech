@@ -19,6 +19,8 @@ export const defaultSettings = () => ({
   defaultPaymentTerms: '50% de anticipo para iniciar y 50% contra entrega final.',
   defaultNotes: 'Incluye 60 días de garantía técnica, capacitación al personal y documentación de uso.',
   monthlyGoal: 2000,
+  showBs: true,
+  logo: '',
   catalog: [
     { id: 'svc-1', name: 'Sistema web a medida', description: 'Desarrollo de plataforma web a medida (Laravel + Vue): base de datos, panel administrativo y roles de usuario.', price: 650, category: 'Desarrollo Web a Medida' },
     { id: 'svc-2', name: 'Landing page profesional', description: 'Página web comercial optimizada para móviles, con formulario de contacto, botón de WhatsApp y SEO básico.', price: 280, category: 'Desarrollo Web a Medida' },
@@ -40,7 +42,10 @@ export const emptyData = () => ({
   quotes: [],
   projects: [],
   payments: [],
-  tasks: []
+  tasks: [],
+  tickets: [],
+  subscriptions: [],
+  expenses: []
 });
 
 export const buildDemoData = () => {
@@ -158,13 +163,13 @@ export const buildDemoData = () => {
     { id: 'PAG-003', clientId: 'CLI-001', projectId: 'PRY-001', amount: 630, date: m(3, 4), method: 'Transferencia', reference: 'TR-88120', note: 'Anticipo 60%' },
     { id: 'PAG-004', clientId: 'CLI-001', projectId: 'PRY-001', amount: 420, date: m(3, 22), method: 'Pago Móvil', reference: 'PM-55102', note: 'Saldo final' },
     { id: 'PAG-005', clientId: 'CLI-002', projectId: 'PRY-002', amount: 760, date: m(2, 6), method: 'Zelle', reference: 'ZL-3011', note: 'Anticipo 40%' },
-    { id: 'PAG-008', clientId: 'CLI-007', projectId: null, amount: 160, date: m(1, 8), method: 'Pago Móvil', reference: 'PM-60033', note: 'Soporte puntual' },
+    { id: 'PAG-008', clientId: 'CLI-007', projectId: null, amount: 160, date: m(1, 8), method: 'Pago Móvil', reference: 'PM-60033', note: 'Plan de soporte mensual', currency: 'VES', rate: 845, amountVes: 135200, subscriptionId: 'PLN-002', period: m(1, 1).slice(0, 7) },
     { id: 'PAG-010', clientId: 'CLI-001', projectId: 'PRY-006', amount: 450, date: m(1, 24), method: 'Zelle', reference: 'ZL-3388', note: 'Anticipo 50% web' },
     { id: 'PAG-006', clientId: 'CLI-002', projectId: 'PRY-002', amount: 570, date: m(0, 3), method: 'Binance / USDT', reference: 'BN-77A1', note: 'Hito intermedio' },
-    { id: 'PAG-007', clientId: 'CLI-001', projectId: 'PRY-004', amount: 160, date: m(0, 5), method: 'Efectivo USD', reference: '', note: 'Soporte mes 1' },
-    { id: 'PAG-011', clientId: 'CLI-007', projectId: null, amount: 160, date: m(0, 10), method: 'Pago Móvil', reference: 'PM-70110', note: 'Soporte mensual' },
+    { id: 'PAG-007', clientId: 'CLI-001', projectId: null, amount: 160, date: m(0, 5), method: 'Efectivo USD', reference: '', note: 'Plan de soporte mensual', subscriptionId: 'PLN-001', period: m(0, 1).slice(0, 7) },
+    { id: 'PAG-011', clientId: 'CLI-007', projectId: null, amount: 160, date: m(0, 10), method: 'Pago Móvil', reference: 'PM-70110', note: 'Plan de soporte mensual', currency: 'VES', rate: 880, amountVes: 140800, subscriptionId: 'PLN-002', period: m(0, 1).slice(0, 7) },
     { id: 'PAG-012', clientId: 'CLI-001', projectId: 'PRY-006', amount: 300, date: m(0, 18), method: 'Zelle', reference: 'ZL-3502', note: 'Segundo abono web' },
-    { id: 'PAG-009', clientId: 'CLI-005', projectId: 'PRY-005', amount: 60, date: m(0, 25), method: 'Pago Móvil', reference: 'PM-71209', note: 'Anticipo diagnóstico' }
+    { id: 'PAG-009', clientId: 'CLI-005', projectId: 'PRY-005', amount: 60, date: m(0, 25), method: 'Pago Móvil', reference: 'PM-71209', note: 'Anticipo diagnóstico', currency: 'VES', rate: 885, amountVes: 53100 }
   ];
 
   data.tasks = [
@@ -190,6 +195,34 @@ export const buildDemoData = () => {
     { id: 'ACT-011', clientId: 'CLI-001', type: 'note', text: 'Firmó soporte mensual por 3 meses.', date: d(-20) }
   ];
 
+  // Hora relativa a ahora (para tickets): h horas atrás.
+  const ago = (h) => new Date(Date.now() - h * 3600000).toISOString();
+  data.tickets = [
+    { id: 'TCK-001', clientId: 'CLI-001', title: 'Caja 2 no imprime tickets', device: 'Impresora térmica Bixolon SRP-350', category: 'Impresora', priority: 'urgent', status: 'in_progress', openedAt: ago(2), resolvedAt: null, description: 'La impresora enciende pero no responde desde el sistema de facturación.', solution: '', charge: 0 },
+    { id: 'TCK-002', clientId: 'CLI-005', title: 'Cajas se desconectan en hora pico', device: 'Switch y router principal', category: 'Red / Internet', priority: 'high', status: 'open', openedAt: ago(30), resolvedAt: null, description: 'Entre 11 am y 1 pm las 3 cajas pierden conexión con el servidor.', solution: '', charge: 0 },
+    { id: 'TCK-003', clientId: 'CLI-007', title: 'Actualizar costos por nueva lista de proveedores', device: 'Módulo de costos', category: 'Software / Sistema', priority: 'normal', status: 'waiting', openedAt: ago(52), resolvedAt: null, description: 'Esperando el archivo de precios del proveedor.', solution: '', charge: 0 },
+    { id: 'TCK-004', clientId: 'CLI-002', title: 'Vendedor no puede iniciar sesión', device: 'App de vendedores', category: 'Software / Sistema', priority: 'high', status: 'resolved', openedAt: ago(120), resolvedAt: ago(117), description: 'Usuario bloqueado por intentos fallidos.', solution: 'Se desbloqueó el usuario y se restableció la contraseña.', charge: 0 },
+    { id: 'TCK-005', clientId: 'CLI-001', title: 'Lector de códigos no lee etiquetas nuevas', device: 'Lector Honeywell 1250g', category: 'Caja POS', priority: 'normal', status: 'resolved', openedAt: ago(200), resolvedAt: ago(180), description: '', solution: 'Se habilitó la simbología Code 128 en el lector.', charge: 25 },
+    { id: 'TCK-006', clientId: 'CLI-003', title: 'Respaldo del servidor no se ejecutó', device: 'Servidor de inventario', category: 'Respaldo de datos', priority: 'urgent', status: 'resolved', openedAt: ago(340), resolvedAt: ago(337), description: 'Alerta de respaldo fallido.', solution: 'Disco externo desconectado. Se reconectó y se verificó el respaldo.', charge: 0 }
+  ];
+
+  data.subscriptions = [
+    { id: 'PLN-001', clientId: 'CLI-001', title: 'Soporte mensual POS y red', amount: 160, billingDay: 5, startDate: d(-60), active: true, notes: 'Visitas preventivas quincenales y atención prioritaria.' },
+    { id: 'PLN-002', clientId: 'CLI-007', title: 'Soporte del sistema de costos', amount: 160, billingDay: 10, startDate: d(-90), active: true, notes: '' },
+    { id: 'PLN-003', clientId: 'CLI-002', title: 'Hosting y mantenimiento del portal', amount: 45, billingDay: 1, startDate: d(-40), active: true, notes: 'Servidor, dominio y respaldos.' }
+  ];
+
+  data.expenses = [
+    { id: 'GTO-001', date: m(3, 2), amount: 140, category: 'Materiales y repuestos', description: 'Bobina de cable UTP Cat6 y conectores', projectId: 'PRY-001', clientId: 'CLI-001', method: 'Efectivo USD', currency: 'USD', amountVes: 0, rate: 0 },
+    { id: 'GTO-002', date: m(2, 10), amount: 60, category: 'Software y hosting', description: 'Servidor en la nube (3 meses)', projectId: 'PRY-002', clientId: 'CLI-002', method: 'Binance / USDT', currency: 'USD', amountVes: 0, rate: 0 },
+    { id: 'GTO-003', date: m(1, 15), amount: 35, category: 'Transporte', description: 'Traslados a sucursales', projectId: 'PRY-006', clientId: 'CLI-001', method: 'Pago Móvil', currency: 'VES', amountVes: 29750, rate: 850 },
+    { id: 'GTO-004', date: m(0, 4), amount: 25, category: 'Software y hosting', description: 'Dominio anual', projectId: 'PRY-006', clientId: 'CLI-001', method: 'Zelle', currency: 'USD', amountVes: 0, rate: 0 },
+    { id: 'GTO-005', date: m(0, 12), amount: 30, category: 'Publicidad', description: 'Campaña en Instagram', projectId: null, clientId: '', method: 'Zelle', currency: 'USD', amountVes: 0, rate: 0 },
+    { id: 'GTO-006', date: m(0, 20), amount: 18, category: 'Materiales y repuestos', description: 'Conectores RJ45 y canaletas', projectId: 'PRY-005', clientId: 'CLI-005', method: 'Pago Móvil', currency: 'VES', amountVes: 15930, rate: 885 }
+  ];
+
+  data.payments.forEach(p => { p.currency ||= 'USD'; p.amountVes ||= 0; p.rate ||= 0; p.subscriptionId ||= null; p.period ||= ''; });
+  data.quotes.forEach(q => { q.approvedAt = q.status === 'approved' ? `${q.date}T15:00:00.000Z` : null; q.approvedBy = ''; });
   data.seq = { client: 10, quote: 8, project: 6, payment: 12, task: 6, activity: 11 };
   return data;
 };

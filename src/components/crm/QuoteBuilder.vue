@@ -50,18 +50,28 @@ const validate = () => {
   error.value = '';
   return true;
 };
-const save = (silent = false) => {
-  if (!validate()) return null;
-  form.value.items = form.value.items.filter(i => i.description.trim());
-  const saved = crm.saveQuote(form.value);
-  form.value = clone(saved);
-  if (!silent) ui.toast(`Cotización ${saved.id} guardada`);
-  return saved;
+// El número de una cotización nueva lo asigna el servidor: guardar es asíncrono.
+const saving = ref(false);
+const save = async (silent = false) => {
+  if (!validate() || saving.value) return null;
+  saving.value = true;
+  try {
+    form.value.items = form.value.items.filter(i => i.description.trim());
+    const saved = await crm.saveQuote(form.value);
+    form.value = clone(saved);
+    if (!silent) ui.toast(`Cotización ${saved.id} guardada`);
+    return saved;
+  } catch (e) {
+    ui.toast(e.message || 'No se pudo guardar la cotización', 'error');
+    return null;
+  } finally {
+    saving.value = false;
+  }
 };
-const saveAndClose = () => { if (save()) emit('close'); };
-const preview = () => { const q = save(true); if (q) ui.openProforma(q.id); };
-const sendWhatsApp = () => {
-  const q = save(true);
+const saveAndClose = async () => { if (await save()) emit('close'); };
+const preview = async () => { const q = await save(true); if (q) ui.openProforma(q.id); };
+const sendWhatsApp = async () => {
+  const q = await save(true);
   if (!q) return;
   if (!client.value?.phone) { ui.toast('El cliente no tiene teléfono registrado', 'error'); return; }
   openWhatsApp(client.value.phone, buildQuoteMessage(crm, q));
@@ -70,7 +80,7 @@ const sendWhatsApp = () => {
   ui.toast('Cotización marcada como enviada');
 };
 const copyText = async () => {
-  const q = save(true);
+  const q = await save(true);
   if (!q) return;
   try {
     await navigator.clipboard.writeText(buildQuoteMessage(crm, q));
@@ -233,7 +243,7 @@ const copyText = async () => {
           <p v-if="error" class="text-sm text-rose-400">{{ error }}</p>
 
           <div class="space-y-2">
-            <button class="crm-btn-primary w-full" @click="saveAndClose"><CheckCircleIcon class="w-5 h-5" />Guardar cotización</button>
+            <button class="crm-btn-primary w-full" :disabled="saving" @click="saveAndClose"><CheckCircleIcon class="w-5 h-5" />{{ saving ? 'Guardando…' : 'Guardar cotización' }}</button>
             <button class="crm-btn-whatsapp w-full" @click="sendWhatsApp"><ChatBubbleOvalLeftEllipsisIcon class="w-5 h-5" />Enviar por WhatsApp</button>
             <div class="grid grid-cols-2 gap-2">
               <button class="crm-btn-secondary text-xs" @click="preview"><EyeIcon class="w-4 h-4" />PDF</button>

@@ -18,9 +18,12 @@ import { viewFromSlug, slugFromView } from './crm/ui';
 
 // El CRM se carga aparte para no hacer más pesada la landing.
 const CrmApp = defineAsyncComponent(() => import('./components/crm/CrmApp.vue'));
+const ClientPortal = defineAsyncComponent(() => import('./components/crm/ClientPortal.vue'));
 
-// Rutas: #demo[/vista] (demo pública) y #crm[/vista] (espacio privado con login).
-const mode = ref('public'); // 'public' | 'crm'
+// Rutas: #demo[/vista] (demo pública), #crm[/vista] (espacio privado con login)
+// y #portal/<token> (portal de un cliente, sin login).
+const mode = ref('public'); // 'public' | 'crm' | 'portal'
+const portalToken = ref('');
 const workspace = ref('demo');
 const view = ref('dashboard');
 const session = ref(null);
@@ -28,12 +31,16 @@ const showLogin = ref(false);
 
 const parseHash = () => {
   const [root, slug] = window.location.hash.replace(/^#/, '').split('/');
-  return { root, view: viewFromSlug(slug) };
+  return { root, slug: slug || '', view: viewFromSlug(slug) };
 };
 
 const route = () => {
-  const { root, view: v } = parseHash();
-  if (root === 'demo') {
+  const { root, slug, view: v } = parseHash();
+  if (root === 'portal') {
+    portalToken.value = slug;
+    mode.value = 'portal';
+    showLogin.value = false;
+  } else if (root === 'demo') {
     workspace.value = 'demo';
     view.value = v;
     mode.value = 'crm';
@@ -110,8 +117,10 @@ onUnmounted(() => {
 
 <template>
   <div>
+    <ClientPortal v-if="mode === 'portal'" :key="portalToken" :token="portalToken" />
+
     <CrmApp
-      v-if="mode === 'crm'"
+      v-else-if="mode === 'crm'"
       :key="workspace + (session?.user?.id || '')"
       :workspace="workspace"
       :view="view"

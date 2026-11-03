@@ -52,7 +52,8 @@ onUnmounted(() => { document.body.classList.remove('printing-doc'); document.rem
         <!-- Encabezado -->
         <header class="flex flex-col sm:flex-row justify-between gap-6 pb-6 border-b-2 border-slate-900">
           <div class="flex items-start gap-3">
-            <div class="w-12 h-12 rounded-xl bg-slate-900 text-cyan-300 flex items-center justify-center font-mono font-bold text-lg">{{ initials(st.businessName) }}</div>
+            <img v-if="st.logo" :src="st.logo" alt="" class="w-12 h-12 rounded-xl object-contain" />
+            <div v-else class="w-12 h-12 rounded-xl bg-slate-900 text-cyan-300 flex items-center justify-center font-mono font-bold text-lg">{{ initials(st.businessName) }}</div>
             <div>
               <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">{{ st.businessName }}</h2>
               <p class="text-sm text-slate-600">{{ st.tagline }}</p>

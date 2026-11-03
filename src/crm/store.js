@@ -1,12 +1,12 @@
 // Estado del CRM por espacio de trabajo: 'demo' se guarda en el navegador del visitante,
 // 'private' se sincroniza con Supabase (ver remote.js).
 import { reactive, watch } from 'vue';
-import { fetchWorkspace, attachRemoteSync } from './remote';
+import { fetchWorkspace, attachRemoteSync, nextServerNumber } from './remote';
 import { buildDemoData, emptyData, defaultSettings, LEGACY_SEED_IDS } from './seed';
-import { todayISO, clone, daysFromToday, addDays, formatMoney } from './utils';
+import { todayISO, clone, daysFromToday, addDays, formatMoney, uid, computeQuoteTotals, monthKeyOf } from './utils';
 import { stageOf, OPEN_STAGES } from './constants';
 
-const storageKey = (ws) => `jc_crm_v4_${ws}`;
+const storageKey = (ws) => `jc_crm_v5_${ws}`;
 
 const readJSON = (key) => {
   try {
@@ -17,17 +17,20 @@ const readJSON = (key) => {
   }
 };
 
+const LISTS = ['clients', 'activities', 'quotes', 'projects', 'payments', 'tasks', 'tickets', 'subscriptions', 'expenses'];
+
 // Completa campos faltantes para que datos viejos o importados no rompan la interfaz.
 const hydrate = (data) => {
   const base = emptyData();
   const out = { ...base, ...data };
   out.settings = { ...defaultSettings(), ...(data.settings || {}) };
   out.seq = { ...base.seq, ...(data.seq || {}) };
-  for (const key of ['clients', 'activities', 'quotes', 'projects', 'payments', 'tasks']) {
+  for (const key of LISTS) {
     out[key] = Array.isArray(data[key]) ? data[key] : [];
   }
   out.clients.forEach(c => { c.tags ||= []; c.stage ||= 'lead'; });
   out.projects.forEach(p => { p.milestones ||= p.tasks || []; delete p.tasks; });
+  out.payments.forEach(p => { p.currency ||= 'USD'; p.amountVes ??= 0; p.rate ??= 0; p.subscriptionId ??= null; p.period ??= ''; });
   return out;
 };
 
@@ -64,6 +67,7 @@ const migrateLegacy = () => {
 };
 
 const loadDemo = () => {
+  try { localStorage.removeItem('jc_crm_v4_demo'); } catch { /* sin almacenamiento */ }
   const saved = readJSON(storageKey('demo'));
   return saved ? hydrate(saved) : buildDemoData();
 };
@@ -72,7 +76,7 @@ const loadDemo = () => {
 export function createCrmStore(ws, options = {}) {
   const isDemo = ws === 'demo';
   const state = reactive(isDemo ? loadDemo() : emptyData());
-  const status = reactive({ ready: isDemo, loading: !isDemo, saving: false, dirty: false, error: '', lastSync: null, migrated: false });
+  const status = reactive({ ready: isDemo, loading: !isDemo, saving: false, dirty: false, error: '', lastSync: null, migrated: false, live: false });
   let saveTimer = null;
   let remote = null;
 
@@ -121,15 +125,26 @@ export function createCrmStore(ws, options = {}) {
   }
 
   // ---------------------------------------------------------------- helpers
-  const PREFIX = { client: 'CLI', project: 'PRY', payment: 'PAG', task: 'TAR', activity: 'ACT' };
-  const LIST = { client: 'clients', quote: 'quotes', project: 'projects', payment: 'payments', task: 'tasks', activity: 'activities' };
+  // IDs aleatorios: dos dispositivos nunca generan el mismo. Solo las cotizaciones llevan un
+  // correlativo (COT-001) y en el espacio privado lo asigna el servidor (crm_next_number).
+  const PREFIX = { client: 'CLI', project: 'PRY', payment: 'PAG', task: 'TAR', activity: 'ACT', ticket: 'TCK', subscription: 'PLN', expense: 'GTO' };
+  const LIST = { client: 'clients', project: 'projects', payment: 'payments', task: 'tasks', activity: 'activities', ticket: 'tickets', subscription: 'subscriptions', expense: 'expenses' };
   const nextId = (kind) => {
     let id;
+    do { id = uid(PREFIX[kind], kind === 'activity' ? 8 : 6); } while (state[LIST[kind]].some(x => x.id === id));
+    return id;
+  };
+  const quoteNumber = (id) => Number(String(id).match(/(\d+)$/)?.[1]) || 0;
+  const allocQuoteId = async () => {
+    const prefix = state.settings.quotePrefix || 'COT';
+    const localMax = Math.max(state.seq.quote || 0, ...state.quotes.map(q => quoteNumber(q.id)));
+    let n = localMax;
+    let id;
     do {
-      state.seq[kind] = (state.seq[kind] || 0) + 1;
-      const n = String(state.seq[kind]).padStart(3, '0');
-      id = kind === 'quote' ? `${state.settings.quotePrefix || 'COT'}-${n}` : `${PREFIX[kind]}-${n}`;
-    } while (state[LIST[kind]].some(x => x.id === id));
+      n = isDemo ? n + 1 : await nextServerNumber('quote', n + 1);
+      id = `${prefix}-${String(n).padStart(3, '0')}`;
+    } while (state.quotes.some(q => q.id === id));
+    state.seq.quote = Math.max(state.seq.quote || 0, n);
     return id;
   };
   const replaceById = (list, item) => {
@@ -143,14 +158,7 @@ export function createCrmStore(ws, options = {}) {
   const money = (v) => formatMoney(v, state.settings.currency);
 
   // ---------------------------------------------------------------- cálculos
-  const quoteTotals = (q) => {
-    const subtotal = (q.items || []).reduce((acc, i) => acc + (Number(i.quantity) || 0) * (Number(i.unitPrice) || 0), 0);
-    const pct = Math.min(100, Math.max(0, Number(q.discountPercent) || 0));
-    const discount = subtotal * pct / 100;
-    const rate = q.taxRate ?? state.settings.taxRate;
-    const tax = q.applyTax ? (subtotal - discount) * rate / 100 : 0;
-    return { subtotal, discount, tax, taxRate: rate, total: subtotal - discount + tax };
-  };
+  const quoteTotals = (q) => computeQuoteTotals(q, state.settings.taxRate);
   const quoteStatus = (q) => {
     if (q.status === 'sent' && daysFromToday(addDays(q.date, q.validityDays || 15)) < 0) return 'expired';
     return q.status;
@@ -163,6 +171,26 @@ export function createCrmStore(ws, options = {}) {
   const projectBalance = (p) => Math.max(0, Number(p.budget || 0) - projectPaid(p));
   const clientPaid = (id) => state.payments.filter(x => x.clientId === id).reduce((a, x) => a + Number(x.amount || 0), 0);
   const clientBalance = (id) => state.projects.filter(p => p.clientId === id).reduce((a, p) => a + projectBalance(p), 0);
+  const projectExpenses = (p) => state.expenses.filter(x => x.projectId === p.id).reduce((a, x) => a + Number(x.amount || 0), 0);
+  // Ganancia real del proyecto: lo cobrado menos los gastos asociados.
+  const projectProfit = (p) => projectPaid(p) - projectExpenses(p);
+
+  // Planes mensuales: estado del cobro de un período (YYYY-MM).
+  const planPayment = (plan, period) => state.payments.find(x => x.subscriptionId === plan.id && x.period === period) || null;
+  // 'none' = el período es anterior al inicio del plan; 'paused' = plan inactivo sin pago ese mes.
+  const planStatus = (plan, period = monthKeyOf(todayISO())) => {
+    if (planPayment(plan, period)) return 'paid';
+    if (plan.startDate && period < monthKeyOf(plan.startDate)) return 'none';
+    if (!plan.active) return 'paused';
+    const due = `${period}-${String(plan.billingDay || 1).padStart(2, '0')}`;
+    const diff = daysFromToday(due);
+    return diff < 0 ? 'overdue' : diff <= 3 ? 'due' : 'upcoming';
+  };
+  const monthlyRecurring = () => state.subscriptions.filter(x => x.active).reduce((a, x) => a + Number(x.amount || 0), 0);
+
+  // Tickets: horas abiertos y si superaron el tiempo de respuesta comprometido.
+  const ticketHours = (t) => ((t.resolvedAt ? new Date(t.resolvedAt) : new Date()) - new Date(t.openedAt)) / 3600000;
+  const ticketOverdue = (t, slaHours) => t.status !== 'resolved' && ticketHours(t) > slaHours;
 
   // ---------------------------------------------------------------- actividad
   const logActivity = (clientId, type, text, date = todayISO()) => {
@@ -206,6 +234,38 @@ export function createCrmStore(ws, options = {}) {
     state.payments = state.payments.filter(p => p.clientId !== id && !projectIds.has(p.projectId));
     state.tasks = state.tasks.filter(t => t.clientId !== id);
     state.activities = state.activities.filter(a => a.clientId !== id);
+    state.tickets = state.tickets.filter(t => t.clientId !== id);
+    state.subscriptions = state.subscriptions.filter(x => x.clientId !== id);
+    state.expenses = state.expenses.filter(x => x.clientId !== id);
+  };
+  const ensurePortalToken = (id) => {
+    const c = client(id);
+    if (c && !c.portalToken) c.portalToken = crypto.randomUUID();
+    return c?.portalToken;
+  };
+  // Invalida el enlace anterior del portal y genera uno nuevo.
+  const resetPortalToken = (id) => {
+    const c = client(id);
+    if (!c) return null;
+    c.portalToken = crypto.randomUUID();
+    logActivity(id, 'system', 'Se generó un nuevo enlace del portal del cliente.');
+    return c.portalToken;
+  };
+  // Lo que el cliente ve en su portal, con la misma forma que fetchPortal (vista previa y demo).
+  const portalSnapshot = (id) => {
+    const c = client(id);
+    if (!c) return null;
+    const own = (list) => list.filter(x => x.clientId === id);
+    const { catalog, monthlyGoal, ...settings } = state.settings;
+    return clone({
+      client: { id: c.id, company: c.company, name: c.name },
+      settings,
+      quotes: own(state.quotes).filter(q => q.status !== 'draft').sort((a, b) => b.date.localeCompare(a.date)),
+      projects: own(state.projects),
+      payments: own(state.payments).sort((a, b) => b.date.localeCompare(a.date)),
+      tickets: own(state.tickets).sort((a, b) => b.openedAt.localeCompare(a.openedAt))
+        .map(({ id: tid, title, device, status, priority, openedAt, resolvedAt, solution }) => ({ id: tid, title, device, status, priority, openedAt, resolvedAt, solution }))
+    });
   };
 
   // ---------------------------------------------------------------- cotizaciones
@@ -223,12 +283,15 @@ export function createCrmStore(ws, options = {}) {
     applyTax: false,
     taxRate: state.settings.taxRate,
     projectId: null,
+    approvedAt: null,
+    approvedBy: '',
     items: [{ id: 1, description: '', quantity: 1, unitPrice: 0 }]
   });
-  const saveQuote = (data) => {
+  // Asíncrona: el número de una cotización nueva lo asigna el servidor.
+  const saveQuote = async (data) => {
     const item = clone(data);
     const isNew = !item.id;
-    if (isNew) item.id = nextId('quote');
+    if (isNew) item.id = await allocQuoteId();
     item.items = item.items.map(i => ({ ...i, quantity: Number(i.quantity) || 0, unitPrice: Number(i.unitPrice) || 0 }));
     replaceById(state.quotes, item);
     const c = client(item.clientId);
@@ -238,10 +301,12 @@ export function createCrmStore(ws, options = {}) {
     }
     return item;
   };
-  const setQuoteStatus = (id, status) => {
+  const setQuoteStatus = (id, status, approvedBy = '') => {
     const q = quote(id);
     if (!q || q.status === status) return;
     q.status = status;
+    q.approvedAt = status === 'approved' ? new Date().toISOString() : null;
+    q.approvedBy = status === 'approved' ? approvedBy : '';
     const label = { draft: 'pasó a borrador', sent: 'enviada', approved: 'aprobada', rejected: 'rechazada' }[status];
     logActivity(q.clientId, 'system', `Cotización ${q.id} ${label}.`);
     const c = client(q.clientId);
@@ -251,7 +316,7 @@ export function createCrmStore(ws, options = {}) {
   const duplicateQuote = (id) => {
     const q = quote(id);
     if (!q) return null;
-    return saveQuote({ ...clone(q), id: '', date: todayISO(), status: 'draft', projectId: null });
+    return saveQuote({ ...clone(q), id: '', date: todayISO(), status: 'draft', projectId: null, approvedAt: null, approvedBy: '' });
   };
   const deleteQuote = (id) => {
     state.quotes = state.quotes.filter(q => q.id !== id);
@@ -312,6 +377,7 @@ export function createCrmStore(ws, options = {}) {
   const deleteProject = (id) => {
     state.projects = state.projects.filter(p => p.id !== id);
     state.payments.forEach(x => { if (x.projectId === id) x.projectId = null; });
+    state.expenses.forEach(x => { if (x.projectId === id) x.projectId = null; });
     state.quotes.forEach(q => { if (q.projectId === id) q.projectId = null; });
   };
 
@@ -320,7 +386,12 @@ export function createCrmStore(ws, options = {}) {
     const item = clone(data);
     const isNew = !item.id;
     if (isNew) item.id = nextId('payment');
-    item.amount = Number(item.amount) || 0;
+    item.amount = Math.round((Number(item.amount) || 0) * 100) / 100;
+    item.currency ||= 'USD';
+    item.amountVes = Number(item.amountVes) || 0;
+    item.rate = Number(item.rate) || 0;
+    item.subscriptionId ||= null;
+    item.period ||= '';
     if (item.projectId && !item.clientId) item.clientId = project(item.projectId)?.clientId || '';
     replaceById(state.payments, item);
     if (isNew) logActivity(item.clientId, 'system', `Cobro registrado: ${money(item.amount)} (${item.method}).`, item.date);
@@ -328,6 +399,82 @@ export function createCrmStore(ws, options = {}) {
   };
   const deletePayment = (id) => {
     state.payments = state.payments.filter(p => p.id !== id);
+  };
+
+  // ---------------------------------------------------------------- soporte técnico
+  const saveTicket = (data) => {
+    const item = clone(data);
+    const isNew = !item.id;
+    if (isNew) {
+      item.id = nextId('ticket');
+      item.openedAt ||= new Date().toISOString();
+    }
+    item.charge = Number(item.charge) || 0;
+    if (item.status === 'resolved' && !item.resolvedAt) item.resolvedAt = new Date().toISOString();
+    if (item.status !== 'resolved') item.resolvedAt = null;
+    replaceById(state.tickets, item);
+    if (isNew) logActivity(item.clientId, 'system', `Ticket ${item.id} abierto: ${item.title}.`);
+    return item;
+  };
+  const setTicketStatus = (id, status) => {
+    const t = state.tickets.find(x => x.id === id);
+    if (!t || t.status === status) return;
+    t.status = status;
+    t.resolvedAt = status === 'resolved' ? new Date().toISOString() : null;
+    if (status === 'resolved') logActivity(t.clientId, 'system', `Ticket ${t.id} resuelto: ${t.title}.`);
+  };
+  const deleteTicket = (id) => {
+    state.tickets = state.tickets.filter(t => t.id !== id);
+  };
+
+  // ---------------------------------------------------------------- planes mensuales
+  const saveSubscription = (data) => {
+    const item = clone(data);
+    const isNew = !item.id;
+    if (isNew) item.id = nextId('subscription');
+    item.amount = Number(item.amount) || 0;
+    item.billingDay = Math.min(28, Math.max(1, Number(item.billingDay) || 1));
+    replaceById(state.subscriptions, item);
+    if (isNew) logActivity(item.clientId, 'system', `Plan mensual creado: ${item.title} (${money(item.amount)}/mes).`);
+    return item;
+  };
+  const deleteSubscription = (id) => {
+    state.subscriptions = state.subscriptions.filter(x => x.id !== id);
+    state.payments.forEach(x => { if (x.subscriptionId === id) x.subscriptionId = null; });
+  };
+
+  // ---------------------------------------------------------------- gastos
+  const saveExpense = (data) => {
+    const item = clone(data);
+    if (!item.id) item.id = nextId('expense');
+    item.amount = Math.round((Number(item.amount) || 0) * 100) / 100;
+    item.amountVes = Number(item.amountVes) || 0;
+    item.rate = Number(item.rate) || 0;
+    item.currency ||= 'USD';
+    if (item.projectId && !item.clientId) item.clientId = project(item.projectId)?.clientId || '';
+    replaceById(state.expenses, item);
+    return item;
+  };
+  const deleteExpense = (id) => {
+    state.expenses = state.expenses.filter(x => x.id !== id);
+  };
+
+  // ---------------------------------------------------------------- deshacer
+  // Ejecuta un borrado y devuelve una función que lo revierte: reinserta lo eliminado y
+  // restaura los registros que el borrado modificó (p. ej. referencias puestas en null).
+  const withUndo = (fn) => {
+    const before = Object.fromEntries(LISTS.map(k => [k, clone(state[k])]));
+    fn();
+    return () => {
+      for (const k of LISTS) {
+        const current = new Map(state[k].map(x => [x.id, x]));
+        before[k].forEach((item, idx) => {
+          const now = current.get(item.id);
+          if (!now) state[k].splice(Math.min(idx, state[k].length), 0, item);
+          else if (JSON.stringify(now) !== JSON.stringify(item)) Object.assign(now, item);
+        });
+      }
+    };
   };
 
   // ---------------------------------------------------------------- tareas
@@ -378,6 +525,10 @@ export function createCrmStore(ws, options = {}) {
     saveProject, toggleMilestone, addMilestone, removeMilestone, deleteProject,
     savePayment, deletePayment,
     saveTask, toggleTask, deleteTask,
+    saveTicket, setTicketStatus, deleteTicket, ticketHours, ticketOverdue,
+    saveSubscription, deleteSubscription, planPayment, planStatus, monthlyRecurring,
+    saveExpense, deleteExpense, projectExpenses, projectProfit,
+    ensurePortalToken, resetPortalToken, portalSnapshot, withUndo,
     exportData, importData, resetDemo, wipe
   };
 }

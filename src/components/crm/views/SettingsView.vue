@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { PlusIcon, TrashIcon, ArrowDownTrayIcon, ArrowUpTrayIcon, ArrowPathIcon, KeyIcon, CloudIcon } from '@heroicons/vue/24/outline';
+import { PhotoIcon, PlusIcon, TrashIcon, ArrowDownTrayIcon, ArrowUpTrayIcon, ArrowPathIcon, KeyIcon, CloudIcon } from '@heroicons/vue/24/outline';
 import { useCrm, useUi } from '../../../crm/ui';
 import { SERVICE_TYPES } from '../../../crm/constants';
-import { downloadFile, todayISO } from '../../../crm/utils';
+import { downloadFile, todayISO, imageToDataUrl } from '../../../crm/utils';
 import { updatePassword } from '../../../crm/auth';
 
 const props = defineProps({ username: { type: String, default: '' } });
@@ -20,6 +20,20 @@ const addService = () => {
   ui.toast('Servicio agregado al catálogo');
 };
 const removeService = (id) => { st.value.catalog = st.value.catalog.filter(x => x.id !== id); };
+
+// Logo: se guarda reducido dentro de los ajustes (aparece en el portal del cliente y la proforma).
+const logoInput = ref(null);
+const uploadLogo = async (e) => {
+  const file = e.target.files?.[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    st.value.logo = await imageToDataUrl(file);
+    ui.toast('Logo actualizado');
+  } catch (err) {
+    ui.toast(err.message, 'error');
+  }
+};
 
 const exportBackup = () => {
   downloadFile(`respaldo-crm-${crm.isDemo ? 'demo' : 'privado'}-${todayISO()}.json`, crm.exportData());
@@ -52,7 +66,7 @@ const resetDemo = async () => {
 const wipe = async () => {
   const ok = await ui.confirm({
     title: '¿Borrar todos los datos?',
-    message: 'Se eliminarán clientes, cotizaciones, proyectos, cobros, tareas e historial. Tu perfil y catálogo se conservan. Esta acción no se puede deshacer.',
+    message: 'Se eliminarán clientes, cotizaciones, proyectos, cobros, tareas, soporte, planes, gastos e historial. Tu perfil y catálogo se conservan. Esta acción no se puede deshacer.',
     confirmLabel: 'Borrar todo', danger: true, requireText: 'BORRAR'
   });
   if (ok) { crm.wipe(); ui.toast('Datos borrados'); }
@@ -89,6 +103,18 @@ const changePassword = async () => {
     <!-- Perfil -->
     <section class="crm-card p-5 sm:p-6">
       <h3 class="font-semibold text-white mb-4">Perfil del negocio</h3>
+      <div class="flex items-center gap-4 mb-5">
+        <img v-if="st.logo" :src="st.logo" alt="Logo" class="w-16 h-16 rounded-xl object-contain bg-white p-1.5" />
+        <div v-else class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center text-slate-500"><PhotoIcon class="w-7 h-7" /></div>
+        <div class="space-y-1.5">
+          <div class="flex gap-2">
+            <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="logoInput.click()">{{ st.logo ? 'Cambiar logo' : 'Subir logo' }}</button>
+            <button v-if="st.logo" class="text-xs text-slate-500 hover:text-rose-300" @click="st.logo = ''">Quitar</button>
+          </div>
+          <p class="text-2xs text-slate-500">Aparece en tus cotizaciones y en el portal del cliente.</p>
+        </div>
+        <input ref="logoInput" type="file" accept="image/*" class="hidden" @change="uploadLogo" />
+      </div>
       <div class="grid sm:grid-cols-2 gap-4">
         <div><label class="crm-label">Nombre del negocio</label><input v-model="st.businessName" class="crm-input" /></div>
         <div><label class="crm-label">Eslogan / especialidad</label><input v-model="st.tagline" class="crm-input" /></div>

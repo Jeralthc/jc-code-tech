@@ -44,21 +44,22 @@ const send = (q) => {
   openWhatsApp(c.phone, buildQuoteMessage(crm, q));
   if (q.status === 'draft') crm.setQuoteStatus(q.id, 'sent');
 };
-const duplicate = (q) => {
-  const copy = crm.duplicateQuote(q.id);
-  ui.toast(`Duplicada como ${copy.id}`);
-  ui.editQuote(copy.id);
+const duplicate = async (q) => {
+  try {
+    const copy = await crm.duplicateQuote(q.id);
+    ui.toast(`Duplicada como ${copy.id}`);
+    ui.editQuote(copy.id);
+  } catch (e) {
+    ui.toast(e.message || 'No se pudo duplicar la cotización', 'error');
+  }
 };
 const toProject = (q) => {
   const p = crm.convertQuoteToProject(q.id);
   ui.toast(`Proyecto ${p.id} creado a partir de ${q.id}`);
   ui.go('projects');
 };
-const remove = async (q) => {
-  if (await ui.confirm({ title: `¿Eliminar la cotización ${q.id}?`, message: 'Esta acción no se puede deshacer.', confirmLabel: 'Eliminar', danger: true })) {
-    crm.deleteQuote(q.id);
-    ui.toast('Cotización eliminada');
-  }
+const remove = (q) => {
+  ui.deleted(`Cotización ${q.id} eliminada`, crm.withUndo(() => crm.deleteQuote(q.id)));
 };
 const changeStatus = (q, value) => {
   crm.setQuoteStatus(q.id, value);

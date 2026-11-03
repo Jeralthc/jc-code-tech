@@ -1,16 +1,20 @@
 // Controlador de interfaz compartido: navegación, modales globales, toasts y confirmaciones.
 import { reactive, inject } from 'vue';
 
+// group: título de la sección del menú lateral.
 export const VIEWS = [
   { key: 'dashboard', label: 'Inicio', slug: 'inicio' },
-  { key: 'pipeline', label: 'Pipeline', slug: 'pipeline' },
-  { key: 'clients', label: 'Clientes', slug: 'clientes' },
-  { key: 'quotes', label: 'Cotizaciones', slug: 'cotizaciones' },
-  { key: 'projects', label: 'Proyectos', slug: 'proyectos' },
-  { key: 'payments', label: 'Cobranzas', slug: 'cobranzas' },
-  { key: 'agenda', label: 'Agenda', slug: 'agenda' },
-  { key: 'reviews', label: 'Opiniones web', slug: 'opiniones', privateOnly: true },
-  { key: 'settings', label: 'Ajustes', slug: 'ajustes' }
+  { key: 'pipeline', label: 'Pipeline', slug: 'pipeline', group: 'Ventas' },
+  { key: 'clients', label: 'Clientes', slug: 'clientes', group: 'Ventas' },
+  { key: 'quotes', label: 'Cotizaciones', slug: 'cotizaciones', group: 'Ventas' },
+  { key: 'projects', label: 'Proyectos', slug: 'proyectos', group: 'Operación' },
+  { key: 'tickets', label: 'Soporte', slug: 'soporte', group: 'Operación' },
+  { key: 'agenda', label: 'Agenda', slug: 'agenda', group: 'Operación' },
+  { key: 'payments', label: 'Cobranzas', slug: 'cobranzas', group: 'Finanzas' },
+  { key: 'subscriptions', label: 'Planes mensuales', slug: 'planes', group: 'Finanzas' },
+  { key: 'expenses', label: 'Gastos y utilidad', slug: 'gastos', group: 'Finanzas' },
+  { key: 'reviews', label: 'Opiniones web', slug: 'opiniones', group: 'Cuenta', privateOnly: true },
+  { key: 'settings', label: 'Ajustes', slug: 'ajustes', group: 'Cuenta' }
 ];
 
 export const viewFromSlug = (slug) => VIEWS.find(v => v.slug === slug)?.key || 'dashboard';
@@ -26,8 +30,12 @@ export function createUi(onNavigate) {
     projectForm: null,
     paymentForm: null,
     taskForm: null,
+    ticketForm: null,
+    subscriptionForm: null,
+    expenseForm: null,
     quoteEditor: null,
     proformaId: null,
+    portalClientId: null,
 
     go(view) {
       ui.view = view;
@@ -36,10 +44,16 @@ export function createUi(onNavigate) {
       onNavigate?.(view);
       window.scrollTo({ top: 0 });
     },
-    toast(message, type = 'success') {
+    // action opcional: { label, run } muestra un botón en la notificación (p. ej. Deshacer).
+    toast(message, type = 'success', action = null) {
       const id = Date.now() + Math.random();
-      ui.toasts.push({ id, message, type });
-      setTimeout(() => { ui.toasts = ui.toasts.filter(t => t.id !== id); }, 3500);
+      ui.toasts.push({ id, message, type, action });
+      setTimeout(() => ui.dismissToast(id), action ? 7000 : 3500);
+    },
+    dismissToast(id) { ui.toasts = ui.toasts.filter(t => t.id !== id); },
+    // Notifica un borrado ofreciendo revertirlo (undo viene de crm.withUndo).
+    deleted(message, undo) {
+      ui.toast(message, 'success', { label: 'Deshacer', run: () => { undo(); ui.toast('Cambio revertido'); } });
     },
     confirm({ title, message = '', confirmLabel = 'Confirmar', danger = false, requireText = '' }) {
       return new Promise(resolve => {
@@ -51,6 +65,10 @@ export function createUi(onNavigate) {
     editProject(project = null, prefill = {}) { ui.projectForm = { project, prefill }; },
     addPayment(prefill = {}, payment = null) { ui.paymentForm = { payment, prefill }; },
     editTask(task = null, prefill = {}) { ui.taskForm = { task, prefill }; },
+    editTicket(ticket = null, prefill = {}) { ui.ticketForm = { ticket, prefill }; },
+    editSubscription(plan = null, prefill = {}) { ui.subscriptionForm = { plan, prefill }; },
+    editExpense(expense = null, prefill = {}) { ui.expenseForm = { expense, prefill }; },
+    openPortal(clientId) { ui.portalClientId = clientId; },
     // Abre el editor de cotizaciones: id existente o nueva (opcionalmente para un cliente).
     editQuote(id = null, clientId = '') {
       ui.go('quotes');

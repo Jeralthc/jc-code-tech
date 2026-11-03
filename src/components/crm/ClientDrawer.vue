@@ -2,12 +2,13 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {
   XMarkIcon, PencilSquareIcon, TrashIcon, PhoneIcon, EnvelopeIcon, ChatBubbleOvalLeftEllipsisIcon,
-  DocumentTextIcon, BanknotesIcon, FolderIcon, CalendarDaysIcon, MapPinIcon, PlusIcon
+  DocumentTextIcon, BanknotesIcon, FolderIcon, CalendarDaysIcon, MapPinIcon, PlusIcon,
+  LifebuoyIcon, EyeIcon, LinkIcon, ArrowPathIcon, GlobeAltIcon
 } from '@heroicons/vue/24/outline';
 import ClientAvatar from './ui/ClientAvatar.vue';
 import StatusBadge from './ui/StatusBadge.vue';
 import { useCrm, useUi } from '../../crm/ui';
-import { STAGES, ACTIVITY_TYPES, QUOTE_STATUS, PROJECT_STATUS } from '../../crm/constants';
+import { STAGES, ACTIVITY_TYPES, QUOTE_STATUS, PROJECT_STATUS, TICKET_STATUS } from '../../crm/constants';
 import { formatDate, relativeDay, daysFromToday, todayISO, addDays, whatsappUrl, formatMoney } from '../../crm/utils';
 
 const props = defineProps({ clientId: { type: String, required: true } });
@@ -25,14 +26,45 @@ const quotes = computed(() => s.quotes.filter(q => q.clientId === props.clientId
 const projects = computed(() => s.projects.filter(p => p.clientId === props.clientId));
 const payments = computed(() => s.payments.filter(p => p.clientId === props.clientId).sort((a, b) => b.date.localeCompare(a.date)));
 const tasks = computed(() => s.tasks.filter(t => t.clientId === props.clientId && !t.done));
+const tickets = computed(() => s.tickets.filter(t => t.clientId === props.clientId));
+const plans = computed(() => s.subscriptions.filter(x => x.clientId === props.clientId));
 const quoted = computed(() => quotes.value.filter(q => q.status !== 'rejected').reduce((a, q) => a + crm.quoteTotals(q).total, 0));
 
 const tabs = computed(() => [
   { key: 'activity', label: 'Historial', count: activities.value.length },
   { key: 'quotes', label: 'Cotizaciones', count: quotes.value.length },
   { key: 'projects', label: 'Proyectos', count: projects.value.length },
-  { key: 'payments', label: 'Cobros', count: payments.value.length }
+  { key: 'payments', label: 'Cobros', count: payments.value.length },
+  { key: 'tickets', label: 'Soporte', count: tickets.value.length },
+  { key: 'plans', label: 'Planes', count: plans.value.length }
 ]);
+
+// Portal del cliente: enlace secreto donde ve sus cotizaciones, proyectos, pagos y soporte.
+const portalUrl = (token) => `${window.location.origin}${window.location.pathname}#portal/${token}`;
+const copyPortal = async () => {
+  const url = portalUrl(crm.ensurePortalToken(c.value.id));
+  try {
+    await navigator.clipboard.writeText(url);
+    ui.toast('Enlace del portal copiado');
+  } catch {
+    ui.toast('No se pudo copiar el enlace', 'error');
+  }
+};
+const sharePortal = () => {
+  const url = portalUrl(crm.ensurePortalToken(c.value.id));
+  const text = `Hola ${c.value.name?.split(' ')[0] || ''}, aquí puedes ver tus cotizaciones, el avance de tus proyectos, tus pagos y tus solicitudes de soporte: ${url}`;
+  window.open(whatsappUrl(c.value.phone, text), '_blank', 'noopener');
+};
+const resetPortal = async () => {
+  const ok = await ui.confirm({
+    title: '¿Generar un enlace nuevo?',
+    message: 'El enlace anterior dejará de funcionar. Úsalo si lo compartiste por error.',
+    confirmLabel: 'Generar enlace'
+  });
+  if (!ok) return;
+  crm.resetPortalToken(c.value.id);
+  ui.toast('Enlace nuevo generado');
+};
 
 // Registro rápido de actividad
 const noteType = ref('note');
@@ -64,7 +96,11 @@ const remove = async () => {
   emit('close');
 };
 
-const onKey = (e) => { if (e.key === 'Escape' && !ui.confirmState && !ui.clientForm && !ui.paymentForm && !ui.taskForm && !ui.projectForm) emit('close'); };
+const onKey = (e) => {
+  if (e.key !== 'Escape' || ui.confirmState || ui.clientForm || ui.paymentForm || ui.taskForm || ui.projectForm) return;
+  if (ui.ticketForm || ui.subscriptionForm || ui.portalClientId) return;
+  emit('close');
+};
 onMounted(() => document.addEventListener('keydown', onKey));
 onUnmounted(() => document.removeEventListener('keydown', onKey));
 </script>
@@ -155,7 +191,28 @@ onUnmounted(() => document.removeEventListener('keydown', onKey));
             <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="ui.addPayment({ clientId: c.id })"><BanknotesIcon class="w-4 h-4" />Cobro</button>
             <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="ui.editProject(null, { clientId: c.id })"><FolderIcon class="w-4 h-4" />Proyecto</button>
             <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="ui.editTask(null, { clientId: c.id })"><PlusIcon class="w-4 h-4" />Tarea</button>
+            <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="ui.editTicket(null, { clientId: c.id })"><LifebuoyIcon class="w-4 h-4" />Ticket</button>
           </div>
+        </div>
+
+        <!-- Portal del cliente -->
+        <div class="p-5 sm:p-6 border-b border-slate-800 space-y-3">
+          <div class="flex items-start gap-3">
+            <GlobeAltIcon class="w-5 h-5 text-violet-300 shrink-0 mt-0.5" />
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white">Portal del cliente</p>
+              <p class="text-xs text-slate-500">Un enlace privado donde ve sus cotizaciones (y las aprueba), el avance de sus proyectos, sus pagos y su soporte. No necesita usuario.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="ui.openPortal(c.id)"><EyeIcon class="w-4 h-4" />Vista previa</button>
+            <template v-if="!crm.isDemo">
+              <button class="crm-btn-secondary !px-3 !py-2 text-xs" @click="copyPortal"><LinkIcon class="w-4 h-4" />Copiar enlace</button>
+              <button v-if="c.phone" class="crm-btn-whatsapp !px-3 !py-2 text-xs" @click="sharePortal"><ChatBubbleOvalLeftEllipsisIcon class="w-4 h-4" />Enviar por WhatsApp</button>
+              <button v-if="c.portalToken" class="crm-icon-btn" title="Generar un enlace nuevo (invalida el anterior)" @click="resetPortal"><ArrowPathIcon class="w-4 h-4" /></button>
+            </template>
+          </div>
+          <p v-if="crm.isDemo" class="text-2xs text-slate-500">En la demo solo está la vista previa: el enlace real funciona en tu espacio privado.</p>
         </div>
 
         <!-- Pestañas -->
@@ -226,6 +283,34 @@ onUnmounted(() => document.removeEventListener('keydown', onKey));
               <p class="text-xs text-slate-500 mt-1.5">Cobrado {{ money(crm.projectPaid(p)) }} de {{ money(p.budget) }}</p>
             </li>
             <li v-if="!projects.length" class="text-sm text-slate-500 text-center py-6">Sin proyectos.</li>
+          </ul>
+
+          <!-- Soporte -->
+          <ul v-else-if="tab === 'tickets'" class="space-y-2">
+            <li v-for="t in tickets" :key="t.id">
+              <button class="w-full flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-950/50 border border-slate-800 hover:border-slate-600 text-left" @click="ui.editTicket(t)">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-white truncate"><span class="font-mono text-cyan-300">{{ t.id }}</span> · {{ t.title }}</p>
+                  <p class="text-xs text-slate-500">{{ formatDate(String(t.openedAt).slice(0, 10)) }}<span v-if="t.device"> · {{ t.device }}</span></p>
+                </div>
+                <StatusBadge :label="TICKET_STATUS[t.status]?.label" :tone="TICKET_STATUS[t.status]?.tone" />
+              </button>
+            </li>
+            <li v-if="!tickets.length" class="text-sm text-slate-500 text-center py-6">Sin tickets. <button class="text-cyan-300 hover:underline" @click="ui.editTicket(null, { clientId: c.id })">Abrir uno</button></li>
+          </ul>
+
+          <!-- Planes mensuales -->
+          <ul v-else-if="tab === 'plans'" class="space-y-2">
+            <li v-for="x in plans" :key="x.id">
+              <button class="w-full flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-950/50 border border-slate-800 hover:border-slate-600 text-left" @click="ui.editSubscription(x)">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-white truncate">{{ x.title }}</p>
+                  <p class="text-xs text-slate-500">Cobro el día {{ x.billingDay }}<span v-if="!x.active"> · Pausado</span></p>
+                </div>
+                <span class="font-mono text-sm text-white shrink-0">{{ money(x.amount) }}/mes</span>
+              </button>
+            </li>
+            <li v-if="!plans.length" class="text-sm text-slate-500 text-center py-6">Sin planes. <button class="text-cyan-300 hover:underline" @click="ui.editSubscription(null, { clientId: c.id })">Crear uno</button></li>
           </ul>
 
           <!-- Cobros -->
